@@ -47,10 +47,16 @@ fi
 
 ### Ruby ###
 if [ -d "$HOME/.rvm" ]; then
+  echo "Set up ruby stuff"
   PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
   [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 fi
 
+### directory colors on linux ###
+if [ -e "$HOME/.config/.dircolors" ]; then
+  echo "using .dircolors"
+  eval `dircolors ~/.config/.dircolors`
+fi
 
 ### Confirm load ###
 echo "energize!"
