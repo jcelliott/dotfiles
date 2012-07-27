@@ -3,18 +3,16 @@
 # Automatically generate .gitignore for home directory based on currently tracked files
 # Author: Joshua Elliott
 
-pushd $HOME 1>/dev/null
-
+cd $HOME
 GIT_TRACKED=`git ls-files`
 #echo $GIT_TRACKED
 
-rm .gitignore
-echo '*' > .gitignore
+rm $HOME/.gitignore
+echo '*' > $HOME/.gitignore
 
 for tracked in $GIT_TRACKED; do
   #echo "tracked: "$tracked
-  echo "!"$tracked >> .gitignore
+  echo "!"$tracked >> $HOME/.gitignore
 done
 
 echo "Creted new .gitignore"
-popd 1>/dev/null
