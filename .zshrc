@@ -83,6 +83,11 @@ if [ -d "$HOME/.rvm" ]; then
   [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 fi
 
+### Fix git autocompletion ###
+# from: <http://talkings.org/post/5236392664/zsh-and-slow-git-completion>
+__git_files() {
+  _wanted files expl 'local files' _files
+}
 
 ### Confirm load ###
 echo "energize!"
