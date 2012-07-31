@@ -13,3 +13,6 @@
 [submodule ".config/gnome-terminal-colors-solarized"]
 	path = .config/gnome-terminal-colors-solarized
 	url = https://github.com/sigurdga/gnome-terminal-colors-solarized.git
+[submodule "/Users/jelliott/.vim/bundle/supertab"]
+	path = /Users/jelliott/.vim/bundle/supertab
+	url = git://github.com/ervandew/supertab.git

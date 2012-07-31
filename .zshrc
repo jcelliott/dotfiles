@@ -59,6 +59,9 @@ alias no='ls' # for dvorak
 alias vimconf='vim ~/.vimrc'
 alias zshconf='vim ~/.zshrc'
 
+# this is not the correct way to do this, just more convenient right now (put in ~/.rspec)
+alias rspec='rspec --color --format nested' 
+
 # Use MacVim's build of vim if it exists on the system
 command -v mvim >/dev/null 2>&1
 if [ $? -eq 0 ]; then
