@@ -45,6 +45,7 @@ export EDITOR='vim -f'
 
 ### Aliases ###
 if [[ $platform == 'mac' ]]; then
+  # Using GNU coreutils
   alias ls='gls --color=auto'
   alias ll='gls -lah --color=auto'
   alias la='gls -a --color=auto'
