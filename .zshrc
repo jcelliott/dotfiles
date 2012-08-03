@@ -45,6 +45,7 @@ export EDITOR='vim -f'
 
 ### Aliases ###
 if [[ $platform == 'mac' ]]; then
+  # Using GNU coreutils
   alias ls='gls --color=auto'
   alias ll='gls -lah --color=auto'
   alias la='gls -a --color=auto'
@@ -58,6 +59,9 @@ fi
 alias no='ls' # for dvorak
 alias vimconf='vim ~/.vimrc'
 alias zshconf='vim ~/.zshrc'
+
+# this is not the correct way to do this, just more convenient right now (put in ~/.rspec)
+alias rspec='rspec --color --format nested' 
 
 # Use MacVim's build of vim if it exists on the system
 command -v mvim >/dev/null 2>&1
@@ -83,6 +87,11 @@ if [ -d "$HOME/.rvm" ]; then
   [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 fi
 
+### Fix git autocompletion ###
+# from: <http://talkings.org/post/5236392664/zsh-and-slow-git-completion>
+__git_files() {
+  _wanted files expl 'local files' _files
+}
 
 ### Confirm load ###
 echo "energize!"
