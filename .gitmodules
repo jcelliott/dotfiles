@@ -13,8 +13,8 @@
 [submodule ".config/gnome-terminal-colors-solarized"]
 	path = .config/gnome-terminal-colors-solarized
 	url = https://github.com/sigurdga/gnome-terminal-colors-solarized.git
-[submodule "/Users/jelliott/.vim/bundle/supertab"]
-	path = /Users/jelliott/.vim/bundle/supertab
+[submodule ".vim/bundle/supertab"]
+	path = .vim/bundle/supertab
 	url = git://github.com/ervandew/supertab.git
 [submodule ".vim/bundle/delimitMate"]
 	path = .vim/bundle/delimitMate
