@@ -7,7 +7,7 @@ cd $HOME
 GIT_TRACKED=`git ls-files`
 #echo $GIT_TRACKED
 
-rm $HOME/.gitignore
+rm $HOME/.gitignore 2>/dev/null
 echo '*' > $HOME/.gitignore
 
 for tracked in $GIT_TRACKED; do
