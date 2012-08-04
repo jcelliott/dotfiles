@@ -95,7 +95,7 @@ filetype plugin indent on
 "au VimEnter * wincmd p
 
 " .json files are javascript
-au BufRead,BufNewFile *.json set ft=javascript
+" au BufRead,BufNewFile *.json set ft=javascript
 
 syntax enable
 set background=dark
@@ -116,6 +116,9 @@ augroup resCur
 augroup END
 
 "----------------------------------------------------------
+
+" automatically source vimrc when written
+au! BufWritePost .vimrc,_vimrc,vimrc source $MYVIMRC
 
 " Use ; like : for commands (easier to type, prevents accidental
 " capitalization errors)
