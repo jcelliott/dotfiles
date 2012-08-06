@@ -17,7 +17,7 @@ ZSH_THEME="afowler"
 
 # Plugins (~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-plugins=(git brew node npm osx ruby rvm screen)
+plugins=(brew node npm osx ruby rvm screen)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -60,8 +60,12 @@ alias no='ls' # for dvorak
 alias vimconf='vim ~/.vimrc'
 alias zshconf='vim ~/.zshrc'
 
-# this is not the correct way to do this, just more convenient right now (put in ~/.rspec)
-alias rspec='rspec --color --format nested' 
+alias smi='git submodule init'
+alias smu='git submodule update'
+alias gst='git status'
+alias gc='git commit -v'
+alias glg='git log --stat --graph --max-count=5'
+alias ga='git add'
 
 # Use MacVim's build of vim if it exists on the system
 command -v mvim >/dev/null 2>&1

@@ -31,6 +31,7 @@ set expandtab
 set softtabstop=2
 set autoindent
 set autoread        " auto read on external file changes
+set hidden
 "syntax on
 
 " Tell vim to remember certain things when we exit
@@ -177,6 +178,14 @@ set cursorline
 " Edit and reload vimrc
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
+
+" LustyJuggler / LustyExplorer mappings
+let g:LustyExplorerSuppressRubyWarning = 1
+map <silent> <leader>, :LustyJuggler<CR>
+map <silent> <leader>. :LustyJugglePrevious<CR>
+map <silent> <leader>f :LustyFilesystemExplorer<CR>
+map <silent> <leader>b :LustyBufferExplorer<CR>
+map <silent> <leader>q :bd<CR>
 
 " always show the status line
 set laststatus=2
