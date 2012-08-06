@@ -6,6 +6,9 @@
 " Joshua Elliott
 " Created 6/28/12
 "
+" TODO:
+"	  - Command to toggle autocompletion (tab, delimeters, etc.)
+
 "----------------------------------------------------------
 " General Settings
 "----------------------------------------------------------
@@ -202,13 +205,14 @@ hi User1 ctermbg=lightgray  ctermfg=darkred     guibg=lightgray guifg=darkred
 hi User2 ctermbg=lightgray  ctermfg=darkmagenta guibg=lightgray guifg=darkmagenta
 hi User3 ctermbg=red        ctermfg=white       guibg=red       guifg=white
 
-" Statusline formatting
+" Statusline formatting	                      (Remember to escape spaces '\ ')
 set statusline=
-set statusline+=%F                            "full filename
-set statusline+=\ %1*                         "<space> switch to User1 highlight
+set statusline+=[%n]	                        "buffer number
+set statusline+=\ %F                          "full filename
+set statusline+=\ %1*                         "switch to User1 highlight
 set statusline+=%y                            "filetype
 set statusline+=%*                            "normal highlight
-set statusline+=\ %2*                         "<space> switch to User2 highlight
+set statusline+=\ %2*                         "switch to User2 highlight
 "git status (if the plugin is loaded)
 set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}
 set statusline+=%*                            "normal highlight
@@ -218,8 +222,9 @@ set statusline+=%3*                           "switch to User3 highlight
 "syntastic warnings (if the plugin is loaded)
 set statusline+=%{exists('g:loaded_syntastic')?SyntasticStatuslineFlag():''}
 set statusline+=%*                            "normal highlight
-set statusline+=\ %r                          "<space> read only flag
+set statusline+=\ %r                          "read only flag
 set statusline+=%m                            "modified flag
-set statusline+=\ %l/%L                       "<space> line number / total lines
+set statusline+=\ %l/%L                       "line number / total lines
 set statusline+=:%c                           "column
+
 
