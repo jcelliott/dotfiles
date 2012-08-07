@@ -8,6 +8,8 @@
 "
 " TODO:
 "	  - Command to toggle autocompletion (tab, delimeters, etc.)
+"	  - marks and highlights system (like current <leader>l) with <leader>1-9
+"	  - change highlight colors in status bar on transition to insert mode
 
 "----------------------------------------------------------
 " General Settings
@@ -138,8 +140,14 @@ nnoremap Y y$
 " (from:Steve Fancia [spf13.com])
 cmap w!! w !sudo tee % >/dev/null
 
-" press Space to turn off highlighting and clear any message already displayed.
-nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
+" <leader>l will highlight the current line and set mark l.
+" Use 'l to return and :match to clear
+:nnoremap <silent> <Leader>l ml:execute 'match Search /\%'.line('.').'l/'<CR>
+
+" <Space> turn off highlighting, clear search pattern, clear messages
+nnoremap <silent> <Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+" <alt-Space> to do the above and clear match highlight
+nnoremap <silent> <A-Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>:match<CR>
 
 " Use the system clipboard for cut and copy (not working right now on osx)
 set clipboard=unnamed
@@ -175,9 +183,6 @@ hi cursorline cterm=bold gui=bold
 "hi cursorline cterm=NONE ctermbg=Black
 set cursorline
 
-" <leader>l will highlight the current line and set mark l. Use 'l to return
-:nnoremap <silent> <Leader>l ml:execute 'match Search /\%'.line('.').'l/'<CR>
-
 " Edit and reload vimrc
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
@@ -201,24 +206,25 @@ au InsertLeave * hi statusline ctermbg=White ctermfg=DarkGray  guibg=White guifg
 hi statusline ctermbg=White ctermfg=DarkGray guibg=White guifg=DarkGray
 
 " Highlights for status line (must appear after any :colorscheme)
-hi User1 ctermbg=lightgray  ctermfg=darkred     guibg=lightgray guifg=darkred
-hi User2 ctermbg=lightgray  ctermfg=darkmagenta guibg=lightgray guifg=darkmagenta
-hi User3 ctermbg=red        ctermfg=white       guibg=red       guifg=white
+hi User1 ctermbg=darkgray	ctermfg=lightblue	guibg=darkgray guifg=lightblue
+hi User2 ctermbg=gray   ctermfg=darkred     guibg=gray	guifg=darkred
+hi User3 ctermbg=gray   ctermfg=darkmagenta guibg=gray	guifg=darkmagenta
+hi User4 ctermbg=red	  ctermfg=white       guibg=red   guifg=white
 
 " Statusline formatting	                      (Remember to escape spaces '\ ')
 set statusline=
-set statusline+=[%n]	                        "buffer number
+set statusline+=%1*[%n]%*	                    "buffer number
 set statusline+=\ %F                          "full filename
-set statusline+=\ %1*                         "switch to User1 highlight
+set statusline+=\ %2*                         "switch to User2 highlight
 set statusline+=%y                            "filetype
 set statusline+=%*                            "normal highlight
-set statusline+=\ %2*                         "switch to User2 highlight
+set statusline+=\ %3*                         "switch to User3 highlight
 "git status (if the plugin is loaded)
 set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}
 set statusline+=%*                            "normal highlight
 
 set statusline+=%=                            "right align
-set statusline+=%3*                           "switch to User3 highlight
+set statusline+=%4*                           "switch to User4 highlight
 "syntastic warnings (if the plugin is loaded)
 set statusline+=%{exists('g:loaded_syntastic')?SyntasticStatuslineFlag():''}
 set statusline+=%*                            "normal highlight
