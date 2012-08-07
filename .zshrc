@@ -60,8 +60,9 @@ alias no='ls' # for dvorak
 alias vimconf='vim ~/.vimrc'
 alias zshconf='vim ~/.zshrc'
 
-alias smi='git submodule init'
-alias smu='git submodule update'
+alias gsa='git submodule add'
+alias gsi='git submodule init'
+alias gsu='git submodule update'
 alias gst='git status'
 alias gc='git commit -v'
 alias glg='git log --stat --graph --max-count=5'
