@@ -191,7 +191,8 @@ nmap <silent> <leader>sv :so $MYVIMRC<CR>
 let g:LustyExplorerSuppressRubyWarning = 1
 map <silent> <leader>, :LustyJuggler<CR>
 map <silent> <leader>. :LustyJugglePrevious<CR>
-map <silent> <leader>f :LustyFilesystemExplorer<CR>
+map <silent> <leader>f :LustyFilesystemExplorerFromHere<CR>
+map <silent> <leader>h :LustyFilesystemExplorer $HOME<CR>
 map <silent> <leader>b :LustyBufferExplorer<CR>
 map <silent> <leader>q :bd<CR>
 

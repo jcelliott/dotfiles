@@ -16,9 +16,6 @@
 [submodule ".vim/bundle/supertab"]
 	path = .vim/bundle/supertab
 	url = git://github.com/ervandew/supertab.git
-[submodule ".vim/bundle/delimitMate"]
-	path = .vim/bundle/delimitMate
-	url = git://github.com/Raimondi/delimitMate.git
 [submodule ".vim/bundle/tcomment"]
 	path = .vim/bundle/tcomment
 	url = git://github.com/tomtom/tcomment_vim.git
