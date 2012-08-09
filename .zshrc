@@ -60,13 +60,16 @@ alias no='ls' # for dvorak
 alias vimconf='vim ~/.vimrc'
 alias zshconf='vim ~/.zshrc'
 
+alias gst='git status'
+alias gc='git commit -v'
+alias glg='git log --stat --graph'
+alias glgs='git log --stat --graph --max-count=3'
+alias ga='git add'
 alias gsa='git submodule add'
 alias gsi='git submodule init'
 alias gsu='git submodule update'
-alias gst='git status'
-alias gc='git commit -v'
-alias glg='git log --stat --graph --max-count=5'
-alias ga='git add'
+alias gcm='git checkout master'
+alias gch='git checkout'
 
 # Use MacVim's build of vim if it exists on the system
 command -v mvim >/dev/null 2>&1
