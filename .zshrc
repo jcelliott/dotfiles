@@ -12,6 +12,9 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 ZSH_THEME="afowler"
 
+# Use vi style bindings
+#bindkey -v
+
 # Comment this out to disable weekly auto-update checks
 # DISABLE_AUTO_UPDATE="true"
 

@@ -168,6 +168,9 @@ set scrolloff=8
 " Lines to scroll when cursor leaves screen
 set scrolljump=5
 
+" toggle paste mode
+set pastetoggle=<F2>
+
 " Auto fold code
 set foldenable
 
