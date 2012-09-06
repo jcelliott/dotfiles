@@ -197,7 +197,7 @@ map <silent> <leader>. :LustyJugglePrevious<CR>
 map <silent> <leader>f :LustyFilesystemExplorerFromHere<CR>
 map <silent> <leader>h :LustyFilesystemExplorer $HOME<CR>
 map <silent> <leader>b :LustyBufferExplorer<CR>
-map <silent> <leader>q :bd<CR>
+map <silent> <leader>q :bd<CR> " closes current buffer
 
 " always show the status line
 set laststatus=2

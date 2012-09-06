@@ -1,0 +1,80 @@
+#!/bin/sh
+
+# Sets up user environment, including:
+#  zsh,
+
+echo "Setting up your environment..."
+
+### Check OS ###
+platform='unknown'
+case `uname` in
+  Darwin)
+    platform=mac
+    ;;
+  Linux)
+    platform=linux
+    ;;
+  *)
+    echo "Unsupported operating system. Aborting"
+    exit 1
+    ;;
+esac
+echo "Operating System:   "$platform
+
+if [ -e "$HOME/.config/.exthrd.lock" ]; then
+  echo "You have already set up your environment here. You will need to run 'unsetmeup' if you want to run setup again."
+  exit 1
+fi
+
+### Check if programs are installed ###
+
+install_something() {
+  local something = $1
+  if [[ $platform == 'mac' ]]; then
+    brew install $something
+    if [ $? -eq 1 ]; then
+      echo "Could not install $something. Aborting"
+      exit 1
+    fi
+  elif [[ $platform == 'linux' ]]; then
+    if [ -f /etc/debian_version ]; then
+      sudo apt-get install $something
+      if [ $? -eq 1 ]; then
+        echo "Could not install $something. Aborting"
+        exit 1
+      fi
+    elif [ -f /etc/arch-release ]; then
+      sudo pacman -S $something
+      if [ $? -eq 1 ]; then
+        echo "Could not install $something. Aborting"
+        exit 1
+      fi
+    else
+      echo "I don't know how to install things on your operating system. Aborting"
+    fi
+  fi
+}
+
+command -v git >/dev/null 2>&1 || { echo "Git not installed. Attempting to install."; install_something git; }
+command -v zsh >/dev/null 2>&1 || { echo "Zsh not installed. Attempting to install."; install_something zsh; }
+command -v vim >/dev/null 2>&1 || { echo "Vim not installed. Attempting to install."; install_something git; }
+
+
+# check that vim has support for: ruby, clipboard, etc.
+
+git clone https://github.com/joshuacelliott/dotfiles.git $HOME/.config/exthrd >/dev/null
+
+### Back up files ###
+if [ -f $HOME/.vimrc ]; then
+  cp $HOME/.vimrc $HOME/.vimrc.backup
+  rm $HOME/.vimrc
+  echo "Backed up .vimrc"
+fi
+
+if [ -f $HOME/.zshrc ]; then
+  cp $HOME/.zshrc $HOME/.zshrc.backup
+  rm $HOME/.zshrc
+  echo "Backed up .zshrc"
+fi
+
+
