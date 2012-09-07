@@ -98,6 +98,8 @@ git fetch
 git branch master origin/master
 git reset --hard origin/master
 
+git submodule init
+git submodule update
 autogi
 
 ### oh-my-zsh ###
