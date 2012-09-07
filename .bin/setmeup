@@ -10,7 +10,7 @@ echo "Setting up your environment..."
 
 echo "Have you added this machine's public key to your github account? (y/n) "
 read added_key
-if [ $added_key = "n" ]; then
+if [ $added_key -eq "n" ]; then
   echo "You need to do that first. Aborting"
   exit 1
 else
@@ -42,9 +42,9 @@ echo "Operating System:   "$platform
 ### Check if programs are installed ###
 
 install_something() {
-  local something_mac = $1
-  local something_deb = $2
-  local something_arch = $3
+  local something_mac=$1
+  local something_deb=$2
+  local something_arch=$3
   if [ $platform = 'mac' ]; then
     brew install $something_mac
     if [ $? -eq 1 ]; then
@@ -54,7 +54,7 @@ install_something() {
   elif [ $platform = 'linux' ]; then
     if [ -f /etc/debian_version ]; then
       sudo apt-get install $something_deb
-      if [ $? -eq 1 ]; then
+      if [ "$?" -eq 1 ]; then
         echo "Could not install $something_deb. Aborting"
         exit 1
       fi
@@ -78,10 +78,6 @@ command -v zsh >/dev/null 2>&1 ||
 command -v vim >/dev/null 2>&1 || 
   { echo "Vim not installed. Attempting to install."; install_something macvim vim-nox vim; }
 
-# Check that vim has support for:
-vim --version | grep "+clipboard" >/dev/null 2>&1 || { echo "Warning: vim not compiled with +clipboard"; }
-vim --version | grep "+ruby" >/dev/null 2>&1 || { echo "Warning: vim not compiled with +ruby"; }
-
 ### Backup files ###
 if [ -f $HOME/.vimrc ]; then
   cp $HOME/.vimrc $HOME/.vimrc.backup
@@ -102,12 +98,16 @@ git fetch
 git branch master origin/master
 git reset --hard origin/master
 
+autogi
+
 ### oh-my-zsh ###
 git clone git://github.com/robbyrussell/oh-my-zsh.git $HOME/.oh-my-zsh
 chsh -s /bin/zsh `whoami`
-zsh
-source .zshrc
+# zsh
+# source .zshrc
 
-autogi
+# Check that vim has support for:
+vim --version | grep "+clipboard" >/dev/null 2>&1 || { echo "Warning: vim not compiled with +clipboard"; }
+vim --version | grep "+ruby" >/dev/null 2>&1 || { echo "Warning: vim not compiled with +ruby"; }
 
-echo "...Finished setting up environment"
+echo "...Finished setting up environment. You should log out and log back in now."
