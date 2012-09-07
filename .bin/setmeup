@@ -1,0 +1,104 @@
+#!/bin/sh
+
+# Author: Joshua Elliott
+# Sets up my dev environment
+
+# TODO: build custom vim, install rvm/ruby, 
+
+cd $HOME
+echo "Setting up your environment..."
+
+### Check OS ###
+platform='unknown'
+case `uname` in
+  Darwin)
+    platform=mac
+    ;;
+  Linux)
+    platform=linux
+    ;;
+  *)
+    echo "Unsupported operating system. Aborting"
+    exit 1
+    ;;
+esac
+echo "Operating System:   "$platform
+
+if [ -e "$HOME/.config/.exthrd.lock" ]; then
+  echo "You have already set up your environment here. You will need to run 'unsetmeup' if you want to run setup again."
+  exit 1
+fi
+touch $HOME/.config/.exthrd.lock
+
+### Check if programs are installed ###
+
+install_something() {
+  local something_mac = $1
+  local something_deb = $2
+  local something_arch = $3
+  if [[ $platform == 'mac' ]]; then
+    brew install $something_mac
+    if [ $? -eq 1 ]; then
+      echo "Could not install $something_mac. Aborting"
+      exit 1
+    fi
+  elif [[ $platform == 'linux' ]]; then
+    if [ -f /etc/debian_version ]; then
+      sudo apt-get install $something_deb
+      if [ $? -eq 1 ]; then
+        echo "Could not install $something_deb. Aborting"
+        exit 1
+      fi
+    elif [ -f /etc/arch-release ]; then
+      sudo pacman -S $something_arch
+      if [ $? -eq 1 ]; then
+        echo "Could not install $something_arch. Aborting"
+        exit 1
+      fi
+    else
+      echo "I don't know how to install things on your operating system. Aborting"
+      exit 1
+    fi
+  fi
+}
+
+command -v git >/dev/null 2>&1 || 
+  { echo "Git not installed. Attempting to install."; install_something git git git; }
+command -v zsh >/dev/null 2>&1 || 
+  { echo "Zsh not installed. Attempting to install."; install_something zsh zsh zsh; }
+command -v vim >/dev/null 2>&1 || 
+  { echo "Vim not installed. Attempting to install."; install_something macvim vim-nox vim; }
+
+# Check that vim has support for:
+vim --version | grep "+clipboard" >/dev/null 2>&1 || { echo "Warning: vim not compiled with +clipboard"; }
+vim --version | grep "+ruby" >/dev/null 2>&1 || { echo "Warning: vim not compiled with +ruby"; }
+
+### Backup files ###
+if [ -f $HOME/.vimrc ]; then
+  cp $HOME/.vimrc $HOME/.vimrc.backup
+  rm $HOME/.vimrc
+  echo "Backed up .vimrc"
+fi
+
+if [ -f $HOME/.zshrc ]; then
+  cp $HOME/.zshrc $HOME/.zshrc.backup
+  rm $HOME/.zshrc
+  echo "Backed up .zshrc"
+fi
+
+### deploy dotfiles repo ###
+git init
+git remote add origin git@github.com:joshuacelliott/dotfiles.git
+git fetch
+git branch master origin/master
+git reset --hard origin/master
+
+### oh-my-zsh ###
+git clone git://github.com/robbyrussell/oh-my-zsh.git $HOME/.oh-my-zsh
+chsh -s /bin/zsh
+zsh
+source .zshrc
+
+autogi
+
+echo "...Finished setting up environment"
