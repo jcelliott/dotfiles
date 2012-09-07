@@ -8,6 +8,15 @@
 cd $HOME
 echo "Setting up your environment..."
 
+echo "Have you added this machine's public key to your github account? (y/n) "
+read added_key
+if [ $added_key == "n" ]; then
+  echo "You need to do that first. Aborting"
+  exit 1
+else
+  echo "Good for you!"
+fi
+
 ### Check OS ###
 platform='unknown'
 case `uname` in
@@ -24,11 +33,11 @@ case `uname` in
 esac
 echo "Operating System:   "$platform
 
-if [ -e "$HOME/.config/.exthrd.lock" ]; then
-  echo "You have already set up your environment here. You will need to run 'unsetmeup' if you want to run setup again."
-  exit 1
-fi
-touch $HOME/.config/.exthrd.lock
+# if [ -e "$HOME/.config/.exthrd.lock" ]; then
+#   echo "You have already set up your environment here. You will need to run 'unsetmeup' if you want to run setup again."
+#   exit 1
+# fi
+# touch $HOME/.config/.exthrd.lock
 
 ### Check if programs are installed ###
 
@@ -95,7 +104,7 @@ git reset --hard origin/master
 
 ### oh-my-zsh ###
 git clone git://github.com/robbyrussell/oh-my-zsh.git $HOME/.oh-my-zsh
-chsh -s /bin/zsh
+chsh -s /bin/zsh `whoami`
 zsh
 source .zshrc
 
