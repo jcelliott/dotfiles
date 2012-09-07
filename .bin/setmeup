@@ -10,7 +10,7 @@ echo "Setting up your environment..."
 
 echo "Have you added this machine's public key to your github account? (y/n) "
 read added_key
-if [ $added_key == "n" ]; then
+if [ $added_key = "n" ]; then
   echo "You need to do that first. Aborting"
   exit 1
 else
@@ -45,13 +45,13 @@ install_something() {
   local something_mac = $1
   local something_deb = $2
   local something_arch = $3
-  if [[ $platform == 'mac' ]]; then
+  if [ $platform = 'mac' ]; then
     brew install $something_mac
     if [ $? -eq 1 ]; then
       echo "Could not install $something_mac. Aborting"
       exit 1
     fi
-  elif [[ $platform == 'linux' ]]; then
+  elif [ $platform = 'linux' ]; then
     if [ -f /etc/debian_version ]; then
       sudo apt-get install $something_deb
       if [ $? -eq 1 ]; then
