@@ -74,6 +74,7 @@ alias gsi='git submodule init'
 alias gsu='git submodule update'
 alias gcm='git checkout master'
 alias gch='git checkout'
+alias gpnp='git pull;git push'
 
 # Use MacVim's build of vim if it exists on the system
 command -v mvim >/dev/null 2>&1
