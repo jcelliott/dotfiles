@@ -52,6 +52,7 @@ if [[ $platform == 'mac' ]]; then
   alias ls='gls --color=auto'
   alias ll='gls -lah --color=auto'
   alias la='gls -a --color=auto'
+  alias ql='quick-look'
 
 elif [[ $platform == 'linux' ]]; then
   alias ls='ls --color=auto'
