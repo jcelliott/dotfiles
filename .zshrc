@@ -15,8 +15,8 @@ ZSH_THEME="afowler"
 # Use vi style bindings
 #bindkey -v
 
-# Comment this out to disable weekly auto-update checks
-# DISABLE_AUTO_UPDATE="true"
+# Comment this out to enable weekly auto-update checks
+DISABLE_AUTO_UPDATE="true"
 
 # Plugins (~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
