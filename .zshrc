@@ -52,6 +52,7 @@ if [[ $platform == 'mac' ]]; then
   alias ls='gls --color=auto'
   alias ll='gls -lah --color=auto'
   alias la='gls -a --color=auto'
+  alias ql='quick-look'
 
 elif [[ $platform == 'linux' ]]; then
   alias ls='ls --color=auto'
@@ -73,6 +74,7 @@ alias gsi='git submodule init'
 alias gsu='git submodule update'
 alias gcm='git checkout master'
 alias gch='git checkout'
+alias gpnp='git pull;git push'
 
 # Use MacVim's build of vim if it exists on the system
 command -v mvim >/dev/null 2>&1
