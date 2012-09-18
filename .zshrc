@@ -84,7 +84,7 @@ if [ $? -eq 0 ]; then
 fi
 
 ### directory colors on linux (for using solarized color scheme) ###
-if [ -e "$HOME/.config/.dircolors" ]; then
+if [ -f "$HOME/.config/.dircolors" ]; then
   #echo "using .dircolors"
   if [[ $platform == 'mac' ]]; then
     eval `gdircolors $HOME/.config/.dircolors`
@@ -105,6 +105,13 @@ fi
 __git_files() {
   _wanted files expl 'local files' _files
 }
+
+### Local customizations ###
+if [ -f "$HOME/.zshrc.local" ]; then
+  echo "loading .zshrc.local"
+  source "$HOME/.zshrc.local" ]
+fi
+
 
 ### Confirm load ###
 echo "energize!"
