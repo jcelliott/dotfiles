@@ -54,6 +54,13 @@ inoremap <C-U> <C-G>u<C-U>
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
 
+  " Language specific options
+
+  " go
+  set rtp+=$GOROOT/misc/vim
+  autocmd BufWritePost *.go :silent Fmt
+
+
   " Enable file type detection.
   " Use the default filetype settings, so that mail gets 'tw' set to 72,
   " 'cindent' is on in C files, etc.
@@ -236,5 +243,4 @@ set statusline+=\ %r                          "read only flag
 set statusline+=%m                            "modified flag
 set statusline+=\ %l/%L                       "line number / total lines
 set statusline+=:%c                           "column
-
 
