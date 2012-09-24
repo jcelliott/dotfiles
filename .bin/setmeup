@@ -5,8 +5,28 @@
 
 # TODO: build custom vim (pkgbuild for arch), install rvm/ruby, 
 
+# This causes the script to exit if a command fails
+set -e
+
+# colorized output
+function cinfo() {
+  echo -e "\E[34m$1\E[0m"
+}
+function cwarn() {
+  echo -e "\E[33m$1\E[0m"
+}
+function cerror() {
+  echo -e "\E[31m$1\E[0m"
+}
+
+sleep 1
 cd $HOME
-echo "Setting up your environment..."
+echo
+cinfo "Setting up your environment..."
+echo "setmeup log:" > $HOME/setmeup.log
+
+cwarn "Make sure you have added this machine's public key to your github account."
+sleep 2
 
 # read -p "Have you added this machine's public key to your github account? (y/n) " yesno
 # case $yesno in
@@ -25,11 +45,25 @@ case `uname` in
     platform=linux
     ;;
   *)
-    echo "Unsupported operating system. Aborting"
+    cerror "Unsupported operating system. Aborting"
     exit 1
     ;;
 esac
-echo "Operating System:   "$platform
+
+# Determine the specific linux distro
+if [ $platform = 'linux' ]; then
+  if [ -f /etc/debian_version ]; then
+    platform=debian
+  elif [ -f /etc/arch-release ]; then
+    platform=arch
+  else
+    cwarn "Automated installation not supported for this operating system.\
+            Make sure you have the following installed: git, zsh, mercurial, vim dependencies"
+    sleep 2
+  fi
+fi
+
+cinfo "Operating System: $platform"
 
 # if [ -e "$HOME/.config/.exthrd.lock" ]; then
 #   echo "You have already set up your environment here. You will need to run 'unsetmeup' if you want to run setup again."
@@ -37,77 +71,132 @@ echo "Operating System:   "$platform
 # fi
 # touch $HOME/.config/.exthrd.lock
 
-### Check if programs are installed ###
+### Install programs ###
+cinfo "Installing programs..."
 
-install_something() {
-  local something_mac=$1
-  local something_deb=$2
-  local something_arch=$3
-  if [ $platform = 'mac' ]; then
-    brew install $something_mac
-    if [ $? -eq 1 ]; then
-      echo "Could not install $something_mac. Aborting"
-      exit 1
-    fi
-  elif [ $platform = 'linux' ]; then
-    if [ -f /etc/debian_version ]; then
-      sudo apt-get install $something_deb
-      if [ "$?" -eq 1 ]; then
-        echo "Could not install $something_deb. Aborting"
-        exit 1
-      fi
-    elif [ -f /etc/arch-release ]; then
-      sudo pacman -S $something_arch
-      if [ $? -eq 1 ]; then
-        echo "Could not install $something_arch. Aborting"
-        exit 1
-      fi
-    else
-      echo "I don't know how to install things on your operating system. Aborting"
-      exit 1
-    fi
-  fi
-}
+VIM_CONFIG_OPTS='--enable-rubyinterp=yes \
+                 --with-features=huge \
+                 --with-compiledby=jelliott'
 
-command -v git >/dev/null 2>&1 || 
-  { echo "Git not installed. Attempting to install."; install_something git git git; }
-command -v zsh >/dev/null 2>&1 || 
-  { echo "Zsh not installed. Attempting to install."; install_something zsh zsh zsh; }
-command -v vim >/dev/null 2>&1 || 
-  { echo "Vim not installed. Attempting to install."; install_something macvim vim-nox vim; }
+# OSX
+if [ $platform = 'mac' ]; then
+  # Install ruby (rvm)
+  cinfo "Installing ruby..."
+  curl -L https://get.rvm.io | bash -s stable --ruby >>$HOME/setmeup.log
+  source $HOME/.rvm/scripts/rvm
+
+  cinfo "Installing homebrew..."
+  ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)" >>$HOME/setmeup.log
+  cinfo "Installing macvim..."
+  brew install macvim >>$HOME/setmeup.log
+  cinfo "Installing git..."
+  brew install git >>$HOME/setmeup.log
+  cinfo "Installing zsh..."
+  brew install zsh >>$HOME/setmeup.log
+  cinfo "Installing GNU coreutils..."
+  brew install coreutils >>$HOME/setmeup.log
+
+# Debian
+elif [ $platform = 'debian' ]; then
+  # First update package database
+  sudo apt-get update --assume-yes >>$HOME/setmeup.log
+  # Install build tools
+  sudo apt-get install --assume-yes build-essential >>$HOME/setmeup.log
+
+  cinfo "Installing git..."
+  sudo apt-get install --assume-yes git >>$HOME/setmeup.log
+  cinfo "Installing zsh..."
+  sudo apt-get install --assume-yes zsh >>$HOME/setmeup.log
+  cinfo "Installing mercurial..."
+  sudo apt-get install --assume-yes mercurial >>$HOME/setmeup.log
+  cinfo "Installing vim dependencies..."
+  sudo apt-get build-dep --assume-yes vim >>$HOME/setmeup.log
+
+  # Install ruby (rvm)
+  cinfo "Installing ruby..."
+  curl -L https://get.rvm.io | bash -s stable --ruby >>$HOME/setmeup.log
+  source $HOME/.rvm/scripts/rvm
+
+  cinfo "Building vim..."
+  mkdir -p $HOME/builds
+  cd $HOME/builds
+  hg clone https://vim.googlecode.com/hg/ vim >>$HOME/setmeup.log
+  cd vim
+  ./configure $VIM_CONFIG_OPTS >>$HOME/setmeup.log
+  make >>$HOME/setmeup.log
+  sudo make install >>$HOME/setmeup.log
+
+# Arch
+elif [ $platform = 'arch' ]; then
+  # First update package database 
+  sudo pacman -Syy --assume-yes >>$HOME/setmeup.log
+  # Install build tools
+  sudo pacman -S base-devel --assume-yes >>$HOME/setmeup.log
+
+  cinfo "Installing git..."
+  sudo pacman -S git --assume-yes >>$HOME/setmeup.log 
+  cinfo "Installing zsh..."
+  sudo pacman -S zsh --assume-yes >>$HOME/setmeup.log
+  cinfo "Installing mercurial..."
+  sudo pacman -S mercurial --assume-yes >>$HOME/setmeup.log
+  # create PKGBUILD for this?
+  cinfo "Installing vim dependencies..."
+  sudo pacman -S vim-runtime --assume-yes >>$HOME/setmeup.log
+
+  # Install ruby (rvm)
+  cinfo "Installing ruby..."
+  curl -L https://get.rvm.io | bash -s stable --ruby >>$HOME/setmeup.log
+  source $HOME/.rvm/scripts/rvm
+  
+  cinfo "Building vim..."
+  mkdir -p $HOME/builds
+  cd $HOME/builds
+  hg clone https://vim.googlecode.com/hg/ vim >>$HOME/setmeup.log
+  cd vim
+  ./configure $VIM_CONFIG_OPTS >>$HOME/setmeup.log
+  make >>$HOME/setmeup.log
+  sudo make install >>$HOME/setmeup.log
+
+else
+  cwarn "nothing automatically installed"
+
+fi
 
 ### Backup files ###
 if [ -f $HOME/.vimrc ]; then
   cp $HOME/.vimrc $HOME/.vimrc.backup
   rm $HOME/.vimrc
-  echo "Backed up .vimrc"
+  cinfo "Backed up .vimrc"
 fi
 
 if [ -f $HOME/.zshrc ]; then
   cp $HOME/.zshrc $HOME/.zshrc.backup
   rm $HOME/.zshrc
-  echo "Backed up .zshrc"
+  cinfo "Backed up .zshrc"
 fi
 
 ### deploy dotfiles repo ###
-git init
-git remote add origin git@github.com:joshuacelliott/dotfiles.git
-git fetch
-git branch master origin/master
-git reset --hard origin/master
+cinfo "Deploying dotfiles repo"
+cd $HOME
+git init >>$HOME/setmeup.log
+git remote add origin git@github.com:joshuacelliott/dotfiles.git >>$HOME/setmeup.log
+git fetch >>$HOME/setmeup.log
+git branch master origin/master >>$HOME/setmeup.log
+git reset --hard origin/master >>$HOME/setmeup.log
 
-git submodule init
-git submodule update
-autogi
+git submodule init >>$HOME/setmeup.log
+git submodule update >>$HOME/setmeup.log
+.bin/autogi
+$HOME/.config/gnome-terminal-colors-solarized/set_dark.sh
 
 ### oh-my-zsh ###
-git clone git://github.com/robbyrussell/oh-my-zsh.git $HOME/.oh-my-zsh
-chsh -s /bin/zsh `whoami`
+# putting echo in front of this means that the script won't exit if chsh fails (like chsh xxxxxxxx || true)
+echo chsh -s /bin/zsh `whoami`
 # zsh
 # source .zshrc
 
 # Check that vim has support for:
-vim --version | grep "+clipboard" >/dev/null 2>&1 || { echo "Warning: vim not compiled with +clipboard"; }
-vim --version | grep "+ruby" >/dev/null 2>&1 || { echo "Warning: vim not compiled with +ruby"; }
+vim --version | grep "+clipboard" >/dev/null 2>&1 || { cwarn "Warning: vim not compiled with +clipboard"; }
+vim --version | grep "+ruby" >/dev/null 2>&1 || { cwarn "Warning: vim not compiled with +ruby"; }
 
-echo "...Finished setting up environment. You should log out and log back in now."
+cinfo "Finished setting up environment. You should log out and log back in now."
