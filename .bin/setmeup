@@ -22,12 +22,15 @@ function cerror() {
 cd $HOME
 cinfo "Setting up your environment..."
 
-read -p "Have you added this machine's public key to your github account? (y/n) " yesno
-case $yesno in
-  [Yy]* ) echo "Good for you!"; break;;
-  [Nn]* ) echo "You need to do that first. Aborting."; exit 1;;
-  * ) echo "Please answer yes or no.";;
-esac
+cwarn "Make sure you have added this machine's public key to your github account."
+sleep 2
+
+# read -p "Have you added this machine's public key to your github account? (y/n) " yesno
+# case $yesno in
+#   [Yy]* ) echo "Good for you!"; break;;
+#   [Nn]* ) echo "You need to do that first. Aborting."; exit 1;;
+#   * ) echo "Please answer yes or no.";;
+# esac
 
 ### Check OS ###
 platform='unknown'
