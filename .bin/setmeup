@@ -88,14 +88,14 @@ if [ $platform = 'mac' ]; then
 # Debian
 elif [ $platform = 'debian' ]; then
   # First update package database
-  sudo apt-get update
+  sudo apt-get update --assume-yes 
   # Install build tools
-  sudo apt-get install build-essential
+  sudo apt-get install --assume-yes build-essential
 
-  sudo apt-get install git
-  sudo apt-get install zsh
-  sudo apt-get install mercurial
-  sudo apt-get build-dep vim
+  sudo apt-get install --assume-yes git
+  sudo apt-get install --assume-yes zsh
+  sudo apt-get install --assume-yes mercurial
+  sudo apt-get build-dep --assume-yes vim
 
   # Install ruby (rvm)
   curl -L https://get.rvm.io | bash -s stable --ruby
@@ -112,15 +112,15 @@ elif [ $platform = 'debian' ]; then
 # Arch
 elif [ $platform = 'arch' ]; then
   # First update package database 
-  sudo pacman -Syy
+  sudo pacman -Syy --assume-yes 
   # Install build tools
-  sudo pacman -S base-devel
+  sudo pacman -S base-devel --assume-yes 
 
-  sudo pacman -S git
-  sudo pacman -S zsh
-  sudo pacman -S mercurial
+  sudo pacman -S git --assume-yes 
+  sudo pacman -S zsh --assume-yes 
+  sudo pacman -S mercurial --assume-yes 
   # create PKGBUILD for this?
-  sudo pacman -S vim-runtime
+  sudo pacman -S vim-runtime --assume-yes 
 
   # Install ruby (rvm)
   curl -L https://get.rvm.io | bash -s stable --ruby
