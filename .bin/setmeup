@@ -99,8 +99,10 @@ if [ $platform = 'mac' ]; then
 # Debian
 elif [ $platform = 'debian' ]; then
   # First update package database
+  cinfo "Updating package database"
   sudo apt-get update --assume-yes >>$HOME/setmeup.log
   # Install build tools
+  cinfo "Installing build tools"
   sudo apt-get install --assume-yes build-essential >>$HOME/setmeup.log
 
   cinfo "Installing git..."
