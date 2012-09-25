@@ -58,7 +58,7 @@ if has("autocmd")
 
   " go
   set rtp+=$GOROOT/misc/vim
-  autocmd BufWritePost *.go :silent Fmt
+  autocmd BufWritePre *.go :silent Fmt
 
 
   " Enable file type detection.
