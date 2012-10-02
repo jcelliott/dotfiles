@@ -1,0 +1,24 @@
+#!/bin/sh
+# /etc/init.d/script_name
+
+
+# define commands
+case "$1" in
+  start)
+    echo "Starting my_service"
+    /usr/local/bin/my_service
+    ;;
+  stop)
+    echo "Stopping my_service"
+    killall service_name
+    ;;
+  *)
+    echo "Usage: /etc/init.d/script_name {start|stop}"
+    echo "   or: service script_name {start|stop}"
+    echo "To register script for startup: update-rc.d script_name defaults"
+    exit 1
+    ;;
+esac
+
+
+exit 0
