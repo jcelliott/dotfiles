@@ -6,14 +6,12 @@
 # Joshua Elliott
 # --------------------------
 
+### oh-my-zsh setup ###
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
 # Look in ~/.oh-my-zsh/themes/
 ZSH_THEME="afowler"
-
-# Use vi style bindings
-#bindkey -v
 
 # Comment this out to enable weekly auto-update checks
 DISABLE_AUTO_UPDATE="true"
@@ -23,6 +21,21 @@ DISABLE_AUTO_UPDATE="true"
 plugins=(brew node npm osx ruby rvm screen)
 
 source $ZSH/oh-my-zsh.sh
+
+### zsh options ###
+# GLOBDOTS lets files beginning with a . be matched without explicitly specifying the dot
+setopt globdots
+
+# HISTIGNOREDUPS prevents the current line from being saved in the history if it is the same as the previous one
+setopt histignoredups
+
+# CORRECT turns on spelling correction for commands
+unsetopt correct
+# CORRECTALL turns on spelling correction for all arguments.
+unsetopt correctall
+
+# Use vi style bindings
+#bindkey -v
 
 ### Check OS ###
 platform='unknown'
