@@ -1,0 +1,7 @@
+[user]
+	email = joshuacelliott@gmail.com
+	name = joshuacelliott
+[core]
+	editor = vim
+[color]
+	ui = auto

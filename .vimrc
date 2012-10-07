@@ -149,12 +149,15 @@ cmap w!! w !sudo tee % >/dev/null
 
 " <leader>l will highlight the current line and set mark l.
 " Use 'l to return and :match to clear
-:nnoremap <silent> <Leader>l ml:execute 'match Search /\%'.line('.').'l/'<CR>
+:nnoremap <silent> <leader>l ml:execute 'match Search /\%'.line('.').'l/'<CR>
 
 " <Space> turn off highlighting, clear search pattern, clear messages
 nnoremap <silent> <Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
-" <alt-Space> to do the above and clear match highlight
-nnoremap <silent> <A-Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>:match<CR>
+" <leader><Space> to do the above and clear match highlight
+nnoremap <silent> <leader><Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>:match<CR>
+
+" <leader>/ highlights occurrences of the word under cursor
+map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 
 " Use the system clipboard for cut and copy (not working right now on osx)
 set clipboard=unnamed
@@ -162,8 +165,6 @@ set clipboard=unnamed
 " ctrl-j and ctrl-k to hold cursor while lines scroll
 map <C-j> <C-e>j
 map <C-k> <C-y>k
-"map <C-j> jzz
-"map <C-k> kzz
 
 " Visual shifting (without exiting Visual mode) [should be able to the same
 " thing with > and then . to repeat]
