@@ -126,6 +126,7 @@ if [ -f "$HOME/.zshrc.local" ]; then
 fi
 
 
-### Confirm load ###
+### Start in home directory and Confirm load ###
+cd $HOME
 echo "energize!"
 

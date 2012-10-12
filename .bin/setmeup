@@ -23,7 +23,8 @@ sleep 1
 cd $HOME
 echo
 cinfo "Setting up your environment..."
-echo "setmeup log:" > $HOME/setmeup.log
+LOG=$HOME/setmeup.log
+echo "setmeup log:" > $LOG
 
 cwarn "Make sure you have added this machine's public key to your github account."
 sleep 2
@@ -82,82 +83,82 @@ VIM_CONFIG_OPTS='--enable-rubyinterp=yes \
 if [ $platform = 'mac' ]; then
   # Install ruby (rvm)
   cinfo "Installing ruby..."
-  curl -L https://get.rvm.io | bash -s stable --ruby >>$HOME/setmeup.log
+  curl -L https://get.rvm.io | bash -s stable --ruby >>$LOG
   source $HOME/.rvm/scripts/rvm
 
   cinfo "Installing homebrew..."
-  ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)" >>$HOME/setmeup.log
+  ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)" >>$LOG
   cinfo "Installing macvim..."
-  brew install macvim >>$HOME/setmeup.log
+  brew install macvim >>$LOG
   cinfo "Installing git..."
-  brew install git >>$HOME/setmeup.log
+  brew install git >>$LOG
   cinfo "Installing zsh..."
-  brew install zsh >>$HOME/setmeup.log
+  brew install zsh >>$LOG
   cinfo "Installing GNU coreutils..."
-  brew install coreutils >>$HOME/setmeup.log
+  brew install coreutils >>$LOG
 
 # Debian
 elif [ $platform = 'debian' ]; then
   # First update package database
   cinfo "Updating package database"
-  sudo apt-get update --assume-yes >>$HOME/setmeup.log
+  sudo apt-get update --assume-yes >>$LOG
   # Install build tools
   cinfo "Installing build tools"
-  sudo apt-get install --assume-yes build-essential >>$HOME/setmeup.log
+  sudo apt-get install --assume-yes build-essential >>$LOG
 
   cinfo "Installing git..."
-  sudo apt-get install --assume-yes git >>$HOME/setmeup.log
+  sudo apt-get install --assume-yes git >>$LOG
   cinfo "Installing zsh..."
-  sudo apt-get install --assume-yes zsh >>$HOME/setmeup.log
+  sudo apt-get install --assume-yes zsh >>$LOG
   cinfo "Installing mercurial..."
-  sudo apt-get install --assume-yes mercurial >>$HOME/setmeup.log
+  sudo apt-get install --assume-yes mercurial >>$LOG
   cinfo "Installing vim dependencies..."
-  sudo apt-get build-dep --assume-yes vim >>$HOME/setmeup.log
+  sudo apt-get build-dep --assume-yes vim >>$LOG
 
   # Install ruby (rvm)
   cinfo "Installing ruby..."
-  curl -L https://get.rvm.io | bash -s stable --ruby >>$HOME/setmeup.log
+  curl -L https://get.rvm.io | bash -s stable --ruby >>$LOG
   source $HOME/.rvm/scripts/rvm
 
   cinfo "Building vim..."
   mkdir -p $HOME/builds
   cd $HOME/builds
-  hg clone https://vim.googlecode.com/hg/ vim >>$HOME/setmeup.log
+  hg clone https://vim.googlecode.com/hg/ vim >>$LOG
   cd vim
-  ./configure $VIM_CONFIG_OPTS >>$HOME/setmeup.log
-  make >>$HOME/setmeup.log
-  sudo make install >>$HOME/setmeup.log
+  ./configure $VIM_CONFIG_OPTS >>$LOG
+  make >>$LOG
+  sudo make install >>$LOG
 
 # Arch
 elif [ $platform = 'arch' ]; then
   # First update package database 
-  sudo pacman -Syy --assume-yes >>$HOME/setmeup.log
+  sudo pacman -Syy --assume-yes >>$LOG
   # Install build tools
-  sudo pacman -S base-devel --assume-yes >>$HOME/setmeup.log
+  sudo pacman -S base-devel --assume-yes >>$LOG
 
   cinfo "Installing git..."
-  sudo pacman -S git --assume-yes >>$HOME/setmeup.log 
+  sudo pacman -S git --assume-yes >>$LOG 
   cinfo "Installing zsh..."
-  sudo pacman -S zsh --assume-yes >>$HOME/setmeup.log
+  sudo pacman -S zsh --assume-yes >>$LOG
   cinfo "Installing mercurial..."
-  sudo pacman -S mercurial --assume-yes >>$HOME/setmeup.log
+  sudo pacman -S mercurial --assume-yes >>$LOG
   # create PKGBUILD for this?
   cinfo "Installing vim dependencies..."
-  sudo pacman -S vim-runtime --assume-yes >>$HOME/setmeup.log
+  sudo pacman -S vim-runtime --assume-yes >>$LOG
 
   # Install ruby (rvm)
   cinfo "Installing ruby..."
-  curl -L https://get.rvm.io | bash -s stable --ruby >>$HOME/setmeup.log
+  curl -L https://get.rvm.io | bash -s stable --ruby >>$LOG
   source $HOME/.rvm/scripts/rvm
   
   cinfo "Building vim..."
   mkdir -p $HOME/builds
   cd $HOME/builds
-  hg clone https://vim.googlecode.com/hg/ vim >>$HOME/setmeup.log
+  hg clone https://vim.googlecode.com/hg/ vim >>$LOG
   cd vim
-  ./configure $VIM_CONFIG_OPTS >>$HOME/setmeup.log
-  make >>$HOME/setmeup.log
-  sudo make install >>$HOME/setmeup.log
+  ./configure $VIM_CONFIG_OPTS >>$LOG
+  make >>$LOG
+  sudo make install >>$LOG
 
 else
   cwarn "nothing automatically installed"
@@ -180,14 +181,14 @@ fi
 ### deploy dotfiles repo ###
 cinfo "Deploying dotfiles repo"
 cd $HOME
-git init >>$HOME/setmeup.log
-git remote add origin git@github.com:joshuacelliott/dotfiles.git >>$HOME/setmeup.log
-git fetch >>$HOME/setmeup.log
-git branch master origin/master >>$HOME/setmeup.log
-git reset --hard origin/master >>$HOME/setmeup.log
+git init >>$LOG
+git remote add origin git@github.com:joshuacelliott/dotfiles.git >>$LOG
+git fetch >>$LOG
+git branch master origin/master >>$LOG
+git reset --hard origin/master >>$LOG
 
-git submodule init >>$HOME/setmeup.log
-git submodule update >>$HOME/setmeup.log
+git submodule init >>$LOG
+git submodule update >>$LOG
 .bin/autogi
 $HOME/.config/gnome-terminal-colors-solarized/set_dark.sh
 
