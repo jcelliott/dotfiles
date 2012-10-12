@@ -10,6 +10,7 @@
 "	  - Command to toggle autocompletion (tab, delimeters, etc.)
 "	  - marks and highlights system (like current <leader>l) with <leader>1-9
 "	  - change highlight colors in status bar on transition to insert mode
+"	  - organize this mess!
 
 "----------------------------------------------------------
 " General Settings
@@ -165,6 +166,10 @@ set clipboard=unnamed
 " ctrl-j and ctrl-k to hold cursor while lines scroll
 map <C-j> <C-e>j
 map <C-k> <C-y>k
+
+" H and L go to beginning and end of line
+noremap H ^
+noremap L $
 
 " Visual shifting (without exiting Visual mode) [should be able to the same
 " thing with > and then . to repeat]
