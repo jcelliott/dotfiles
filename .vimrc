@@ -46,7 +46,7 @@ set hidden
 "  :50  :  up to 50 lines of command-line history will be remembered
 "  %    :  saves and restores the buffer list
 "  n... :  where to save the viminfo files
-set viminfo='25,\"250,:50,%,n~/.viminfo
+set viminfo='25,\"250,:50,%,n$HOME/.vim/.viminfo
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
