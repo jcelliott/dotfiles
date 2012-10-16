@@ -171,6 +171,12 @@ map <C-k> <C-y>k
 noremap H ^
 noremap L $
 
+" Move to first, next, and previous location in the location list
+" (used to move between syntastic error locations)
+map <silent> <leader>g :lfirst<CR>
+map <silent> <leader>j :lnext<CR>
+map <silent> <leader>k :lprev<CR>
+
 " Visual shifting (without exiting Visual mode) [should be able to the same
 " thing with > and then . to repeat]
 vnoremap < <gv
