@@ -182,6 +182,9 @@ map <silent> <leader>k :lprev<CR>
 vnoremap < <gv
 vnoremap > >gv
 
+" toggle case of character under cursor
+map <silent> <leader>c g~l 
+
 " Always leave visible lines at top and bottom of window
 set scrolloff=8
 " Lines to scroll when cursor leaves screen
