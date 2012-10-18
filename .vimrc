@@ -160,6 +160,10 @@ nnoremap <silent> <leader><Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>:matc
 " <leader>/ highlights occurrences of the word under cursor
 map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 
+" TODO lists. Changes the first occurence of - to ✓ and vice-versa
+map <silent> <leader>c :.s/-/✓<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+map <silent> <leader>x :.s/✓/-<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+
 " Use the system clipboard for cut and copy (not working right now on osx)
 set clipboard=unnamed
 
