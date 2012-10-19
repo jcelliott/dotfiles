@@ -164,6 +164,10 @@ map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 map <C-j> ddp
 map <C-k> ddkP
 
+" Insert lines above or below
+noremap go o<esc>k
+noremap gi O<esc>j
+
 " up and down hold cursor while lines scroll
 noremap <Down> <C-e>j
 noremap <Up> <C-y>k
@@ -259,4 +263,5 @@ set statusline+=\ %r                          "read only flag
 set statusline+=%m                            "modified flag
 set statusline+=\ %l/%L                       "line number / total lines
 set statusline+=:%c                           "column
+
 
