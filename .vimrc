@@ -22,21 +22,22 @@ set nocompatible
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
-set history=100		  " keep x lines of command line history
-set ruler		        " show the cursor position all the time
-set showcmd		      " display incomplete commands
-set incsearch		    " do incremental searching
-set hlsearch        " highlight search
-set smartcase       " case sensitive search if using uppercase chars
-set mouse=a         " enable mouse
-"set background=dark " assume we're using a dark background
+set history=100         " keep x lines of command line history
+set ruler               " show the cursor position all the time
+set showcmd             " display incomplete commands
+set incsearch           " do incremental searching
+set hlsearch            " highlight search
+set smartcase           " case sensitive search if using uppercase chars
+set mouse=a             " enable mouse
+set textwidth=120       " wrap lines at 120 chars
+set formatoptions=cqnl  " settings for formatting (see :help fo-table)
 set tabstop=2
 set shiftwidth=2
 set smarttab
-set expandtab
+set expandtab           " expand tabs to spaces
 set softtabstop=2
 set autoindent
-set autoread        " auto read on external file changes
+set autoread            " auto read on external file changes
 set hidden
 "syntax on
 
@@ -154,8 +155,11 @@ cmap w!! w !sudo tee % >/dev/null
 
 " <Space> turn off highlighting, clear search pattern, clear messages
 nnoremap <silent> <Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
-" <leader><Space> to do the above and clear match highlight
-nnoremap <silent> <leader><Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>:match<CR>
+
+" <leader><Space> Really clear:
+" turn off highlighting, clear search pattern, clear messages, clear match highlight, 
+" clear quickfix list, clear location list :cgetexpr [] :lgetexpr []
+nnoremap <silent> <leader><Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>:match<CR>:cgetexpr[]<CR>:lgetexpr[]<CR>
 
 " <leader>/ highlights occurrences of the word under cursor
 map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
