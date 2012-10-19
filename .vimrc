@@ -160,12 +160,13 @@ nnoremap <silent> <leader><Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>:matc
 " <leader>/ highlights occurrences of the word under cursor
 map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 
-" Use the system clipboard for cut and copy (not working right now on osx)
-set clipboard=unnamed
+" Move lines up and down
+map <C-j> ddp
+map <C-k> ddkP
 
-" ctrl-j and ctrl-k to hold cursor while lines scroll
-map <C-j> <C-e>j
-map <C-k> <C-y>k
+" up and down hold cursor while lines scroll
+noremap <Down> <C-e>j
+noremap <Up> <C-y>k
 
 " H and L go to beginning and end of line
 noremap H ^
@@ -181,6 +182,9 @@ map <silent> <leader>k :lprev<CR>
 " thing with > and then . to repeat]
 vnoremap < <gv
 vnoremap > >gv
+
+" Use the system clipboard for cut and copy (not working right now on osx)
+set clipboard=unnamed
 
 " Always leave visible lines at top and bottom of window
 set scrolloff=8
