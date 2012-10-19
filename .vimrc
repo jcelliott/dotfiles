@@ -164,12 +164,17 @@ map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 map <silent> <leader>c :.s/-/✓<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
 map <silent> <leader>x :.s/✓/-<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
 
-" Use the system clipboard for cut and copy (not working right now on osx)
-set clipboard=unnamed
+" Move lines up and down
+map <C-j> ddp
+map <C-k> ddkP
 
-" ctrl-j and ctrl-k to hold cursor while lines scroll
-map <C-j> <C-e>j
-map <C-k> <C-y>k
+" Insert lines above or below
+noremap go o<esc>k
+noremap gi O<esc>j
+
+" up and down hold cursor while lines scroll
+noremap <Down> <C-e>j
+noremap <Up> <C-y>k
 
 " H and L go to beginning and end of line
 noremap H ^
@@ -185,6 +190,9 @@ map <silent> <leader>k :lprev<CR>
 " thing with > and then . to repeat]
 vnoremap < <gv
 vnoremap > >gv
+
+" Use the system clipboard for cut and copy (not working right now on osx)
+set clipboard=unnamed
 
 " Always leave visible lines at top and bottom of window
 set scrolloff=8
@@ -259,4 +267,5 @@ set statusline+=\ %r                          "read only flag
 set statusline+=%m                            "modified flag
 set statusline+=\ %l/%L                       "line number / total lines
 set statusline+=:%c                           "column
+
 
