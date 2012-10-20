@@ -12,34 +12,38 @@
 "	  - change highlight colors in status bar on transition to insert mode
 "	  - organize this mess!
 
-"----------------------------------------------------------
+"------------------------------------------------------------------------------
 " General Settings
-"----------------------------------------------------------
+"------------------------------------------------------------------------------
 
-" vim settings instead of vi settings
-set nocompatible
+set nocompatible        " vim settings instead of vi settings
 
-" allow backspacing over everything in insert mode
-set backspace=indent,eol,start
-
+set bs=indent,eol,start " allow backspacing over everything in insert mode
 set history=100         " keep x lines of command line history
 set ruler               " show the cursor position all the time
+set number              " Show line numbers
 set showcmd             " display incomplete commands
 set incsearch           " do incremental searching
 set hlsearch            " highlight search
 set smartcase           " case sensitive search if using uppercase chars
 set mouse=a             " enable mouse
-set textwidth=120       " wrap lines at 120 chars
+set scrolloff=5         " Always leave visible lines at top and bottom of window
+set scrolljump=5        " Lines to scroll when cursor leaves screen
+set foldenable          " Auto fold code
+
 set formatoptions=cqnl  " settings for formatting (see :help fo-table)
+set textwidth=120       " wrap lines at 120 chars
 set tabstop=2
+set softtabstop=2
 set shiftwidth=2
 set smarttab
 set expandtab           " expand tabs to spaces
-set softtabstop=2
 set autoindent
+
 set autoread            " auto read on external file changes
-set hidden
-"syntax on
+set hidden              " allow buffers to remain open in the background
+set clipboard=unnamed   " Use the system clipboard for cut and copy
+set pastetoggle=<F2>    " toggle paste mode
 
 " Tell vim to remember certain things when we exit
 "  '25  :  marks will be remembered for up to 25 previously edited files
@@ -47,100 +51,91 @@ set hidden
 "  :50  :  up to 50 lines of command-line history will be remembered
 "  %    :  saves and restores the buffer list
 "  n... :  where to save the viminfo files
-set viminfo='25,\"250,:50,%,n$HOME/.vim/.viminfo
+set viminfo='25,\"1000,:50,%,n$HOME/.vim/.viminfo
 
-" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
-" so that you can undo CTRL-U after inserting a line break.
-inoremap <C-U> <C-G>u<C-U>
-
-" Only do this part when compiled with support for autocommands.
-if has("autocmd")
-
-  " Language specific options
-
-  " go
-  set rtp+=$GOROOT/misc/vim
-  autocmd BufWritePre *.go :silent Fmt
-
-
-  " Enable file type detection.
-  " Use the default filetype settings, so that mail gets 'tw' set to 72,
-  " 'cindent' is on in C files, etc.
-  " Also load indent files, to automatically do language-dependent indenting.
-  filetype plugin indent on
-
-  " Put these in an autocmd group, so that we can delete them easily.
-  augroup vimrcEx
-  au!
-
-  " For all text files set 'textwidth' to 78 characters.
-  autocmd FileType text setlocal textwidth=78
-
-  " When editing a file, always jump to the last known cursor position.
-  " Don't do it when the position is invalid or when inside an event handler
-  " (happens when dropping a file on gvim).
-  " Also don't do it when the mark is in the first line, that is the default
-  " position when opening a file.
-  autocmd BufReadPost *
-    \ if line("'\"") > 1 && line("'\"") <= line("$") |
-    \   exe "normal! g`\"" |
-    \ endif
-
-  augroup END
-
-endif " has("autocmd")
-
-" Convenient command to see the difference between the current buffer and the
-" file it was loaded from, thus the changes you made.
-" Only define it when not defined already.
-if !exists(":DiffOrig")
-  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
-		  \ | wincmd p | diffthis
-endif
-
-
-"----------------------------------------------------------
-"if exists('g:loaded_pathogen')
+" Load plugins
+" if exists('g:loaded_pathogen') " this was causing problems
   call pathogen#infect()
-"endif
+" endif
+
+" Enable file type detection.
+" Also load indent files, to automatically do language-dependent indenting.
 filetype plugin indent on
 
-" Open NertTree when Vim Starts
-"au VimEnter * NERDTree
-"au VimEnter * wincmd p
-
-" .json files are javascript
-" au BufRead,BufNewFile *.json set ft=javascript
-
+" Enable syntax highlighting and keep current colors
 syntax enable
-set background=dark
-colorscheme solarized
-
-"map <C-s> set paste
-
-function! ResCur()
-  if line("'\"") <= line("$")
-    normal! g`"
-    return 1
-  endif
-endfunction
-
-augroup resCur
-  autocmd!
-  autocmd BufWinEnter * call ResCur()
-augroup END
-
-"----------------------------------------------------------
 
 " automatically source vimrc when written
 au! BufWritePost .vimrc,_vimrc,vimrc source $MYVIMRC
 
-" Use ; like : for commands (easier to type, prevents accidental
-" capitalization errors)
+
+"------------------------------------------------------------------------------
+" Appearance
+"------------------------------------------------------------------------------
+
+set background=dark
+colorscheme solarized
+
+" Line number highlight
+hi LineNr ctermfg=DarkGray
+
+" Highlight for current line
+hi cursorline cterm=bold gui=bold
+"hi cursorline cterm=NONE ctermbg=Black
+set cursorline
+
+" always show the status line
+set laststatus=2
+
+" Sets the status line highlighting according the current mode
+au InsertEnter * hi statusline ctermbg=White ctermfg=Red       guibg=White guifg=Red
+au InsertLeave * hi statusline ctermbg=White ctermfg=DarkGray  guibg=White guifg=DarkGray
+
+" Set the default statusline highlight
+hi statusline ctermbg=White ctermfg=DarkGray guibg=White guifg=DarkGray
+
+" Highlights for status line (must appear after any :colorscheme)
+hi User1 ctermbg=darkgray	ctermfg=lightblue	guibg=darkgray guifg=lightblue
+hi User2 ctermbg=gray   ctermfg=darkred     guibg=gray	guifg=darkred
+hi User3 ctermbg=gray   ctermfg=darkmagenta guibg=gray	guifg=darkmagenta
+hi User4 ctermbg=red	  ctermfg=white       guibg=red   guifg=white
+
+" Statusline formatting	                      (Remember to escape spaces '\ ')
+set statusline=
+set statusline+=%1*[%n]%*	                    "buffer number
+set statusline+=\ %F                          "full filename
+set statusline+=\ %2*                         "switch to User2 highlight
+set statusline+=%y                            "filetype
+set statusline+=%*                            "normal highlight
+set statusline+=\ %3*                         "switch to User3 highlight
+"git status (if the plugin is loaded)
+set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}
+set statusline+=%*                            "normal highlight
+
+set statusline+=%=                            "right align
+set statusline+=%4*                           "switch to User4 highlight
+"syntastic warnings (if the plugin is loaded)
+set statusline+=%{exists('g:loaded_syntastic')?SyntasticStatuslineFlag():''}
+set statusline+=%*                            "normal highlight
+set statusline+=\ %r                          "read only flag
+set statusline+=%m                            "modified flag
+set statusline+=\ %l/%L                       "line number / total lines
+set statusline+=:%c                           "column
+
+
+"------------------------------------------------------------------------------
+" Mappings
+"------------------------------------------------------------------------------
+
+" Use ; like : for commands (easier to type, prevents accidental capitalization errors)
 nnoremap ; :
 
 " Use , for leader (easier to type, standard location)
 let mapleader = ','
+
+" Edit and reload vimrc
+nmap <silent> <leader>ev :e $MYVIMRC<CR>
+nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
 " Yank from cursor to eol (like D, C)
 nnoremap Y y$
@@ -184,46 +179,21 @@ noremap <Up> <C-y>k
 noremap H ^
 noremap L $
 
-" Move to first, next, and previous location in the location list
-" (used to move between syntastic error locations)
-map <silent> <leader>g :lfirst<CR>
-map <silent> <leader>j :lnext<CR>
-map <silent> <leader>k :lprev<CR>
-
 " Visual shifting (without exiting Visual mode) [should be able to the same
 " thing with > and then . to repeat]
 vnoremap < <gv
 vnoremap > >gv
 
-" Use the system clipboard for cut and copy (not working right now on osx)
-set clipboard=unnamed
 
-" Always leave visible lines at top and bottom of window
-set scrolloff=8
-" Lines to scroll when cursor leaves screen
-set scrolljump=5
+"------------------------------------------------------------------------------
+" Plugin Mappings
+"------------------------------------------------------------------------------
 
-" toggle paste mode
-set pastetoggle=<F2>
-
-" Auto fold code
-set foldenable
-
-" Show line numbers
-set number
-"set numberwidth=5
-
-" Line number highlight
-hi LineNr ctermfg=DarkGray
-
-" Highlight for current line
-hi cursorline cterm=bold gui=bold
-"hi cursorline cterm=NONE ctermbg=Black
-set cursorline
-
-" Edit and reload vimrc
-nmap <silent> <leader>ev :e $MYVIMRC<CR>
-nmap <silent> <leader>sv :so $MYVIMRC<CR>
+" Move to first, next, and previous location in the location list
+" (used to move between syntastic error locations)
+map <silent> <leader>g :lfirst<CR>
+map <silent> <leader>j :lnext<CR>
+map <silent> <leader>k :lprev<CR>
 
 " LustyJuggler / LustyExplorer mappings
 let g:LustyExplorerSuppressRubyWarning = 1
@@ -234,42 +204,50 @@ map <silent> <leader>h :LustyFilesystemExplorer $HOME<CR>
 map <silent> <leader>b :LustyBufferExplorer<CR>
 map <silent> <leader>q :bd<CR> " closes current buffer
 
-" always show the status line
-set laststatus=2
 
-" Sets the status line highlighting according the current mode
-au InsertEnter * hi statusline ctermbg=White ctermfg=Red       guibg=White guifg=Red
-au InsertLeave * hi statusline ctermbg=White ctermfg=DarkGray  guibg=White guifg=DarkGray
+"------------------------------------------------------------------------------
+" Language specific options
+"------------------------------------------------------------------------------
 
-" Set the default statusline highlight
-hi statusline ctermbg=White ctermfg=DarkGray guibg=White guifg=DarkGray
+" ----- go -----
 
-" Highlights for status line (must appear after any :colorscheme)
-hi User1 ctermbg=darkgray	ctermfg=lightblue	guibg=darkgray guifg=lightblue
-hi User2 ctermbg=gray   ctermfg=darkred     guibg=gray	guifg=darkred
-hi User3 ctermbg=gray   ctermfg=darkmagenta guibg=gray	guifg=darkmagenta
-hi User4 ctermbg=red	  ctermfg=white       guibg=red   guifg=white
-
-" Statusline formatting	                      (Remember to escape spaces '\ ')
-set statusline=
-set statusline+=%1*[%n]%*	                    "buffer number
-set statusline+=\ %F                          "full filename
-set statusline+=\ %2*                         "switch to User2 highlight
-set statusline+=%y                            "filetype
-set statusline+=%*                            "normal highlight
-set statusline+=\ %3*                         "switch to User3 highlight
-"git status (if the plugin is loaded)
-set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}
-set statusline+=%*                            "normal highlight
-
-set statusline+=%=                            "right align
-set statusline+=%4*                           "switch to User4 highlight
-"syntastic warnings (if the plugin is loaded)
-set statusline+=%{exists('g:loaded_syntastic')?SyntasticStatuslineFlag():''}
-set statusline+=%*                            "normal highlight
-set statusline+=\ %r                          "read only flag
-set statusline+=%m                            "modified flag
-set statusline+=\ %l/%L                       "line number / total lines
-set statusline+=:%c                           "column
+set rtp+=$GOROOT/misc/vim
+autocmd BufWritePre *.go :silent Fmt
 
 
+
+" ----------- UNSORTED -----------
+
+" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+inoremap <C-U> <C-G>u<C-U>
+
+" When editing a file, always jump to the last known cursor position.
+" Don't do it when the position is invalid or when inside an event handler
+" (happens when dropping a file on gvim).
+" Also don't do it when the mark is in the first line, that is the default
+" position when opening a file.
+autocmd BufReadPost *
+  \ if line("'\"") > 1 && line("'\"") <= line("$") |
+  \   exe "normal! g`\"" |
+  \ endif
+
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+		  \ | wincmd p | diffthis
+endif
+
+function! ResCur()
+  if line("'\"") <= line("$")
+    normal! g`"
+    return 1
+  endif
+endfunction
+
+augroup resCur
+  autocmd!
+  autocmd BufWinEnter * call ResCur()
+augroup END
