@@ -31,7 +31,8 @@ set scrolloff=5         " Always leave visible lines at top and bottom of window
 set scrolljump=5        " Lines to scroll when cursor leaves screen
 set foldenable          " Auto fold code
 
-set formatoptions=cqnl  " settings for formatting (see :help fo-table)
+set formatoptions=cqnlj " settings for formatting (see :help fo-table)
+                        " (also see autocmd for formatoptions below)
 set textwidth=120       " wrap lines at 120 chars
 set tabstop=2
 set softtabstop=2
@@ -66,7 +67,11 @@ filetype plugin indent on
 syntax enable
 
 " automatically source vimrc when written
-au! BufWritePost .vimrc,_vimrc,vimrc source $MYVIMRC
+autocmd! BufWritePost .vimrc,_vimrc,vimrc source $MYVIMRC
+
+" Really set formatoptions. Filetype-specific plugins will override the default setting.
+" This autocommand will execute after any filetype plugins.
+autocmd FileType * setlocal formatoptions=cqnlj
 
 
 "------------------------------------------------------------------------------
