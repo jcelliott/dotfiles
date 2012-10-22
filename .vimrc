@@ -200,6 +200,12 @@ noremap L $
 vnoremap < <gv
 vnoremap > >gv
 
+" Move between splits with ctrl + hjkl
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-h> <C-w>h
+map <C-l> <C-w>l
+
 
 "------------------------------------------------------------------------------
 " Plugin Mappings
