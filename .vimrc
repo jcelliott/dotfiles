@@ -129,7 +129,8 @@ set statusline+=%=                            " right align
 set statusline+=%4*                           " switch to User4 highlight
 set statusline+=%{SyntasticStatuslineFlag()}  " syntastic warnings
 set statusline+=%*                            " normal highlight
-set statusline+=\ %h                          " help buffer flag
+set statusline+=\ %{&paste?'PASTE':''}\       " paste mode flag
+set statusline+=%h                            " help buffer flag
 set statusline+=%r                            " read only flag
 set statusline+=%m                            " modified flag
 set statusline+=\ %l/%L                       " line number / total lines
