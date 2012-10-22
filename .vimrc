@@ -33,7 +33,7 @@ set foldenable          " Auto fold code
 
 set formatoptions=cqnlj " settings for formatting (see :help fo-table)
                         " (also see autocmd for formatoptions below)
-set textwidth=120       " wrap lines at 120 chars
+set textwidth=100       " wrap lines at 100 chars
 set tabstop=2
 set softtabstop=2
 set shiftwidth=2
@@ -44,7 +44,7 @@ set autoindent
 set autoread            " auto read on external file changes
 set hidden              " allow buffers to remain open in the background
 set clipboard=unnamed   " Use the system clipboard for cut and copy
-set pastetoggle=<F2>    " toggle paste mode
+set pastetoggle=<F2>    " toggle paste mode (while paste is enabled, all formatting is disabled)
 
 " Tell vim to remember certain things when we exit
 "  '25  :  marks will be remembered for up to 25 previously edited files
@@ -73,59 +73,67 @@ autocmd! BufWritePost .vimrc,_vimrc,vimrc source $MYVIMRC
 " This autocommand will execute after any filetype plugins.
 autocmd FileType * setlocal formatoptions=cqnlj
 
+" Syntastic error list will appear when errors are detected
+let g:syntastic_auto_loc_list=1
+" Syntastic error list hight
+let g:syntastic_loc_list_height=5
+
 
 "------------------------------------------------------------------------------
 " Appearance
 "------------------------------------------------------------------------------
 
 set background=dark
+set t_Co=16
+let g:solarized_termcolors=16
 colorscheme solarized
 
 " Line number highlight
-hi LineNr ctermfg=DarkGray
+hi LineNr ctermfg=239 ctermbg=darkgray
+" hi LineNr ctermfg=darkgray
 
 " Highlight for current line
-hi cursorline cterm=bold gui=bold
-"hi cursorline cterm=NONE ctermbg=Black
+" hi cursorline cterm=underline gui=underline
 set cursorline
+hi cursorline ctermbg=black guibg=black
 
 " always show the status line
 set laststatus=2
 
-" Sets the status line highlighting according the current mode
-au InsertEnter * hi statusline ctermbg=White ctermfg=Red       guibg=White guifg=Red
-au InsertLeave * hi statusline ctermbg=White ctermfg=DarkGray  guibg=White guifg=DarkGray
+" Highlights for status line (must appear after any :colorscheme)
+hi User1 ctermbg=black	ctermfg=darkgreen  guibg=black guifg=darkgreen  "buffer number
+hi User2 ctermbg=black  ctermfg=darkred    guibg=black guifg=darkred    "filetype
+hi User3 ctermbg=black  ctermfg=darkblue   guibg=gray	 guifg=darkblue   "fugitive(git)
+hi User4 ctermbg=red	  ctermfg=white      guibg=red   guifg=white      "syntastic
 
 " Set the default statusline highlight
-hi statusline ctermbg=White ctermfg=DarkGray guibg=White guifg=DarkGray
+hi statusline ctermbg=gray ctermfg=black guibg=gray guifg=black
 
-" Highlights for status line (must appear after any :colorscheme)
-hi User1 ctermbg=darkgray	ctermfg=lightblue	guibg=darkgray guifg=lightblue
-hi User2 ctermbg=gray   ctermfg=darkred     guibg=gray	guifg=darkred
-hi User3 ctermbg=gray   ctermfg=darkmagenta guibg=gray	guifg=darkmagenta
-hi User4 ctermbg=red	  ctermfg=white       guibg=red   guifg=white
+" Sets the status line highlighting according the current mode
+au InsertEnter * hi statusline ctermbg=gray ctermfg=red   guibg=gray  guifg=red
+au InsertLeave * hi statusline ctermbg=gray ctermfg=black guibg=gray  guifg=black
 
 " Statusline formatting	                      (Remember to escape spaces '\ ')
 set statusline=
-set statusline+=%1*[%n]%*	                    "buffer number
-set statusline+=\ %F                          "full filename
-set statusline+=\ %2*                         "switch to User2 highlight
-set statusline+=%y                            "filetype
-set statusline+=%*                            "normal highlight
-set statusline+=\ %3*                         "switch to User3 highlight
+set statusline+=%1*[%n]%*	                    " buffer number
+set statusline+=\ %F                          " full filename
+set statusline+=\ %2*                         " switch to User2 highlight
+set statusline+=%y                            " filetype
+set statusline+=%*                            " normal highlight
+set statusline+=\ %3*                         " switch to User3 highlight
 "git status (if the plugin is loaded)
 set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}
-set statusline+=%*                            "normal highlight
+set statusline+=%*                            " normal highlight
 
-set statusline+=%=                            "right align
-set statusline+=%4*                           "switch to User4 highlight
-"syntastic warnings (if the plugin is loaded)
-set statusline+=%{exists('g:loaded_syntastic')?SyntasticStatuslineFlag():''}
-set statusline+=%*                            "normal highlight
-set statusline+=\ %r                          "read only flag
-set statusline+=%m                            "modified flag
-set statusline+=\ %l/%L                       "line number / total lines
-set statusline+=:%c                           "column
+set statusline+=%=                            " right align
+set statusline+=%4*                           " switch to User4 highlight
+set statusline+=%{SyntasticStatuslineFlag()}  " syntastic warnings
+set statusline+=%*                            " normal highlight
+set statusline+=\ %h                          " help buffer flag
+set statusline+=%r                            " read only flag
+set statusline+=%m                            " modified flag
+set statusline+=\ %l/%L                       " line number / total lines
+set statusline+=:%c                           " column
 
 
 "------------------------------------------------------------------------------
@@ -151,7 +159,7 @@ cmap w!! w !sudo tee % >/dev/null
 
 " <leader>l will highlight the current line and set mark l.
 " Use 'l to return and :match to clear
-:nnoremap <silent> <leader>l ml:execute 'match Search /\%'.line('.').'l/'<CR>
+nnoremap <silent> <leader>l ml:execute 'match Search /\%'.line('.').'l/'<CR>
 
 " <Space> turn off highlighting, clear search pattern, clear messages
 nnoremap <silent> <Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
@@ -168,9 +176,12 @@ map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 map <silent> <leader>c :.s/-/✓<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
 map <silent> <leader>x :.s/✓/-<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
 
+" Manually start a syntax check (syntastic)
+nmap gs :SyntasticCheck<CR>
+
 " Move lines up and down
-map <C-j> ddp
-map <C-k> ddkP
+map <C-Down> ddp
+map <C-Up> ddkP
 
 " Insert lines above or below
 noremap go o<esc>k
