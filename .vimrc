@@ -89,29 +89,28 @@ let g:solarized_termcolors=16
 colorscheme solarized
 
 " Line number highlight
-hi LineNr ctermfg=239 ctermbg=darkgray
+hi LineNr ctermfg=239 ctermbg=darkgray guifg=darkslategray
 " hi LineNr ctermfg=darkgray
 
 " Highlight for current line
-" hi cursorline cterm=underline gui=underline
 set cursorline
-hi cursorline ctermbg=black guibg=black
+hi cursorline ctermbg=black gui=bold
 
 " always show the status line
 set laststatus=2
 
 " Highlights for status line (must appear after any :colorscheme)
-hi User1 ctermbg=black	ctermfg=darkgreen  guibg=black guifg=darkgreen  "buffer number
-hi User2 ctermbg=black  ctermfg=darkred    guibg=black guifg=darkred    "filetype
-hi User3 ctermbg=black  ctermfg=darkblue   guibg=gray	 guifg=darkblue   "fugitive(git)
-hi User4 ctermbg=red	  ctermfg=white      guibg=red   guifg=white      "syntastic
+hi User1 ctermbg=black ctermfg=darkgreen guibg=steelblue4 guifg=darkgray "buffer number
+hi User2 ctermbg=black ctermfg=darkred   guibg=black      guifg=darkred  "filetype
+hi User3 ctermbg=black ctermfg=darkblue  guibg=gray	      guifg=darkblue "fugitive(git)
+hi User4 ctermbg=red	 ctermfg=white     guibg=red        guifg=white    "syntastic
 
 " Set the default statusline highlight
-hi statusline ctermbg=gray ctermfg=black guibg=gray guifg=black
+hi statusline ctermbg=gray ctermfg=black guibg=gray guifg=steelblue4
 
 " Sets the status line highlighting according the current mode
-au InsertEnter * hi statusline ctermbg=gray ctermfg=red   guibg=gray  guifg=red
-au InsertLeave * hi statusline ctermbg=gray ctermfg=black guibg=gray  guifg=black
+au InsertEnter * hi statusline ctermbg=gray ctermfg=red   guibg=gray  guifg=orangered4
+au InsertLeave * hi statusline ctermbg=gray ctermfg=black guibg=gray  guifg=steelblue4
 
 " Statusline formatting	                      (Remember to escape spaces '\ ')
 set statusline=
@@ -129,7 +128,7 @@ set statusline+=%=                            " right align
 set statusline+=%4*                           " switch to User4 highlight
 set statusline+=%{SyntasticStatuslineFlag()}  " syntastic warnings
 set statusline+=%*                            " normal highlight
-set statusline+=\ %{&paste?'PASTE':''}\       " paste mode flag
+set statusline+=\ %4*%{&paste?'PASTE':''}%*   " paste mode flag
 set statusline+=%h                            " help buffer flag
 set statusline+=%r                            " read only flag
 set statusline+=%m                            " modified flag

@@ -90,11 +90,11 @@ alias gch='git checkout'
 alias gpnp='git pull;git push'
 
 # Use MacVim's build of vim if it exists on the system
-command -v mvim >/dev/null 2>&1
-if [ $? -eq 0 ]; then
-  echo "Vim: Using macvim build"
-  alias vim='/usr/local/Cellar/macvim/7.3-64/MacVim.app/Contents/MacOS/Vim'
-fi
+# command -v mvim >/dev/null 2>&1
+# if [ $? -eq 0 ]; then
+#   echo "Vim: Using macvim build"
+#   alias vim='/usr/local/Cellar/macvim/7.3-64/MacVim.app/Contents/MacOS/Vim'
+# fi
 
 ### directory colors on linux (for using solarized color scheme) ###
 if [ -f "$HOME/.config/.dircolors" ]; then
