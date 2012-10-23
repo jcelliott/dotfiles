@@ -31,7 +31,7 @@ set scrolloff=5         " Always leave visible lines at top and bottom of window
 set scrolljump=5        " Lines to scroll when cursor leaves screen
 set foldenable          " Auto fold code
 
-set formatoptions=cqnlj " settings for formatting (see :help fo-table)
+set formatoptions=cqnl  " settings for formatting (see :help fo-table)
                         " (also see autocmd for formatoptions below)
 set textwidth=100       " wrap lines at 100 chars
 set tabstop=2
@@ -59,6 +59,9 @@ set viminfo='25,\"1000,:50,%,n$HOME/.vim/.viminfo
   call pathogen#infect()
 " endif
 
+" add go plugins path to vim runtimepath (have to do this before 'filetype plugin indent on')
+set rtp+=$GOROOT/misc/vim
+
 " Enable file type detection.
 " Also load indent files, to automatically do language-dependent indenting.
 filetype plugin indent on
@@ -71,7 +74,7 @@ autocmd! BufWritePost .vimrc,_vimrc,vimrc source $MYVIMRC
 
 " Really set formatoptions. Filetype-specific plugins will override the default setting.
 " This autocommand will execute after any filetype plugins.
-autocmd FileType * setlocal formatoptions=cqnlj
+autocmd FileType * setlocal formatoptions=cqnl
 
 " Syntastic error list will appear when errors are detected
 let g:syntastic_auto_loc_list=1
@@ -233,7 +236,10 @@ map <silent> <leader>q :bd<CR> " closes current buffer
 
 " ----- go -----
 
-set rtp+=$GOROOT/misc/vim
+" add go plugins path to vim runtimepath (have to do this before 'filetype plugin indent on')
+" set rtp+=$GOROOT/misc/vim
+
+" run file through goformat before saving
 autocmd BufWritePre *.go :silent Fmt
 
 
