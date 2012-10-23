@@ -96,6 +96,7 @@ if [ $platform = 'mac' ]; then
   brew install zsh >>$LOG
   cinfo "Installing GNU coreutils..."
   brew install coreutils >>$LOG
+  # http://stackoverflow.com/questions/6114380/trying-to-compile-vim-on-os-x
 
 # Debian
 elif [ $platform = 'debian' ]; then
