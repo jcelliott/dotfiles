@@ -179,8 +179,10 @@ map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 map <silent> <leader>c :.s/-/✓<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
 map <silent> <leader>x :.s/✓/-<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
 
+" Toggle Syntastic mode [active|passive]
+map <leader>z :SyntasticToggleMode<CR>
 " Manually start a syntax check (syntastic)
-nmap gs :SyntasticCheck<CR>
+map <leader>a :SyntasticCheck<CR>
 
 " Move lines up and down
 map <C-Down> ddp
@@ -265,7 +267,13 @@ map <silent> <leader>q :bd<CR> " closes current buffer
 autocmd BufWritePre *.go :silent Fmt
 
 " ----- python -----
-autocmd Filetype python let b:interpreter = 'python'
+function! PythonSettings()
+  let b:interpreter = 'python'
+  set tabstop=4
+  set softtabstop=4
+  set shiftwidth=4
+endfunction
+autocmd Filetype python :call PythonSettings()
 
 
 
