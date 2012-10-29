@@ -203,6 +203,21 @@ noremap L $
 vnoremap < <gv
 vnoremap > >gv
 
+" run the current script with <F5>
+function! RunScript()
+  if exists("b:interpreter")
+    exec("!".b:interpreter." %")
+  endif
+endfunction
+map <F5> :w<CR> :call RunScript()<CR>
+
+" add the name of the current file in a comment at the top of the file
+" (depends on tcomment [mapped to gcc to comment the current line])
+map <F3> mnggO<C-R>%<ESC>gcc'n
+
+" go to shell (exit the shell to return to vim)
+map gs :sh<CR>
+
 " Move between splits with ctrl + hjkl
 map <C-j> <C-w>j
 map <C-k> <C-w>k
@@ -235,12 +250,14 @@ map <silent> <leader>q :bd<CR> " closes current buffer
 "------------------------------------------------------------------------------
 
 " ----- go -----
-
 " add go plugins path to vim runtimepath (have to do this before 'filetype plugin indent on')
 " set rtp+=$GOROOT/misc/vim
 
 " run file through goformat before saving
 autocmd BufWritePre *.go :silent Fmt
+
+" ----- python -----
+autocmd Filetype python let b:interpreter = 'python'
 
 
 

@@ -76,6 +76,7 @@ cinfo "Operating System: $platform"
 cinfo "Installing programs..."
 
 VIM_CONFIG_OPTS='--enable-rubyinterp=yes \
+                 --enable-pythoninterp=yes \
                  --with-features=huge \
                  --with-compiledby=jelliott'
 

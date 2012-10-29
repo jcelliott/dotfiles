@@ -127,6 +127,6 @@ fi
 
 
 ### Start in home directory and Confirm load ###
-cd $HOME
+# cd $HOME
 echo "energize!"
 
