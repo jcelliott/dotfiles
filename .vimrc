@@ -211,6 +211,14 @@ function! RunScript()
 endfunction
 map <F5> :w<CR> :call RunScript()<CR>
 
+" run REPL for current filetype (if applicable) with <F4>
+function! REPL()
+  if exists("b:interpreter")
+    exec("!".b:interpreter)
+  endif
+endfunction
+map <F4> :call REPL()<CR>
+
 " add the name of the current file in a comment at the top of the file
 " (depends on tcomment [mapped to gcc to comment the current line])
 map <F3> mnggO<C-R>%<ESC>gcc'n
