@@ -4,15 +4,20 @@
 # Author: Joshua Elliott
 
 cd $HOME
+GI="$HOME/.gitignore"
 GIT_TRACKED=`git ls-files`
 #echo $GIT_TRACKED
 
-rm $HOME/.gitignore 2>/dev/null
-echo '*' > $HOME/.gitignore
+rm $GI 2>/dev/null
+echo '*' > $GI
+
+# add any specific files to be un-ignored
+echo '!.vim' >> $GI
+echo '!bin' >> $GI
 
 for tracked in $GIT_TRACKED; do
   #echo "tracked: "$tracked
-  echo "!"$tracked >> $HOME/.gitignore
+  echo "!"$tracked >> $GI
 done
 
 echo "Creted new .gitignore"
