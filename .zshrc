@@ -51,8 +51,8 @@ echo "Operating System:   "$platform
 
 ### Path ###
 PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/texbin
-if [ -d "$HOME/.bin" ]; then
-  PATH=$HOME/.bin:$PATH
+if [ -d "$HOME/bin" ]; then
+  PATH=$HOME/bin:$PATH
 fi
 export PATH
 
