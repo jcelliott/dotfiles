@@ -76,6 +76,8 @@ autocmd! BufWritePost .vimrc,_vimrc,vimrc source $MYVIMRC
 " This autocommand will execute after any filetype plugins.
 autocmd FileType * setlocal formatoptions=cqnl
 
+" show error markers in gutter
+let g:syntastic_enable_signs=1
 " Syntastic error list will appear when errors are detected
 let g:syntastic_auto_loc_list=1
 " Syntastic error list hight
@@ -269,6 +271,7 @@ map <silent> <leader>q :bd<CR> " closes current buffer
 
 " run file through goformat before saving
 autocmd BufWritePre *.go :silent Fmt
+
 function!  GoSettings()
   let b:interpreter = 'go run'
 endfunction
