@@ -209,14 +209,18 @@ vnoremap > >gv
 function! RunScript()
   if exists("b:interpreter")
     exec("!".b:interpreter." %")
+  else
+    echo "No interpreter defined for " . &filetype
   endif
 endfunction
 map <F5> :w<CR> :call RunScript()<CR>
 
 " run REPL for current filetype (if applicable) with <F4>
 function! REPL()
-  if exists("b:interpreter")
-    exec("!".b:interpreter)
+  if exists("b:repl")
+    exec("!".b:repl)
+  else
+    echo "No REPL defined for " . &filetype
   endif
 endfunction
 map <F4> :call REPL()<CR>
@@ -265,10 +269,15 @@ map <silent> <leader>q :bd<CR> " closes current buffer
 
 " run file through goformat before saving
 autocmd BufWritePre *.go :silent Fmt
+function!  GoSettings()
+  let b:interpreter = 'go run'
+endfunction
+autocmd Filetype go :call GoSettings()
 
 " ----- python -----
 function! PythonSettings()
   let b:interpreter = 'python'
+  let b:repl = 'python'
   set tabstop=4
   set softtabstop=4
   set shiftwidth=4
