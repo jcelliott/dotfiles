@@ -186,9 +186,11 @@ map <leader>z :SyntasticToggleMode<CR>
 " Manually start a syntax check (syntastic)
 map <leader>a :SyntasticCheck<CR>
 
-" Move lines up and down
+" Move lines and blocks up and down
 map <C-Down> ddp
 map <C-Up> ddkP
+vmap <C-Down> dpV`]
+vmap <C-Up> dkPV`]
 
 " Insert lines above or below
 noremap go o<esc>k
