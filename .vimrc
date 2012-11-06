@@ -209,6 +209,9 @@ noremap L $
 vnoremap < <gv
 vnoremap > >gv
 
+" run make
+map <F6> :make<CR>
+
 " run the current script with <F5>
 function! RunScript()
   if exists("b:interpreter")
@@ -262,6 +265,11 @@ map <silent> <leader>h :LustyFilesystemExplorer $HOME<CR>
 map <silent> <leader>b :LustyBufferExplorer<CR>
 map <silent> <leader>q :bd<CR> " closes current buffer
 
+" NERDtree
+map <silent> <leader>t :NERDTreeToggle<CR>
+map <silent> <leader>r :NERDTree $HOME<CR>
+map <silent> <leader>e :NERDTreeFind<CR>
+
 
 "------------------------------------------------------------------------------
 " Language specific options
@@ -276,6 +284,7 @@ autocmd BufWritePre *.go :silent Fmt
 
 function!  GoSettings()
   let b:interpreter = 'go run'
+  set makeprg = "go build %"
 endfunction
 autocmd Filetype go :call GoSettings()
 
