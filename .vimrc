@@ -210,7 +210,7 @@ vnoremap < <gv
 vnoremap > >gv
 
 " run make
-map <F6> :make<CR>
+map <F6> :w<CR>:make<CR>
 
 " run the current script with <F5>
 function! RunScript()
