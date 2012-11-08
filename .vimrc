@@ -114,8 +114,19 @@ hi User4 ctermbg=red	 ctermfg=white     guibg=red        guifg=white    "syntast
 hi statusline ctermbg=gray ctermfg=black guibg=gray guifg=steelblue4
 
 " Sets the status line highlighting according the current mode
-au InsertEnter * hi statusline ctermbg=gray ctermfg=red   guibg=gray  guifg=orangered4
-au InsertLeave * hi statusline ctermbg=gray ctermfg=black guibg=gray  guifg=steelblue4
+function! SetInsertStatusline()
+hi statusline ctermbg=gray  ctermfg=red      guibg=gray  guifg=orangered4
+hi User2      ctermbg=red ctermfg=darkred  guibg=white guifg=darkred    "filetype
+hi User3      ctermbg=red ctermfg=darkblue guibg=white	guifg=darkblue  "fugitive(git)
+endfunction
+au InsertEnter * :call SetInsertStatusline()
+
+function! ClearInsertStatusline()
+hi statusline ctermbg=gray  ctermfg=black    guibg=gray  guifg=steelblue4
+hi User2      ctermbg=black ctermfg=darkred  guibg=black guifg=darkred    "filetype
+hi User3      ctermbg=black ctermfg=darkblue guibg=gray	 guifg=darkblue   "fugitive(git)
+endfunction
+au InsertLeave * :call ClearInsertStatusline()
 
 " Statusline formatting	                      (Remember to escape spaces '\ ')
 set statusline=
@@ -299,8 +310,14 @@ endfunction
 autocmd Filetype python :call PythonSettings()
 
 
+" ----------- UNSORTED / EXPERIMENTAL -----------
 
-" ----------- UNSORTED -----------
+" alternative ESC mappings
+
+" removes the delay when exiting insert mode (purely cosmetic, updates the statusline color immediately)
+" breaks all the things
+" imap <ESC> <ESC>
+" imap jk <ESC>  
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
