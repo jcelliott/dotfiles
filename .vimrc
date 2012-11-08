@@ -10,7 +10,7 @@
 "	  - Command to toggle autocompletion (tab, delimeters, etc.)
 "	  - marks and highlights system (like current <leader>l) with <leader>1-9
 "	  - change highlight colors in status bar on transition to insert mode
-"	  - organize this mess!
+"   - LaTeX support
 
 "------------------------------------------------------------------------------
 " General Settings
