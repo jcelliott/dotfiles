@@ -46,6 +46,11 @@ set hidden              " allow buffers to remain open in the background
 set clipboard=unnamed   " Use the system clipboard for cut and copy
 set pastetoggle=<F2>    " toggle paste mode (while paste is enabled, all formatting is disabled)
 
+" remove the delay when exiting insert mode (purely cosmetic, updates the statusline color immediately)
+" doesn't wait to receive key codes, doesn't affect multi-character mappings
+set ttimeout
+set ttimeoutlen=0
+
 " Tell vim to remember certain things when we exit
 "  '25  :  marks will be remembered for up to 25 previously edited files
 "  "1000:  will save up to 1000 lines for each register
@@ -312,12 +317,13 @@ autocmd Filetype python :call PythonSettings()
 
 " ----------- UNSORTED / EXPERIMENTAL -----------
 
-" alternative ESC mappings
+" experimenting with ESC
 
 " removes the delay when exiting insert mode (purely cosmetic, updates the statusline color immediately)
 " breaks all the things
 " imap <ESC> <ESC>
 " imap jk <ESC>  
+
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
