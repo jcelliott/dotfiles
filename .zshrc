@@ -6,6 +6,18 @@
 # Joshua Elliott
 # --------------------------
 
+# colorized output
+function cinfo() {
+  # echo -e "\x1b[34m$1\x1b[0m" # blue
+  echo -e "\x1b[32m$1\x1b[0m" # green
+}
+function cwarn() {
+  echo -e "\x1b[33m$1\x1b[0m"
+}
+function cerror() {
+  echo -e "\x1b[31m$1\x1b[0m"
+}
+
 ### oh-my-zsh setup ###
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
@@ -47,7 +59,17 @@ case `uname` in
     platform=linux
     ;;
 esac
-echo "Operating System:   "$platform
+
+# Determine the specific linux distro
+distro='unknown'
+if [ $platform = 'linux' ]; then
+  if [ -f /etc/debian_version ]; then
+    distro=debian
+  elif [ -f /etc/arch-release ]; then
+    distro=arch
+  fi
+fi
+cinfo "Operating System: $platform/$distro"
 
 ### Path ###
 PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/texbin
@@ -71,6 +93,13 @@ elif [[ $platform == 'linux' ]]; then
   alias ls='ls --color=auto'
   alias ll='ls -lah --color=auto'
   alias la='ls -a --color=auto'
+  if [[ $distro == 'arch' ]]; then
+    if [ -f "/usr/bin/pacman-color" ]; then
+      alias pacman='pacman-color'
+    else
+      cwarn "You should install pacman-color (AUR)"
+    fi
+  fi
 fi
 
 alias no='ls' # for dvorak
@@ -91,6 +120,7 @@ alias gch='git checkout'
 alias gpnp='git pull;git push'
 
 # Use MacVim's build of vim if it exists on the system
+# Using custom compiled vim instead now
 # command -v mvim >/dev/null 2>&1
 # if [ $? -eq 0 ]; then
 #   echo "Vim: Using macvim build"
@@ -122,12 +152,12 @@ __git_files() {
 
 ### Local customizations ###
 if [ -f "$HOME/.zshrc.local" ]; then
-  echo "loading .zshrc.local"
+  cinfo "loading .zshrc.local"
   source "$HOME/.zshrc.local" ]
 fi
 
 
 ### Start in home directory and Confirm load ###
 # cd $HOME
-echo "energize!"
+cinfo "energize!"
 
