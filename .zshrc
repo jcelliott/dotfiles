@@ -53,23 +53,25 @@ unsetopt correctall
 platform='unknown'
 case `uname` in
   Darwin)
-    platform=mac
+    platform='darwin'
     ;;
   Linux)
-    platform=linux
+    platform='linux'
     ;;
 esac
 
 # Determine the specific linux distro
-distro='unknown'
+distro=''
 if [ $platform = 'linux' ]; then
   if [ -f /etc/debian_version ]; then
-    distro=debian
+    distro='debian'
   elif [ -f /etc/arch-release ]; then
-    distro=arch
+    distro='arch'
+  else
+    distro='unknown'
   fi
 fi
-cinfo "Operating System: $platform/$distro"
+cinfo "Operating System: $platform $distro"
 
 ### Path ###
 PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/texbin
@@ -82,7 +84,7 @@ export PATH
 export EDITOR='vim -f'
 
 ### Aliases ###
-if [[ $platform == 'mac' ]]; then
+if [[ $platform == 'darwin' ]]; then
   # Using GNU coreutils
   alias ls='gls --color=auto'
   alias ll='gls -lah --color=auto'
@@ -130,7 +132,7 @@ alias gpnp='git pull;git push'
 ### directory colors on linux (for using solarized color scheme) ###
 if [ -f "$HOME/.config/.dircolors" ]; then
   #echo "using .dircolors"
-  if [[ $platform == 'mac' ]]; then
+  if [[ $platform == 'darwin' ]]; then
     eval `gdircolors $HOME/.config/.dircolors`
   elif [[ $platform == 'linux' ]]; then
     eval `dircolors ~/.config/.dircolors`
