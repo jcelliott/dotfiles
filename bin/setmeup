@@ -191,7 +191,7 @@ git reset --hard origin/master >>$LOG
 
 git submodule init >>$LOG
 git submodule update >>$LOG
-.bin/autogi
+bin/autogi
 $HOME/.config/gnome-terminal-colors-solarized/set_dark.sh
 
 ### oh-my-zsh ###
