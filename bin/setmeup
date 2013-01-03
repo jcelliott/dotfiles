@@ -3,7 +3,8 @@
 # Author: Joshua Elliott
 # Sets up my dev environment
 
-# TODO: build custom vim (pkgbuild for arch), install rvm/ruby, 
+# TODO: build custom vim (pkgbuild for arch), install rvm/ruby
+# TODO: setup will probably need user input on a clean install because you have to accept a new host (ie github)
 
 # This causes the script to exit if a command fails
 set -e
