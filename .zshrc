@@ -104,10 +104,12 @@ elif [[ $platform == 'linux' ]]; then
   fi
 fi
 
+alias df='df -h'
 alias no='ls' # for dvorak
 alias vimconf='vim ~/.vimrc'
 alias zshconf='vim ~/.zshrc'
 
+# Git aliases
 alias gst='git status'
 alias gc='git commit -v'
 alias glg='git log --stat --graph'
@@ -119,6 +121,8 @@ alias gsu='git submodule update'
 alias gsuu='git submodule foreach git pull origin master'
 alias gcm='git checkout master'
 alias gch='git checkout'
+alias gl='git pull'
+alias gs='git push'
 alias gpnp='git pull;git push'
 
 # Use MacVim's build of vim if it exists on the system
