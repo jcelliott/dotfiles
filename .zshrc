@@ -112,8 +112,9 @@ alias zshconf='vim ~/.zshrc'
 # Git aliases
 alias gst='git status'
 alias gc='git commit -v'
-alias glg='git log --stat --graph --decorate'
-alias glgs='git log --stat --graph --decorate --max-count=3'
+alias glg='git log --all --stat --graph --decorate'
+alias glgo='git log --all --graph --decorate --oneline'
+alias glgs='git log --all --stat --graph --decorate --max-count=3'
 alias ga='git add'
 alias gsa='git submodule add'
 alias gsi='git submodule init'
@@ -124,6 +125,13 @@ alias gch='git checkout'
 alias gl='git pull'
 alias gs='git push'
 alias gpnp='git pull;git push'
+
+# Use hub (github extensions for git) if it's installed
+if [ -f "$HOME/bin/hub" ]; then
+  alias git='hub'
+else
+  cwarn "You should install hub (defunkt.io/hub)"
+fi
 
 # Use MacVim's build of vim if it exists on the system
 # Using custom compiled vim instead now
