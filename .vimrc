@@ -79,7 +79,7 @@ autocmd! BufWritePost .vimrc,_vimrc,vimrc source $MYVIMRC
 
 " Really set formatoptions. Filetype-specific plugins will override the default setting.
 " This autocommand will execute after any filetype plugins.
-autocmd FileType * setlocal formatoptions=cqnl
+" autocmd FileType * setlocal formatoptions=cqnl
 
 " show error markers in gutter
 let g:syntastic_enable_signs=1
@@ -291,28 +291,8 @@ map <silent> <leader>e :NERDTreeFind<CR>
 " Language specific options
 "------------------------------------------------------------------------------
 
-" ----- go -----
-" add go plugins path to vim runtimepath (have to do this before 'filetype plugin indent on')
-" set rtp+=$GOROOT/misc/vim
+" These should be set in ~/.vim/after/ftplugin/<plugin>.vim
 
-" run file through goformat before saving
-autocmd BufWritePre *.go :silent Fmt
-
-function!  GoSettings()
-  let b:interpreter = 'go run'
-  set makeprg = "go build %"
-endfunction
-autocmd Filetype go :call GoSettings()
-
-" ----- python -----
-function! PythonSettings()
-  let b:interpreter = 'python'
-  let b:repl = 'python'
-  set tabstop=4
-  set softtabstop=4
-  set shiftwidth=4
-endfunction
-autocmd Filetype python :call PythonSettings()
 
 
 " ----------- UNSORTED / EXPERIMENTAL -----------
