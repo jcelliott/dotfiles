@@ -197,11 +197,6 @@ map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 map <silent> <leader>c :.s/-/✓<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
 map <silent> <leader>x :.s/✓/-<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
 
-" Toggle Syntastic mode [active|passive]
-map <leader>z :SyntasticToggleMode<CR>
-" Manually start a syntax check (syntastic)
-map <leader>a :SyntasticCheck<CR>
-
 " Move lines and blocks up and down
 map <C-Down> ddp
 map <C-Up> ddkP
@@ -286,6 +281,22 @@ map <silent> <leader>t :NERDTreeToggle<CR>
 map <silent> <leader>r :NERDTree $HOME<CR>
 map <silent> <leader>e :NERDTreeFind<CR>
 
+" Toggle Syntastic mode [active|passive]
+map <leader>z :SyntasticToggleMode<CR>
+" Manually start a syntax check (syntastic)
+map <leader>a :SyntasticCheck<CR>
+
+" vim-preview (markdown, rdoc, textile, html, ronn, rst)
+if(!exists('g:PreviewBrowsers'))
+  if(system("uname") =~ "Darwin")
+    let g:PreviewBrowsers = 'open,google-chrome,safari,firefox'
+  else
+    let g:PreviewBrowsers = 'chromium,firefox,epiphany'
+  endif
+endif
+" remove default mapping and add custom one
+" nunmap <leader>P " this mapping doesn't exist yet, plugin loaded later
+nmap <leader>p :Preview<CR>
 
 "------------------------------------------------------------------------------
 " Language specific options

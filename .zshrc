@@ -127,7 +127,8 @@ alias gs='git push'
 alias gpnp='git pull;git push'
 
 # Use hub (github extensions for git) if it's installed
-if [ -f "$HOME/bin/hub" ]; then
+command -v hub >/dev/null 2>&1
+if [ $? -eq 0 ]; then
   alias git='hub'
 else
   cwarn "You should install hub (defunkt.io/hub)"
