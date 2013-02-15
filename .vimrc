@@ -168,8 +168,8 @@ nnoremap ; :
 let mapleader = ','
 
 " Edit and reload vimrc
-nmap <silent> <leader>ev :e $MYVIMRC<CR>
-nmap <silent> <leader>sv :so $MYVIMRC<CR>
+nmap <silent> <leader>v :e $MYVIMRC<CR>
+nmap <silent> <leader>sv :source $MYVIMRC<CR>
 
 " Yank from cursor to eol (like D, C)
 nnoremap Y y$
@@ -261,6 +261,9 @@ map <C-k> <C-w>k
 map <C-h> <C-w>h
 map <C-l> <C-w>l
 
+" Vim built-in explorer (Split Explore)
+map <leader>e :Sexplore<CR>
+
 
 "------------------------------------------------------------------------------
 " Plugin Mappings
@@ -273,19 +276,46 @@ map <silent> <leader>j :lnext<CR>
 map <silent> <leader>k :lprev<CR>
 
 " LustyJuggler / LustyExplorer mappings
-let g:LustyExplorerSuppressRubyWarning = 1
-map <silent> <leader>, :LustyJuggler<CR>
-map <silent> <leader>. :LustyJugglePrevious<CR>
-map <silent> <leader>f :LustyFilesystemExplorerFromHere<CR>
-map <silent> <leader>h :LustyFilesystemExplorer $HOME<CR>
-map <silent> <leader>b :LustyBufferExplorer<CR>
-map <silent> <leader>q :bd<CR> " closes current buffer
+function! LustyJugglerMaps()
+  if exists(":LustyJuggler")
+    let g:LustyExplorerSuppressRubyWarning = 1
+    map <silent> <leader>, :LustyJuggler<CR>
+    map <silent> <leader>. :LustyJugglePrevious<CR>
+    map <silent> <leader>f :LustyFilesystemExplorerFromHere<CR>
+    map <silent> <leader>h :LustyFilesystemExplorer $HOME<CR>
+    map <silent> <leader>b :LustyBufferExplorer<CR>
+    map <silent> <leader>q :bd<CR> " closes current buffer
+  endif
+endfunction
 
 " NERDtree
-map <silent> <leader>t :NERDTreeToggle<CR>
-map <silent> <leader>r :NERDTree $HOME<CR>
-map <silent> <leader>e :NERDTreeFind<CR>
+function! NerdTreeMaps()
+  if exists(":NERDTree")
+    map <silent> <leader>tt :NERDTreeToggle<CR>
+    map <silent> <leader>th :NERDTree $HOME<CR>
+  endif
+endfunction
 
+" Eunuch
+function! EunuchMaps()
+  " Eunuch is probably loaded if :SudoWrite exists
+  if exists(":SudoWrite")
+    " Rename (there is a literal space after :Move)
+    map <leader>r :Move 
+    " Remove (no confirmation)
+    map <leader>ddd :Remove<CR>
+    " Write a privileged file with sudo
+    map <leader>w :SudoWrite<CR>
+  endif
+endfunction
+
+function! LoadPluginMaps()
+  :call LustyJugglerMaps()
+  :call NerdTreeMaps()
+  :call EunuchMaps()
+endfunction
+
+autocmd VimEnter * :call LoadPluginMaps()
 
 "------------------------------------------------------------------------------
 " Language specific options

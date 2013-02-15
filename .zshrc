@@ -116,7 +116,7 @@ alias glg='git log --all --stat --graph --decorate'
 alias glgo='git log --all --graph --decorate --oneline'
 alias glgs='git log --all --stat --graph --decorate --max-count=3'
 alias ga='git add'
-alias gsa='git submodule add'
+alias gsa='git submodule add' # gsa <repo> <directory>
 alias gsi='git submodule init'
 alias gsu='git submodule update'
 alias gsuu='git submodule foreach git pull origin master'
