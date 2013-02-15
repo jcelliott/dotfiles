@@ -77,6 +77,15 @@ syntax enable
 " automatically source vimrc when written
 autocmd! BufWritePost .vimrc,_vimrc,vimrc source $MYVIMRC
 
+" When editing a file, always jump to the last known cursor position. Don't do it when the 
+" position is invalid or when inside an event handler (happens when dropping a file on gvim). Also 
+" don't do it when the mark is in the first line, that is the default position when opening a file.
+autocmd BufReadPost *
+  \ if line("'\"") > 1 && line("'\"") <= line("$") |
+  \   exe "normal! g`\"" |
+  \ endif
+
+
 " Really set formatoptions. Filetype-specific plugins will override the default setting.
 " This autocommand will execute after any filetype plugins.
 " autocmd FileType * setlocal formatoptions=cqnl
@@ -197,11 +206,6 @@ map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 map <silent> <leader>c :.s/-/✓<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
 map <silent> <leader>x :.s/✓/-<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
 
-" Toggle Syntastic mode [active|passive]
-map <leader>z :SyntasticToggleMode<CR>
-" Manually start a syntax check (syntastic)
-map <leader>a :SyntasticCheck<CR>
-
 " Move lines and blocks up and down
 map <C-Down> ddp
 map <C-Up> ddkP
@@ -224,6 +228,17 @@ noremap L $
 " thing with > and then . to repeat]
 vnoremap < <gv
 vnoremap > >gv
+
+" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+inoremap <C-U> <C-G>u<C-U>
+
+" Convenient command to see the difference between the current buffer and the file it was loaded 
+" from, thus the changes you made. Only define it when not defined already.
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+		  \ | wincmd p | diffthis
+endif
 
 " run make
 map <F6> :w<CR>:make<CR>
@@ -309,13 +324,33 @@ function! EunuchMaps()
   endif
 endfunction
 
+" Preview
+function! PreviewSettings()
+  " vim-preview (markdown, rdoc, textile, html, ronn, rst)
+  if exists(":Preview")
+    if(!exists('g:PreviewBrowsers'))
+      if(system("uname") =~ "Darwin")
+        let g:PreviewBrowsers = 'open,google-chrome,safari,firefox'
+      else
+        let g:PreviewBrowsers = 'chromium,firefox,epiphany'
+      endif
+    endif
+
+    " remove default mapping and add custom one
+    nunmap <leader>P
+    nmap <leader>p :Preview<CR>
+  endif
+endfunction
+
 function! LoadPluginMaps()
   :call LustyJugglerMaps()
   :call NerdTreeMaps()
   :call EunuchMaps()
+  :call PreviewSettings()
 endfunction
 
 autocmd VimEnter * :call LoadPluginMaps()
+
 
 "------------------------------------------------------------------------------
 " Language specific options
@@ -324,47 +359,11 @@ autocmd VimEnter * :call LoadPluginMaps()
 " These should be set in ~/.vim/after/ftplugin/<plugin>.vim
 
 
-
 " ----------- UNSORTED / EXPERIMENTAL -----------
 
 " experimenting with ESC
-
 " removes the delay when exiting insert mode (purely cosmetic, updates the statusline color immediately)
 " breaks all the things
 " imap <ESC> <ESC>
 " imap jk <ESC>  
 
-
-" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
-" so that you can undo CTRL-U after inserting a line break.
-inoremap <C-U> <C-G>u<C-U>
-
-" When editing a file, always jump to the last known cursor position.
-" Don't do it when the position is invalid or when inside an event handler
-" (happens when dropping a file on gvim).
-" Also don't do it when the mark is in the first line, that is the default
-" position when opening a file.
-autocmd BufReadPost *
-  \ if line("'\"") > 1 && line("'\"") <= line("$") |
-  \   exe "normal! g`\"" |
-  \ endif
-
-" Convenient command to see the difference between the current buffer and the
-" file it was loaded from, thus the changes you made.
-" Only define it when not defined already.
-if !exists(":DiffOrig")
-  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
-		  \ | wincmd p | diffthis
-endif
-
-function! ResCur()
-  if line("'\"") <= line("$")
-    normal! g`"
-    return 1
-  endif
-endfunction
-
-augroup resCur
-  autocmd!
-  autocmd BufWinEnter * call ResCur()
-augroup END
