@@ -220,6 +220,17 @@ noremap L $
 vnoremap < <gv
 vnoremap > >gv
 
+" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+inoremap <C-U> <C-G>u<C-U>
+
+" Convenient command to see the difference between the current buffer and the file it was loaded 
+" from, thus the changes you made. Only define it when not defined already.
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+		  \ | wincmd p | diffthis
+endif
+
 " run make
 map <F6> :w<CR>:make<CR>
 
@@ -313,12 +324,7 @@ nmap <leader>p :Preview<CR>
 " removes the delay when exiting insert mode (purely cosmetic, updates the statusline color immediately)
 " breaks all the things
 " imap <ESC> <ESC>
-" imap jk <ESC>  
-
-
-" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
-" so that you can undo CTRL-U after inserting a line break.
-inoremap <C-U> <C-G>u<C-U>
+imap jk <ESC>  
 
 " When editing a file, always jump to the last known cursor position.
 " Don't do it when the position is invalid or when inside an event handler
@@ -330,14 +336,7 @@ autocmd BufReadPost *
   \   exe "normal! g`\"" |
   \ endif
 
-" Convenient command to see the difference between the current buffer and the
-" file it was loaded from, thus the changes you made.
-" Only define it when not defined already.
-if !exists(":DiffOrig")
-  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
-		  \ | wincmd p | diffthis
-endif
-
+" test this on gvim (mvim)
 function! ResCur()
   if line("'\"") <= line("$")
     normal! g`"
