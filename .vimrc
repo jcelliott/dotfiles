@@ -43,8 +43,13 @@ set autoindent
 
 set autoread            " auto read on external file changes
 set hidden              " allow buffers to remain open in the background
-set clipboard=unnamed   " Use the system clipboard for cut and copy
 set pastetoggle=<F2>    " toggle paste mode (while paste is enabled, all formatting is disabled)
+
+if(system("uname") =~ "Darwin")
+  set clipboard=unnamed     " Use the system clipboard (* register) on mac
+else
+  set clipboard=unnamedplus " Use the X window clipboard (+ register)
+endif
 
 " remove the delay when exiting insert mode (purely cosmetic, updates the statusline color immediately)
 " doesn't wait to receive key codes, doesn't affect multi-character mappings
