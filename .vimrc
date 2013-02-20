@@ -25,6 +25,7 @@ set number              " Show line numbers
 set showcmd             " display incomplete commands
 set incsearch           " do incremental searching
 set hlsearch            " highlight search
+set ignorecase          " case insensitive search
 set smartcase           " case sensitive search if using uppercase chars
 set mouse=a             " enable mouse
 set scrolloff=5         " Always leave visible lines at top and bottom of window
