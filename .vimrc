@@ -209,8 +209,8 @@ nnoremap <silent> <leader><Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>:matc
 map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 
 " TODO lists. Changes the first occurence of - to ✓ and vice-versa
-map <silent> <leader>c :.s/-/✓<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
-map <silent> <leader>x :.s/✓/-<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+map <silent> \c :.s/-/✓<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+map <silent> \x :.s/✓/-<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
 
 " Move lines and blocks up and down
 map <C-Down> ddp
@@ -297,6 +297,9 @@ map <C-l> <C-w>l
 " Vim built-in explorer (Split Explore)
 map <leader>e :Sexplore<CR>
 
+" use <leader>c for comments (gcc from tComment)
+nmap <leader>c gcc
+vmap <leader>c gc
 
 "------------------------------------------------------------------------------
 " Plugin Mappings
