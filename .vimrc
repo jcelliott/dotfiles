@@ -273,6 +273,18 @@ map <F4> :call REPL()<CR>
 " (depends on tcomment [mapped to gcc to comment the current line])
 map <F3> mnggO<C-R>%<ESC>gcc'n
 
+" copy the output of an ex command to a new tab
+function! TabMessage(cmd)
+  redir => message
+  silent execute a:cmd
+  redir END
+  tabnew
+  silent put=message
+  set nomodified
+endfunction
+command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>)
+map \t :TabMessage 
+
 " go to shell (exit the shell to return to vim)
 map gs :sh<CR>
 
