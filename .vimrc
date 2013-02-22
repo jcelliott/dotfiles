@@ -52,6 +52,9 @@ else
   set clipboard=unnamedplus " Use the X window clipboard (+ register)
 endif
 
+" get rid of 'X more files to edit' message on quit
+" autocmd VimEnter * last|rewind
+
 " remove the delay when exiting insert mode (purely cosmetic, updates the statusline color immediately)
 " doesn't wait to receive key codes, doesn't affect multi-character mappings
 set ttimeout
