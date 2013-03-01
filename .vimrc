@@ -69,9 +69,12 @@ set ttimeoutlen=0
 set viminfo='25,\"1000,:50,%,n$HOME/.vim/.viminfo
 
 " Load plugins
-" if exists('g:loaded_pathogen') " this was causing problems
+runtime bundle/pathogen/autoload/pathogen.vim
+if exists('g:loaded_pathogen')
   call pathogen#infect()
-" endif
+  " call LoadPluginMaps()
+endif
+" silent! call pathogen#infect()
 
 " add go plugins path to vim runtimepath (have to do this before 'filetype plugin indent on')
 set rtp+=$GOROOT/misc/vim
@@ -187,7 +190,7 @@ let mapleader = ','
 
 " Edit and reload vimrc
 nmap <silent> <leader>v :e $MYVIMRC<CR>
-nmap <silent> <leader>sv :source $MYVIMRC<CR>
+nmap <silent> \s :source $MYVIMRC<CR>
 
 " Yank from cursor to eol (like D, C)
 nnoremap Y y$
@@ -366,14 +369,22 @@ function! PreviewSettings()
   endif
 endfunction
 
-function! LoadPluginMaps()
-  :call LustyJugglerMaps()
-  :call NerdTreeMaps()
-  :call EunuchMaps()
-  :call PreviewSettings()
+" Surround
+function! SurroundSettings()
+  if exists("g:loaded_surround")
+    map <leader>s ysiw
+  endif
 endfunction
 
-autocmd VimEnter * :call LoadPluginMaps()
+function! LoadPluginMaps()
+  call LustyJugglerMaps()
+  call NerdTreeMaps()
+  call EunuchMaps()
+  call PreviewSettings()
+  call SurroundSettings()
+endfunction
+
+autocmd VimEnter * call LoadPluginMaps()
 
 
 "------------------------------------------------------------------------------
