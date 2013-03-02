@@ -97,17 +97,9 @@ autocmd BufReadPost *
   \   exe "normal! g`\"" |
   \ endif
 
-
 " Really set formatoptions. Filetype-specific plugins will override the default setting.
 " This autocommand will execute after any filetype plugins.
 " autocmd FileType * setlocal formatoptions=cqnl
-
-" show error markers in gutter
-let g:syntastic_enable_signs=1
-" Syntastic error list will appear when errors are detected
-let g:syntastic_auto_loc_list=1
-" Syntastic error list hight
-let g:syntastic_loc_list_height=5
 
 
 "------------------------------------------------------------------------------
@@ -307,41 +299,60 @@ map <leader>e :Sexplore<CR>
 nmap <leader>c gcc
 vmap <leader>c gc
 
+" close current buffer
+map <silent> <leader>q :bd<CR> 
+
+" select last modified text
+nmap <leader>x `[v`]
+
 "------------------------------------------------------------------------------
 " Plugin Mappings
 "------------------------------------------------------------------------------
 
 " Move to first, next, and previous location in the location list
 " (used to move between syntastic error locations)
-map <silent> <leader>g :lfirst<CR>
+" map <silent> <leader>g :lfirst<CR>
 map <silent> <leader>j :lnext<CR>
 map <silent> <leader>k :lprev<CR>
 
+function! SyntasticSettings()
+  if exists("g:loaded_syntastic_plugin")
+    " show error markers in gutter
+    let g:syntastic_enable_signs=1
+    " Syntastic error list will appear when errors are detected
+    let g:syntastic_auto_loc_list=1
+    " Syntastic error list hight
+    let g:syntastic_loc_list_height=5
+    " Toggle Syntastic mode [active|passive]
+    map <leader>z :SyntasticToggleMode<CR>
+    " Manually start a syntax check (syntastic)
+    map <leader>a :SyntasticCheck<CR>
+  endif
+endfunction
+
 " LustyJuggler / LustyExplorer mappings
-function! LustyJugglerMaps()
-  if exists(":LustyJuggler")
+function! LustyJugglerSettings()
+  if exists("g:loaded_lustyexplorer")
     let g:LustyExplorerSuppressRubyWarning = 1
     map <silent> <leader>, :LustyJuggler<CR>
     map <silent> <leader>. :LustyJugglePrevious<CR>
     map <silent> <leader>f :LustyFilesystemExplorerFromHere<CR>
     map <silent> <leader>h :LustyFilesystemExplorer $HOME<CR>
-    map <silent> <leader>b :LustyBufferExplorer<CR>
-    map <silent> <leader>q :bd<CR> " closes current buffer
+    " map <silent> <leader>b :LustyBufferExplorer<CR> " use <leader>lb
   endif
 endfunction
 
 " NERDtree
-function! NerdTreeMaps()
-  if exists(":NERDTree")
+function! NerdTreeSettings()
+  if exists("g:loaded_nerd_tree")
     map <silent> <leader>tt :NERDTreeToggle<CR>
     map <silent> <leader>th :NERDTree $HOME<CR>
   endif
 endfunction
 
 " Eunuch
-function! EunuchMaps()
-  " Eunuch is probably loaded if :SudoWrite exists
-  if exists(":SudoWrite")
+function! EunuchSettings()
+  if exists("g:loaded_eunuch")
     " Rename (there is a literal space after :Move)
     map <leader>r :Move 
     " Remove (no confirmation)
@@ -354,7 +365,7 @@ endfunction
 " Preview
 function! PreviewSettings()
   " vim-preview (markdown, rdoc, textile, html, ronn, rst)
-  if exists(":Preview")
+  if exists("loaded_preview")
     if(!exists('g:PreviewBrowsers'))
       if(system("uname") =~ "Darwin")
         let g:PreviewBrowsers = 'open,google-chrome,safari,firefox'
@@ -376,15 +387,27 @@ function! SurroundSettings()
   endif
 endfunction
 
-function! LoadPluginMaps()
-  call LustyJugglerMaps()
-  call NerdTreeMaps()
-  call EunuchMaps()
-  call PreviewSettings()
-  call SurroundSettings()
+" Tagbar
+function! TagbarSettings()
+  " if exists("g:loaded_tagbar")
+    let g:tagbar_autofocus=1
+    let g:tagbar_sort=0
+    let g:tagbar_autoshowtag=1
+    nmap <silent> <leader>b :TagbarOpenAutoClose<CR>
+  " endif
 endfunction
 
-autocmd VimEnter * call LoadPluginMaps()
+function! LoadPluginSettings()
+  call SyntasticSettings()
+  call LustyJugglerSettings()
+  call NerdTreeSettings()
+  call EunuchSettings()
+  call PreviewSettings()
+  call SurroundSettings()
+  call TagbarSettings()
+endfunction
+
+autocmd VimEnter * call LoadPluginSettings()
 
 
 "------------------------------------------------------------------------------
