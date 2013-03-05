@@ -76,9 +76,6 @@ if exists('g:loaded_pathogen')
 endif
 " silent! call pathogen#infect()
 
-" add go plugins path to vim runtimepath (have to do this before 'filetype plugin indent on')
-set rtp+=$GOROOT/misc/vim
-
 " Enable file type detection.
 " Also load indent files, to automatically do language-dependent indenting.
 filetype plugin indent on
