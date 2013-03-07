@@ -302,6 +302,10 @@ map <silent> <leader>q :bd<CR>
 " select last modified text
 nmap <leader>x `[v`]
 
+" diff mode maps (vimdiff)
+if &diff | map <silent> <leader>du :diffupdate<CR>| endif
+if &diff | map <leader>dp :diffput BASE<CR>| endif
+
 "------------------------------------------------------------------------------
 " Plugin Mappings
 "------------------------------------------------------------------------------
