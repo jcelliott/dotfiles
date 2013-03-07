@@ -55,3 +55,6 @@
 [submodule ".vim/bundle/golang"]
 	path = .vim/bundle/golang
 	url = git://github.com/jnwhiteh/vim-golang.git
+[submodule ".vim/bundle/repeat"]
+	path = .vim/bundle/repeat
+	url = git://github.com/tpope/vim-repeat.git
