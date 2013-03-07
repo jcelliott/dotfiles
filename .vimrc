@@ -289,6 +289,12 @@ map <C-k> <C-w>k
 map <C-h> <C-w>h
 map <C-l> <C-w>l
 
+" Easier navigation in insert mode
+imap <C-h> <home>
+imap <C-j> <down>
+imap <C-k> <up>
+imap <C-l> <end>
+
 " Vim built-in explorer (Split Explore)
 map <leader>e :Sexplore<CR>
 
@@ -406,6 +412,8 @@ endfunction
 
 autocmd VimEnter * call LoadPluginSettings()
 
+" temporary map in order to use instant-markdown
+autocmd BufWritePost *.md,*.markdown :silent !cat %:p | curl -X PUT -T - http://localhost:8090/
 
 "------------------------------------------------------------------------------
 " Language specific options
