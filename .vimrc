@@ -308,6 +308,10 @@ map <silent> <leader>q :bd<CR>
 " select last modified text
 nmap <leader>x `[v`]
 
+" diff mode maps (vimdiff)
+if &diff | map <silent> <leader>du :diffupdate<CR>| endif
+if &diff | map <leader>dp :diffput BASE<CR>| endif
+
 "------------------------------------------------------------------------------
 " Plugin Mappings
 "------------------------------------------------------------------------------
@@ -368,18 +372,18 @@ endfunction
 " Preview
 function! PreviewSettings()
   " vim-preview (markdown, rdoc, textile, html, ronn, rst)
-  if exists("loaded_preview")
-    if(!exists('g:PreviewBrowsers'))
+  if exists(":Preview")
+    " if(!exists('g:PreviewBrowsers'))
       if(system("uname") =~ "Darwin")
         let g:PreviewBrowsers = 'open,google-chrome,safari,firefox'
       else
         let g:PreviewBrowsers = 'chromium,firefox,epiphany'
       endif
-    endif
+    " endif
 
     " remove default mapping and add custom one
     nunmap <leader>P
-    nmap <leader>p :Preview<CR>
+    nmap <silent> <leader>p :Preview<CR>
   endif
 endfunction
 
