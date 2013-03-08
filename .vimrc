@@ -417,7 +417,7 @@ endfunction
 autocmd VimEnter * call LoadPluginSettings()
 
 " temporary map in order to use instant-markdown
-autocmd BufWritePost *.md,*.markdown :silent !cat %:p | curl -X PUT -T - http://localhost:8090/
+" autocmd BufWritePost *.md,*.markdown :silent !cat %:p | curl -X PUT -T - http://localhost:8090/
 
 "------------------------------------------------------------------------------
 " Language specific options
