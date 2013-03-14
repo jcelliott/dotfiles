@@ -83,6 +83,27 @@ export PATH
 ### Editor ###
 export EDITOR='vim -f'
 
+### Man Pager ###
+# This method leaves a "Vim: Reading from stdin..." message on the screen
+# export MANPAGER="/bin/sh -c \"unset PAGER;col -b -x | \
+#     vim -MRn -c 'set ft=man nomod nolist nonumber' \
+#     -c 'map q :q<CR>' \
+#     -c 'map <SPACE> <C-D>' \
+#     -c 'map b <C-U>' \
+#     -c 'nmap K :Man <C-R>=expand(\\\"<cword>\\\")<CR><CR>' -\""
+
+function vman {
+  vim -MRn -c 'set ft=man nomod nolist nonumber' \
+    -c 'map q :q<CR>' \
+    -c 'map <SPACE> <C-D>' \
+    -c 'map b <C-U>' \
+    -c 'nmap K :Man <C-R>=expand(\\\"<cword>\\\")<CR><CR>' \
+    =(/usr/bin/man $*)
+    # zsh process substitution: =(...) is replaced with the name of a file containing its output
+    # this is not the same as <(...) which creates a named pipe (FIFO) instead
+}
+alias man='vman'
+
 ### Aliases ###
 if [[ $platform == 'darwin' ]]; then
   # Using GNU coreutils

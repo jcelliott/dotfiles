@@ -158,12 +158,13 @@ set statusline+=%*                            " normal highlight
 set statusline+=%=                            " right align
 set statusline+=%4*                           " switch to User4 highlight
 set statusline+=%{SyntasticStatuslineFlag()}  " syntastic warnings
-set statusline+=%*                            " normal highlight
-set statusline+=\ %4*%{&paste?'PASTE':''}%*   " paste mode flag
+set statusline+=%*\                           " normal highlight
+set statusline+=%{&spell?'SP\ ':''}
+set statusline+=%4*%{&paste?'PASTE\ ':''}%*   " paste mode flag
 set statusline+=%h                            " help buffer flag
 set statusline+=%r                            " read only flag
 set statusline+=%m                            " modified flag
-set statusline+=\ %l/%L                       " line number / total lines
+set statusline+=%l/%L                       " line number / total lines
 set statusline+=:%c                           " column
 
 
@@ -311,6 +312,11 @@ nmap <leader>x `[v`]
 " diff mode maps (vimdiff)
 if &diff | map <silent> <leader>du :diffupdate<CR>| endif
 if &diff | map <leader>dp :diffput BASE<CR>| endif
+
+" toggle spell check
+nmap <silent> <F7> :setlocal spell! spelllang=en_us<CR>
+imap <silent> <F7> <C-o>:setlocal spell! spelllang=en_us<CR>
+
 
 "------------------------------------------------------------------------------
 " Plugin Mappings
