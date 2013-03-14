@@ -98,7 +98,7 @@ function vman {
     -c 'map <SPACE> <C-D>' \
     -c 'map b <C-U>' \
     -c 'nmap K :Man <C-R>=expand(\\\"<cword>\\\")<CR><CR>' \
-    =(/usr/bin/man $*)
+    =(/usr/bin/man $* | col -bx)
     # zsh process substitution: =(...) is replaced with the name of a file containing its output
     # this is not the same as <(...) which creates a named pipe (FIFO) instead
 }

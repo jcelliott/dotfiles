@@ -1,0 +1,13 @@
+# .ackrc
+
+# Markdown
+--type-set=markdown=.mkd
+--type-add=markdown=.md
+--type-add=markdown=.markdown
+
+# JSON
+--type-set=json=.json
+
+# Options
+--smart-case
+--sort-files
