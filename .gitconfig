@@ -1,6 +1,6 @@
 [user]
 	email = joshuacelliott@gmail.com
-	name = joshuacelliott
+	name = Joshua Elliott
 [core]
 	editor = vim
 	excludesfile = ~/.gitignore_global
