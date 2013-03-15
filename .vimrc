@@ -57,8 +57,14 @@ endif
 
 " remove the delay when exiting insert mode (purely cosmetic, updates the statusline color immediately)
 " doesn't wait to receive key codes, doesn't affect multi-character mappings
-set ttimeout
-set ttimeoutlen=0
+if ! has('gui_running')
+    set ttimeoutlen=10
+    augroup FastEscape
+        autocmd!
+        au InsertEnter * set timeoutlen=0
+        au InsertLeave * set timeoutlen=1000
+    augroup END
+endif
 
 " Tell vim to remember certain things when we exit
 "  '25  :  marks will be remembered for up to 25 previously edited files
@@ -437,36 +443,46 @@ autocmd VimEnter * call LoadPluginSettings()
 " HACKS
 "------------------------------------------------------------------------------
 " make keypad work in vim with iTerm on OS X
-map <Esc>Oq 1
-map <Esc>Or 2
-map <Esc>Os 3
-map <Esc>Ot 4
-map <Esc>Ou 5
-map <Esc>Ov 6
-map <Esc>Ow 7
-map <Esc>Ox 8
-map <Esc>Oy 9
-map <Esc>Op 0
-map <Esc>On .
-map <Esc>OQ /
-map <Esc>OR *
-map <kPlus> +
-map <Esc>OS -
-map! <Esc>Oq 1
-map! <Esc>Or 2
-map! <Esc>Os 3
-map! <Esc>Ot 4
-map! <Esc>Ou 5
-map! <Esc>Ov 6
-map! <Esc>Ow 7
-map! <Esc>Ox 8
-map! <Esc>Oy 9
-map! <Esc>Op 0
-map! <Esc>On .
-map! <Esc>OQ /
-map! <Esc>OR *
-map! <kPlus> +
-map! <Esc>OS -
+
+function! MacKeypadFix()
+  map <Esc>Oq 1
+  map <Esc>Or 2
+  map <Esc>Os 3
+  map <Esc>Ot 4
+  map <Esc>Ou 5
+  map <Esc>Ov 6
+  map <Esc>Ow 7
+  map <Esc>Ox 8
+  map <Esc>Oy 9
+  map <Esc>Op 0
+  map <Esc>On .
+  map <Esc>OQ /
+  map <Esc>OR *
+  map <kPlus> +
+  map <Esc>OS -
+  map! <Esc>Oq 1
+  map! <Esc>Or 2
+  map! <Esc>Os 3
+  map! <Esc>Ot 4
+  map! <Esc>Ou 5
+  map! <Esc>Ov 6
+  map! <Esc>Ow 7
+  map! <Esc>Ox 8
+  map! <Esc>Oy 9
+  map! <Esc>Op 0
+  map! <Esc>On .
+  map! <Esc>OQ /
+  map! <Esc>OR *
+  map! <kPlus> +
+  map! <Esc>OS -
+endfunction
+
+if has("unix")
+  let s:uname = system("uname")
+  if s:uname == "Darwin\n"
+    call MacKeypadFix()
+  endif
+endif
 
 " ----------- UNSORTED / EXPERIMENTAL -----------
 
