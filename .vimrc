@@ -487,8 +487,5 @@ endif
 " ----------- UNSORTED / EXPERIMENTAL -----------
 
 " experimenting with ESC
-" removes the delay when exiting insert mode (purely cosmetic, updates the statusline color immediately)
-" breaks all the things
-" imap <ESC> <ESC>
 " imap jk <ESC>  
 
