@@ -8,3 +8,7 @@
 	ui = auto
 [push]
 	default = simple
+[merge]
+	tool = vimdiff
+[mergetool "vimdiff"]
+	trustExitCode = false
