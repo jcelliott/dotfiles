@@ -5,5 +5,5 @@
 set tw=72
 
 " Start on the first line in insert mode
-call setpos('.', [0,1,1,0])
+au BufEnter * call setpos('.', [0,1,1,0])
 startinsert
