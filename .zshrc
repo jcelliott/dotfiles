@@ -80,6 +80,9 @@ if [ -d "$HOME/bin" ]; then
 fi
 export PATH
 
+### Term ###
+export TERM=xterm-256color
+
 ### Editor ###
 export EDITOR='vim -f'
 
