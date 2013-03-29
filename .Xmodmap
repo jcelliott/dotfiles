@@ -1,5 +1,5 @@
 ! remap right alt to excape
-! remap caps_lock to backspace and <shift> caps_lock to caps_lock
+! remap caps_lock to ctrl and <shift> caps_lock to caps_lock
 keycode   8 =
 keycode   9 = Escape NoSymbol Escape
 keycode  10 = 1 exclam 1 exclam
@@ -58,9 +58,11 @@ keycode  62 = Shift_R NoSymbol Shift_R
 keycode  63 = KP_Multiply KP_Multiply KP_Multiply KP_Multiply KP_Multiply KP_Multiply XF86ClearGrab
 keycode  64 = Alt_L Meta_L Alt_L Meta_L
 keycode  65 = space NoSymbol space
-! map caps_lock to backspace and <shift> caps_lock to caps_lock
+! map caps_lock to ctrl and <shift> caps_lock to caps_lock
 ! keycode  66 = Caps_Lock NoSymbol Caps_Lock
-keycode  66 = BackSpace Caps_Lock BackSpace
+clear lock
+keycode  66 = Control_L Caps_Lock Control_L
+add Control = Control_L
 keycode  67 = F1 F1 F1 F1 F1 F1 XF86Switch_VT_1
 keycode  68 = F2 F2 F2 F2 F2 F2 XF86Switch_VT_2
 keycode  69 = F3 F3 F3 F3 F3 F3 XF86Switch_VT_3
