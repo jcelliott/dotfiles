@@ -1,4 +1,4 @@
 # vim swap files
-.*.swp
+.*.sw?
 .netrwhist
 tags
