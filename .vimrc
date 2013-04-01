@@ -46,10 +46,12 @@ set autoread            " auto read on external file changes
 set hidden              " allow buffers to remain open in the background
 set pastetoggle=<F2>    " toggle paste mode (while paste is enabled, all formatting is disabled)
 
-if(system("uname") =~ "Darwin")
-  set clipboard=unnamed     " Use the system clipboard (* register) on mac
-else
-  set clipboard=unnamedplus " Use the X window clipboard (+ register)
+if $TMUX == ''
+  if(system("uname") =~ "Darwin")
+    set clipboard=unnamed     " Use the system clipboard (* register) on mac
+  else
+    set clipboard=unnamedplus " Use the X window clipboard (+ register)
+  endif
 endif
 
 " get rid of 'X more files to edit' message on quit
