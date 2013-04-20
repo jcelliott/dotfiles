@@ -123,13 +123,13 @@ elif [[ $platform == 'linux' ]]; then
     if [ -f "/usr/bin/pacman-color" ]; then
       alias pacman='pacman-color'
     else
-      cwarn "You should install pacman-color (AUR)"
+      # cwarn "You should install pacman-color (AUR)"
     fi
   fi
 fi
 
 alias df='df -h'
-alias no='ls' # for dvorak
+# alias no='ls' # for dvorak
 alias vimconf='vim ~/.vimrc'
 alias zshconf='vim ~/.zshrc'
 
