@@ -237,6 +237,21 @@ noremap <Up> <C-y>k
 noremap H ^
 noremap L $
 
+" j and k move visual lines instead of real lines
+nnoremap j gj
+nnoremap k gk
+xnoremap j gj
+xnoremap k gk
+
+" J and K move more lines at a time
+nmap J 5j
+nmap K 5k
+xmap J 5j
+xmap K 5k
+
+" Replace J(oin) with \j (because of above mapping)
+nmap \j :join<CR>
+
 " Visual shifting (without exiting Visual mode) [should be able to the same
 " thing with > and then . to repeat]
 vnoremap < <gv
