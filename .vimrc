@@ -233,9 +233,11 @@ noremap gi O<esc>j
 noremap <Down> <C-e>j
 noremap <Up> <C-y>k
 
-" H and L go to beginning and end of line
-noremap H ^
-noremap L $
+" H and L go to beginning and end of visual line
+" noremap H ^
+" noremap L $
+noremap H g^
+noremap L g$
 
 " j and k move visual lines instead of real lines
 nnoremap j gj
