@@ -149,7 +149,8 @@ alias gch='git checkout'
 alias gcb='git checkout -b'
 alias gl='git pull'
 alias gs='git push'
-alias gpnp='git pull;git push'
+alias gpp='git pull;git push'
+alias gf='git diff'
 
 # Use hub (github extensions for git) if it's installed
 command -v hub >/dev/null 2>&1
