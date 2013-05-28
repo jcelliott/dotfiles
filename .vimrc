@@ -334,6 +334,9 @@ vmap <leader>c gc
 " close current buffer
 map <silent> <leader>q :bd<CR> 
 
+" redraw screen
+map \l :redraw!<CR>
+
 " select last modified text
 nmap <leader>x `[v`]
 
