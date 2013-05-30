@@ -188,7 +188,7 @@ let mapleader = ','
 
 " Edit and reload vimrc
 nmap <silent> <leader>v :e $MYVIMRC<CR>
-nmap <silent> \s :source $MYVIMRC<CR>
+nmap <silent> \s :source $MYVIMRC<CR>:echo "sourced vimrc"<CR>
 
 " Yank from cursor to eol (like D, C)
 nnoremap Y y$
@@ -213,11 +213,14 @@ nnoremap <silent> <leader><Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>:matc
 map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 
 " TODO lists. Changes the first occurence of - to ✓ and vice-versa
-" Changes [ ] to [x] and vice-versa. '/e' flag ignores errors
 " map <silent> \c :.s/-/✓/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
 " map <silent> \x :.s/✓/-/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
-map <silent> \x :.s/\[x\]/\[ \]/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
-map <silent> \c :.s/\[ \]/\[x\]/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+" Changes [ ] to [x] and vice-versa. '/e' flag ignores errors
+map <silent> \c :.s/^\[x\]/\[ \]/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+map <silent> \x :.s/^\[ \]/\[x\]/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+" add and remove check boxes ([ ]) at the beginning of the line
+map <silent> \z ^i[ ] <esc>$
+map <silent> \v :.s/^\[[x ]\][ ]\?//e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
 
 " Move lines and blocks up and down
 map <C-Down> ddp
