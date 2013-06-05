@@ -513,6 +513,9 @@ if has("unix")
 endif
 
 " ----------- UNSORTED / EXPERIMENTAL -----------
+"
+" vim-instant-markdown
+" autocmd BufWritePost *.md,*.markdown :silent !cat %:p | curl -X PUT -T - http://localhost:8090/
 
 " experimenting with ESC
 " imap jk <ESC>  
