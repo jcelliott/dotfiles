@@ -9,7 +9,6 @@
 " TODO:
 "	  - Command to toggle autocompletion (tab, delimeters, etc.)
 "	  - marks and highlights system (like current <leader>l) with <leader>1-9
-"	  - change highlight colors in status bar on transition to insert mode
 "   - LaTeX support
 
 "------------------------------------------------------------------------------
@@ -30,10 +29,9 @@ set smartcase           " case sensitive search if using uppercase chars
 set mouse=a             " enable mouse
 set scrolloff=5         " Always leave visible lines at top and bottom of window
 set scrolljump=5        " Lines to scroll when cursor leaves screen
-set foldenable          " Auto fold code
+set foldenable          " enable folds, toggle with zi
 
 set formatoptions=cqnl  " settings for formatting (see :help fo-table)
-                        " (also see autocmd for formatoptions below)
 set textwidth=100       " wrap lines at 100 chars
 set tabstop=2
 set softtabstop=2
@@ -45,6 +43,7 @@ set autoindent
 set autoread            " auto read on external file changes
 set hidden              " allow buffers to remain open in the background
 set pastetoggle=<F2>    " toggle paste mode (while paste is enabled, all formatting is disabled)
+                        " OR :set invpaste<CR>:set paste?<CR>
 
 if $TMUX == ''
   if(system("uname") =~ "Darwin")
@@ -58,7 +57,7 @@ endif
 " autocmd VimEnter * last|rewind
 
 " remove the delay when exiting insert mode (purely cosmetic, updates the statusline color immediately)
-" doesn't wait to receive key codes, doesn't affect multi-character mappings
+" doesn't wait to receive key codes, doesn't affect multi-character mappings (imap jk <esc> won't work)
 if ! has('gui_running')
     set ttimeoutlen=10
     augroup FastEscape
@@ -74,7 +73,7 @@ endif
 "  :50  :  up to 50 lines of command-line history will be remembered
 "  %    :  saves and restores the buffer list
 "  n... :  where to save the viminfo files
-set viminfo='25,\"1000,:50,%,n$HOME/.vim/.viminfo
+set viminfo='25,\"10000,:50,%,n$HOME/.vim/.viminfo
 
 " Load plugins
 runtime bundle/pathogen/autoload/pathogen.vim
@@ -193,8 +192,10 @@ nmap <silent> \s :source $MYVIMRC<CR>:echo "sourced vimrc"<CR>
 " Yank from cursor to eol (like D, C)
 nnoremap Y y$
 
-" For when you forget to sudo. Really write the File 
-" (from:Steve Fancia [spf13.com])
+" yank entire file
+nnoremap <leader>y ggyG`` :echo "yanked entire file"<CR>
+
+" Dirty hack for when you forget to sudo. Really write the File 
 cmap w!! w !sudo tee % >/dev/null
 
 " <leader>l will highlight the current line and set mark l.
@@ -257,8 +258,7 @@ xmap K 5k
 " Replace J(oin) with \j (because of above mapping)
 nmap \j :join<CR>
 
-" Visual shifting (without exiting Visual mode) [should be able to the same
-" thing with > and then . to repeat]
+" Visual shifting (without exiting Visual mode)
 vnoremap < <gv
 vnoremap > >gv
 
@@ -356,7 +356,7 @@ imap <silent> <F7> <C-o>:setlocal spell! spelllang=en_us<CR>
 " Plugin Mappings
 "------------------------------------------------------------------------------
 
-" Move to first, next, and previous location in the location list
+" Move to the next and previous location in the location list
 " (used to move between syntastic error locations)
 " map <silent> <leader>g :lfirst<CR>
 map <silent> <leader>j :lnext<CR>
@@ -456,10 +456,6 @@ endfunction
 
 autocmd VimEnter * call LoadPluginSettings()
 
-" temporary map in order to use instant-markdown
-" in a separate terminal run `instant-markdown-d`
-" autocmd BufWritePost *.md,*.markdown :silent !cat %:p | curl -X PUT -T - http://localhost:8090/
-
 "------------------------------------------------------------------------------
 " Language specific options
 "------------------------------------------------------------------------------
@@ -514,9 +510,10 @@ endif
 
 " ----------- UNSORTED / EXPERIMENTAL -----------
 "
-" vim-instant-markdown
+" temporary map in order to use instant-markdown
+" in a separate terminal run `instant-markdown-d`
 " autocmd BufWritePost *.md,*.markdown :silent !cat %:p | curl -X PUT -T - http://localhost:8090/
 
 " experimenting with ESC
-" imap jk <ESC>  
-
+" imap jk <ESC>
+" imap kj <ESC>
