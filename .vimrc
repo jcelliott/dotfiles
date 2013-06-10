@@ -14,6 +14,7 @@
 "------------------------------------------------------------------------------
 " General Settings
 "------------------------------------------------------------------------------
+"{{{
 
 set nocompatible        " vim settings instead of vi settings
 
@@ -101,14 +102,19 @@ autocmd BufReadPost *
   \   exe "normal! g`\"" |
   \ endif
 
+" automatically save folds and attempt to load them when opening a file
+autocmd BufWinLeave ?* mkview
+autocmd BufWinEnter ?* silent loadview
+
 " Really set formatoptions. Filetype-specific plugins will override the default setting.
 " This autocommand will execute after any filetype plugins.
 " autocmd FileType * setlocal formatoptions=cqnl
-
+"}}}
 
 "------------------------------------------------------------------------------
 " Appearance
 "------------------------------------------------------------------------------
+"{{{
 
 set background=dark
 set t_Co=16
@@ -173,11 +179,12 @@ set statusline+=%r                            " read only flag
 set statusline+=%m                            " modified flag
 set statusline+=%l/%L                       " line number / total lines
 set statusline+=:%c                           " column
-
+"}}}
 
 "------------------------------------------------------------------------------
 " Mappings
 "------------------------------------------------------------------------------
+"{{{
 
 " Use ; like : for commands (easier to type, prevents accidental capitalization errors)
 nnoremap ; :
@@ -350,11 +357,12 @@ if &diff | map <leader>dp :diffput BASE<CR>| endif
 " toggle spell check
 nmap <silent> <F7> :setlocal spell! spelllang=en_us<CR>
 imap <silent> <F7> <C-o>:setlocal spell! spelllang=en_us<CR>
-
+"}}}
 
 "------------------------------------------------------------------------------
 " Plugin Mappings
 "------------------------------------------------------------------------------
+"{{{
 
 " Move to the next and previous location in the location list
 " (used to move between syntastic error locations)
@@ -455,19 +463,22 @@ function! LoadPluginSettings()
 endfunction
 
 autocmd VimEnter * call LoadPluginSettings()
+"}}}
 
 "------------------------------------------------------------------------------
 " Language specific options
 "------------------------------------------------------------------------------
+"{{{
 
 " These should be set in ~/.vim/after/ftplugin/<plugin>.vim
-
+"}}}
 
 "------------------------------------------------------------------------------
 " HACKS
 "------------------------------------------------------------------------------
-" make keypad work in vim with iTerm on OS X
+"{{{
 
+" make keypad work in vim with iTerm on OS X
 function! MacKeypadFix()
   map <Esc>Oq 1
   map <Esc>Or 2
@@ -507,9 +518,13 @@ if has("unix")
     call MacKeypadFix()
   endif
 endif
+"}}}
 
-" ----------- UNSORTED / EXPERIMENTAL -----------
-"
+" -----------------------------------------------------------------------------
+" UNSORTED / EXPERIMENTAL
+" -----------------------------------------------------------------------------
+"{{{
+
 " temporary map in order to use instant-markdown
 " in a separate terminal run `instant-markdown-d`
 " autocmd BufWritePost *.md,*.markdown :silent !cat %:p | curl -X PUT -T - http://localhost:8090/
@@ -517,3 +532,4 @@ endif
 " experimenting with ESC
 " imap jk <ESC>
 " imap kj <ESC>
+"}}}
