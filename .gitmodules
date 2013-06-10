@@ -1,66 +1,9 @@
-[submodule ".vim/bundle/nerdtree"]
-	path = .vim/bundle/nerdtree
-	url = git://github.com/scrooloose/nerdtree.git
-[submodule ".vim/bundle/syntastic"]
-	path = .vim/bundle/syntastic
-	url = git://github.com/scrooloose/syntastic.git
-[submodule ".vim/bundle/fugitive"]
-	path = .vim/bundle/fugitive
-	url = git://github.com/tpope/vim-fugitive.git
-[submodule ".vim/bundle/solarized"]
-	path = .vim/bundle/solarized
-	url = git://github.com/altercation/vim-colors-solarized.git
 [submodule ".config/gnome-terminal-colors-solarized"]
 	path = .config/gnome-terminal-colors-solarized
 	url = https://github.com/sigurdga/gnome-terminal-colors-solarized.git
-[submodule ".vim/bundle/supertab"]
-	path = .vim/bundle/supertab
-	url = git://github.com/ervandew/supertab.git
-[submodule ".vim/bundle/tcomment"]
-	path = .vim/bundle/tcomment
-	url = git://github.com/tomtom/tcomment_vim.git
-[submodule ".vim/bundle/textobj-rubyblock"]
-	path = .vim/bundle/textobj-rubyblock
-	url = git://github.com/nelstrom/vim-textobj-rubyblock.git
-[submodule ".vim/bundle/surround"]
-	path = .vim/bundle/surround
-	url = git://github.com/tpope/vim-surround.git
-[submodule ".vim/bundle/textobj-user"]
-	path = .vim/bundle/textobj-user
-	url = git://github.com/kana/vim-textobj-user.git
-[submodule ".vim/bundle/lusty"]
-	path = .vim/bundle/lusty
-	url = git://github.com/sjbach/lusty.git
 [submodule ".oh-my-zsh"]
 	path = .oh-my-zsh
 	url = git://github.com/robbyrussell/oh-my-zsh.git
-[submodule ".vim/bundle/preview"]
-	path = .vim/bundle/preview
-	url = git://github.com/greyblake/vim-preview.git
-[submodule ".vim/bundle/delimitMate"]
-	path = .vim/bundle/delimitMate
-	url = git://github.com/Raimondi/delimitMate.git
-[submodule ".vim/bundle/eunuch"]
-	path = .vim/bundle/eunuch
-	url = git://github.com/tpope/vim-eunuch.git
-[submodule ".vim/bundle/pathogen"]
-	path = .vim/bundle/pathogen
-	url = git://github.com/tpope/vim-pathogen.git
-[submodule ".vim/bundle/markdown"]
-	path = .vim/bundle/markdown
-	url = git://github.com/tpope/vim-markdown.git
-[submodule ".vim/bundle/tagbar"]
-	path = .vim/bundle/tagbar
-	url = git://github.com/majutsushi/tagbar
-[submodule ".vim/bundle/golang"]
-	path = .vim/bundle/golang
-	url = git://github.com/jnwhiteh/vim-golang.git
-[submodule ".vim/bundle/repeat"]
-	path = .vim/bundle/repeat
-	url = git://github.com/tpope/vim-repeat.git
-[submodule ".vim/bundle/tmux"]
-	path = .vim/bundle/tmux
-	url = git://github.com/peterhoeg/vim-tmux.git
-[submodule ".vim/bundle/jade"]
-	path = .vim/bundle/jade
-	url = git://github.com/digitaltoad/vim-jade.git
+[submodule "/home/josh/.vim/bundle/neobundle"]
+	path = /home/josh/.vim/bundle/neobundle
+	url = git://github.com/Shougo/neobundle.vim.git

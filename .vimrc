@@ -6,10 +6,11 @@
 " Joshua Elliott
 " Created 6/28/12
 "
-" TODO:
+" TODO: "{{{
 "	  - Command to toggle autocompletion (tab, delimeters, etc.)
 "	  - marks and highlights system (like current <leader>l) with <leader>1-9
 "   - LaTeX support
+"}}}
 
 "------------------------------------------------------------------------------
 " General Settings
@@ -84,10 +85,6 @@ if exists('g:loaded_pathogen')
 endif
 " silent! call pathogen#infect()
 
-" Enable file type detection.
-" Also load indent files, to automatically do language-dependent indenting.
-filetype plugin indent on
-
 " Enable syntax highlighting and keep current colors
 syntax enable
 
@@ -109,6 +106,124 @@ autocmd BufWinEnter ?* silent loadview
 " Really set formatoptions. Filetype-specific plugins will override the default setting.
 " This autocommand will execute after any filetype plugins.
 " autocmd FileType * setlocal formatoptions=cqnl
+"}}}
+
+
+"------------------------------------------------------------------------------
+" Neobundle and Plugins
+"------------------------------------------------------------------------------
+"{{{
+
+if has('vim_starting')
+  set runtimepath+=~/.vim/bundle/neobundle
+endif
+call neobundle#rc(expand('~/.vim/bundle'))
+
+" Let neobundle manage neobundle
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" Plugins
+NeoBundle 'scrooloose/syntastic' "{{{
+  " Move to the next and previous location in the location list
+  " (used to move between syntastic error locations)
+  " map <silent> <leader>g :lfirst<CR>
+  map <silent> <leader>j :lnext<CR>
+  map <silent> <leader>k :lprev<CR>
+
+  if exists("g:loaded_syntastic_plugin")
+    " show error markers in gutter
+    let g:syntastic_enable_signs=1
+    " Syntastic error list will appear when errors are detected
+    let g:syntastic_auto_loc_list=1
+    " Syntastic error list hight
+    let g:syntastic_loc_list_height=5
+    " Toggle Syntastic mode [active|passive]
+    map <leader>z :SyntasticToggleMode<CR>
+    " Manually start a syntax check (syntastic)
+    map <leader>a :SyntasticCheck<CR>
+  endif
+"}}}
+NeoBundle 'sjbach/lusty' "{{{
+  if exists("g:loaded_lustyexplorer")
+    let g:LustyExplorerSuppressRubyWarning = 1
+    map <silent> <leader>, :LustyJuggler<CR>
+    map <silent> <leader>. :LustyJugglePrevious<CR>
+    map <silent> <leader>f :LustyFilesystemExplorerFromHere<CR>
+    map <silent> <leader>h :LustyFilesystemExplorer $HOME<CR>
+    " map <silent> <leader>b :LustyBufferExplorer<CR> " use <leader>lb
+  endif
+"}}}
+NeoBundle 'scrooloose/nerdtree' "{{{
+  if exists("g:loaded_nerd_tree")
+    map <silent> <leader>tt :NERDTreeToggle<CR>
+    map <silent> <leader>th :NERDTree $HOME<CR>
+  endif
+"}}}
+NeoBundle 'tpope/vim-eunuch' "{{{
+  if exists("g:loaded_eunuch")
+    " Rename (there is a literal space after :Move)
+    map <leader>r :Move 
+    " Remove (no confirmation)
+    map <leader>ddd :Remove<CR>
+    " Write a privileged file with sudo
+    map <leader>w :SudoWrite<CR>
+  endif
+"}}}
+NeoBundle 'greyblake/vim-preview' "{{{
+  " vim-preview (markdown, rdoc, textile, html, ronn, rst)
+  if exists(":Preview")
+    " if(!exists('g:PreviewBrowsers'))
+      if(system("uname") =~ "Darwin")
+        let g:PreviewBrowsers = 'open,google-chrome,safari,firefox'
+      else
+        let g:PreviewBrowsers = 'chromium,firefox,epiphany'
+      endif
+    " endif
+    " remove default mapping and add custom one
+    autocmd VimEnter * 
+      \ nunmap <leader>P
+      \ nmap <silent> <leader>p :Preview<CR>
+  endif
+"}}}
+NeoBundle 'tpope/vim-surround' "{{{
+  if exists("g:loaded_surround")
+    map <leader>s ysiw
+  endif
+"}}}
+NeoBundle 'majutsushi/tagbar' "{{{
+  " if exists("g:loaded_tagbar")
+    let g:tagbar_autofocus=1
+    let g:tagbar_sort=0
+    let g:tagbar_autoshowtag=1
+    nmap <silent> <leader>b :TagbarOpenAutoClose<CR>
+  " endif
+"}}}
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-markdown'
+NeoBundle 'tpope/vim-repeat'
+NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'ervandew/supertab'
+NeoBundle 'tomtom/tcomment_vim'
+NeoBundle 'nelstrom/vim-textobj-rubyblock', {'depends': 'kana/vim-textobj-user'}
+NeoBundle 'Raimondi/delimitMate'
+NeoBundle 'jnwhiteh/vim-golang'
+NeoBundle 'peterhoeg/vim-tmux'
+" NeoBundle 'digitaltoad/vim-jade'
+  " autocmd FileType jade NeoBundleSource 'vim-jade'
+
+" Installation check.
+NeoBundleCheck
+
+if !has('vim_starting')
+  " Call on_source hook when reloading .vimrc.
+  call neobundle#call_hook('on_source')
+endif
+
+" Enable file type detection.
+" Also load indent files, to automatically do language-dependent indenting.
+" neobundle requires the filetypes to be loaded after all bundles are loaded
+filetype plugin indent on
+
 "}}}
 
 "------------------------------------------------------------------------------
@@ -182,19 +297,58 @@ set statusline+=:%c                           " column
 "}}}
 
 "------------------------------------------------------------------------------
-" Mappings
+" Functions and Commands
 "------------------------------------------------------------------------------
 "{{{
 
+" Convenient command to see the difference between the current buffer and the file it was loaded 
+" from, thus the changes you made. Only define it when not defined already.
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+		  \ | wincmd p | diffthis
+endif
+
+" run the current script with <F5>
+function! RunScript()
+  if exists("b:interpreter")
+    exec("!".b:interpreter." %")
+  else
+    echo "No interpreter defined for " . &filetype
+  endif
+endfunction
+
+" run REPL for current filetype (if applicable) with <F4>
+function! REPL()
+  if exists("b:repl")
+    exec("!".b:repl)
+  else
+    echo "No REPL defined for " . &filetype
+  endif
+endfunction
+
+" copy the output of an ex command to a new tab
+function! TabMessage(cmd)
+  redir => message
+  silent execute a:cmd
+  redir END
+  tabnew
+  silent put=message
+  set nomodified
+endfunction
+command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>)
+
+"}}}
+
+"------------------------------------------------------------------------------
+" Mappings
+"------------------------------------------------------------------------------
+"{{{
+" ----- Basic ----- "{{{
 " Use ; like : for commands (easier to type, prevents accidental capitalization errors)
 nnoremap ; :
 
 " Use , for leader (easier to type, standard location)
 let mapleader = ','
-
-" Edit and reload vimrc
-nmap <silent> <leader>v :e $MYVIMRC<CR>
-nmap <silent> \s :source $MYVIMRC<CR>:echo "sourced vimrc"<CR>
 
 " Yank from cursor to eol (like D, C)
 nnoremap Y y$
@@ -202,34 +356,12 @@ nnoremap Y y$
 " yank entire file
 nnoremap <leader>y ggyG`` :echo "yanked entire file"<CR>
 
-" Dirty hack for when you forget to sudo. Really write the File 
-cmap w!! w !sudo tee % >/dev/null
+" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+inoremap <C-U> <C-G>u<C-U>
+"}}}
 
-" <leader>l will highlight the current line and set mark l.
-" Use 'l to return and :match to clear
-nnoremap <silent> <leader>l ml:execute 'match Search /\%'.line('.').'l/'<CR>
-
-" <Space> turn off highlighting, clear search pattern, clear messages
-nnoremap <silent> <Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
-
-" <leader><Space> Really clear:
-" turn off highlighting, clear search pattern, clear messages, clear match highlight, 
-" clear quickfix list, clear location list :cgetexpr [] :lgetexpr []
-nnoremap <silent> <leader><Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>:match<CR>:cgetexpr[]<CR>:lgetexpr[]<CR>
-
-" <leader>/ highlights occurrences of the word under cursor
-map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
-
-" TODO lists. Changes the first occurence of - to ✓ and vice-versa
-" map <silent> \c :.s/-/✓/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
-" map <silent> \x :.s/✓/-/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
-" Changes [ ] to [x] and vice-versa. '/e' flag ignores errors
-map <silent> \c :.s/^\[x\]/\[ \]/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
-map <silent> \x :.s/^\[ \]/\[x\]/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
-" add and remove check boxes ([ ]) at the beginning of the line
-map <silent> \z ^i[ ] <esc>$
-map <silent> \v :.s/^\[[x ]\][ ]\?//e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
-
+" ----- Movement and Selection ----- "{{{
 " Move lines and blocks up and down
 map <C-Down> ddp
 map <C-Up> ddkP
@@ -269,38 +401,55 @@ nmap \j :join<CR>
 vnoremap < <gv
 vnoremap > >gv
 
-" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
-" so that you can undo CTRL-U after inserting a line break.
-inoremap <C-U> <C-G>u<C-U>
+" Move between splits with ctrl + hjkl
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-h> <C-w>h
+map <C-l> <C-w>l
 
-" Convenient command to see the difference between the current buffer and the file it was loaded 
-" from, thus the changes you made. Only define it when not defined already.
-if !exists(":DiffOrig")
-  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
-		  \ | wincmd p | diffthis
-endif
+" Easier movement in insert mode
+imap <C-h> <home>
+imap <C-j> <down>
+imap <C-k> <up>
+imap <C-l> <end>
+
+" select last modified text
+nmap <leader>x `[v`]
+"}}}
+
+" ----- Marks and Highlighting ----- "{{{
+" <leader>l will highlight the current line and set mark l.
+" Use 'l to return and :match to clear
+nnoremap <silent> <leader>l ml:execute 'match Search /\%'.line('.').'l/'<CR>
+
+" <Space> turn off highlighting, clear search pattern, clear messages
+nnoremap <silent> <Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+
+" <leader><Space> Really clear:
+" turn off highlighting, clear search pattern, clear messages, clear match highlight, 
+" clear quickfix list, clear location list :cgetexpr [] :lgetexpr []
+nnoremap <silent> <leader><Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>:match<CR>:cgetexpr[]<CR>:lgetexpr[]<CR>
+
+" <leader>/ highlights occurrences of the word under cursor. Like * but doesn't move
+map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
+
+"}}}
+
+" ----- Commands ----- "{{{
+" Edit and reload vimrc
+nmap <silent> <leader>v :e $MYVIMRC<CR>
+nmap <silent> \s :source $MYVIMRC<CR>:echo "sourced vimrc"<CR>
+
+" Dirty hack for when you forget to sudo. Really write the File 
+cmap w!! w !sudo tee % >/dev/null
 
 " run make
 map <F6> :w<CR>:make<CR>
 
 " run the current script with <F5>
-function! RunScript()
-  if exists("b:interpreter")
-    exec("!".b:interpreter." %")
-  else
-    echo "No interpreter defined for " . &filetype
-  endif
-endfunction
 map <F5> :w<CR> :call RunScript()<CR>
 
 " run REPL for current filetype (if applicable) with <F4>
-function! REPL()
-  if exists("b:repl")
-    exec("!".b:repl)
-  else
-    echo "No REPL defined for " . &filetype
-  endif
-endfunction
 map <F4> :call REPL()<CR>
 
 " add the name of the current file in a comment at the top of the file
@@ -308,47 +457,36 @@ map <F4> :call REPL()<CR>
 map <F3> mnggO<C-R>%<ESC>gcc'n
 
 " copy the output of an ex command to a new tab
-function! TabMessage(cmd)
-  redir => message
-  silent execute a:cmd
-  redir END
-  tabnew
-  silent put=message
-  set nomodified
-endfunction
-command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>)
 map \t :TabMessage 
 
 " go to shell (exit the shell to return to vim)
 map gs :sh<CR>
 
-" Move between splits with ctrl + hjkl
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-h> <C-w>h
-map <C-l> <C-w>l
+" TODO lists. Changes the first occurence of - to ✓ and vice-versa
+" map <silent> \c :.s/-/✓/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+" map <silent> \x :.s/✓/-/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+" Changes [ ] to [x] and vice-versa. '/e' flag ignores errors
+map <silent> \c :.s/^\[x\]/\[ \]/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+map <silent> \x :.s/^\[ \]/\[x\]/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+" add and remove check boxes ([ ]) at the beginning of the line
+map <silent> \z ^i[ ] <esc>$
+map <silent> \v :.s/^\[[x ]\][ ]\?//e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+"}}}
 
-" Easier navigation in insert mode
-imap <C-h> <home>
-imap <C-j> <down>
-imap <C-k> <up>
-imap <C-l> <end>
-
+" ----- Files and Navigation ----- "{{{
 " Vim built-in explorer (Split Explore)
 map <leader>e :Sexplore<CR>
+
+" close current buffer
+map <silent> <leader>q :bd<CR> 
+"}}}
 
 " use <leader>c for comments (gcc from tComment)
 nmap <leader>c gcc
 vmap <leader>c gc
 
-" close current buffer
-map <silent> <leader>q :bd<CR> 
-
 " redraw screen
 map \l :redraw!<CR>
-
-" select last modified text
-nmap <leader>x `[v`]
 
 " diff mode maps (vimdiff)
 if &diff | map <silent> <leader>du :diffupdate<CR>| endif
@@ -357,112 +495,6 @@ if &diff | map <leader>dp :diffput BASE<CR>| endif
 " toggle spell check
 nmap <silent> <F7> :setlocal spell! spelllang=en_us<CR>
 imap <silent> <F7> <C-o>:setlocal spell! spelllang=en_us<CR>
-"}}}
-
-"------------------------------------------------------------------------------
-" Plugin Mappings
-"------------------------------------------------------------------------------
-"{{{
-
-" Move to the next and previous location in the location list
-" (used to move between syntastic error locations)
-" map <silent> <leader>g :lfirst<CR>
-map <silent> <leader>j :lnext<CR>
-map <silent> <leader>k :lprev<CR>
-
-function! SyntasticSettings()
-  if exists("g:loaded_syntastic_plugin")
-    " show error markers in gutter
-    let g:syntastic_enable_signs=1
-    " Syntastic error list will appear when errors are detected
-    let g:syntastic_auto_loc_list=1
-    " Syntastic error list hight
-    let g:syntastic_loc_list_height=5
-    " Toggle Syntastic mode [active|passive]
-    map <leader>z :SyntasticToggleMode<CR>
-    " Manually start a syntax check (syntastic)
-    map <leader>a :SyntasticCheck<CR>
-  endif
-endfunction
-
-" LustyJuggler / LustyExplorer mappings
-function! LustyJugglerSettings()
-  if exists("g:loaded_lustyexplorer")
-    let g:LustyExplorerSuppressRubyWarning = 1
-    map <silent> <leader>, :LustyJuggler<CR>
-    map <silent> <leader>. :LustyJugglePrevious<CR>
-    map <silent> <leader>f :LustyFilesystemExplorerFromHere<CR>
-    map <silent> <leader>h :LustyFilesystemExplorer $HOME<CR>
-    " map <silent> <leader>b :LustyBufferExplorer<CR> " use <leader>lb
-  endif
-endfunction
-
-" NERDtree
-function! NerdTreeSettings()
-  if exists("g:loaded_nerd_tree")
-    map <silent> <leader>tt :NERDTreeToggle<CR>
-    map <silent> <leader>th :NERDTree $HOME<CR>
-  endif
-endfunction
-
-" Eunuch
-function! EunuchSettings()
-  if exists("g:loaded_eunuch")
-    " Rename (there is a literal space after :Move)
-    map <leader>r :Move 
-    " Remove (no confirmation)
-    map <leader>ddd :Remove<CR>
-    " Write a privileged file with sudo
-    map <leader>w :SudoWrite<CR>
-  endif
-endfunction
-
-" Preview
-function! PreviewSettings()
-  " vim-preview (markdown, rdoc, textile, html, ronn, rst)
-  if exists(":Preview")
-    " if(!exists('g:PreviewBrowsers'))
-      if(system("uname") =~ "Darwin")
-        let g:PreviewBrowsers = 'open,google-chrome,safari,firefox'
-      else
-        let g:PreviewBrowsers = 'chromium,firefox,epiphany'
-      endif
-    " endif
-
-    " remove default mapping and add custom one
-    nunmap <leader>P
-    nmap <silent> <leader>p :Preview<CR>
-  endif
-endfunction
-
-" Surround
-function! SurroundSettings()
-  if exists("g:loaded_surround")
-    map <leader>s ysiw
-  endif
-endfunction
-
-" Tagbar
-function! TagbarSettings()
-  " if exists("g:loaded_tagbar")
-    let g:tagbar_autofocus=1
-    let g:tagbar_sort=0
-    let g:tagbar_autoshowtag=1
-    nmap <silent> <leader>b :TagbarOpenAutoClose<CR>
-  " endif
-endfunction
-
-function! LoadPluginSettings()
-  call SyntasticSettings()
-  call LustyJugglerSettings()
-  call NerdTreeSettings()
-  call EunuchSettings()
-  call PreviewSettings()
-  call SurroundSettings()
-  call TagbarSettings()
-endfunction
-
-autocmd VimEnter * call LoadPluginSettings()
 "}}}
 
 "------------------------------------------------------------------------------
