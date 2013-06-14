@@ -108,194 +108,6 @@ autocmd BufWinEnter ?* silent loadview
 " autocmd FileType * setlocal formatoptions=cqnl
 "}}}
 
-
-"------------------------------------------------------------------------------
-" Neobundle and Plugins
-"------------------------------------------------------------------------------
-"{{{
-
-if has('vim_starting')
-  set runtimepath+=~/.vim/bundle/neobundle
-endif
-call neobundle#rc(expand('~/.vim/bundle'))
-
-" Let neobundle manage neobundle
-NeoBundleFetch 'Shougo/neobundle.vim'
-
-" Plugins
-NeoBundle 'scrooloose/syntastic' "{{{
-  " Move to the next and previous location in the location list
-  " (used to move between syntastic error locations)
-  " map <silent> <leader>g :lfirst<CR>
-  map <silent> <leader>j :lnext<CR>
-  map <silent> <leader>k :lprev<CR>
-
-  if exists("g:loaded_syntastic_plugin")
-    " show error markers in gutter
-    let g:syntastic_enable_signs=1
-    " Syntastic error list will appear when errors are detected
-    let g:syntastic_auto_loc_list=1
-    " Syntastic error list hight
-    let g:syntastic_loc_list_height=5
-    " Toggle Syntastic mode [active|passive]
-    map <leader>z :SyntasticToggleMode<CR>
-    " Manually start a syntax check (syntastic)
-    map <leader>a :SyntasticCheck<CR>
-  endif
-"}}}
-NeoBundle 'sjbach/lusty' "{{{
-  if exists("g:loaded_lustyexplorer")
-    let g:LustyExplorerSuppressRubyWarning = 1
-    map <silent> <leader>, :LustyJuggler<CR>
-    map <silent> <leader>. :LustyJugglePrevious<CR>
-    map <silent> <leader>f :LustyFilesystemExplorerFromHere<CR>
-    map <silent> <leader>h :LustyFilesystemExplorer $HOME<CR>
-    " map <silent> <leader>b :LustyBufferExplorer<CR> " use <leader>lb
-  endif
-"}}}
-NeoBundle 'scrooloose/nerdtree' "{{{
-  if exists("g:loaded_nerd_tree")
-    map <silent> <leader>tt :NERDTreeToggle<CR>
-    map <silent> <leader>th :NERDTree $HOME<CR>
-  endif
-"}}}
-NeoBundle 'tpope/vim-eunuch' "{{{
-  if exists("g:loaded_eunuch")
-    " Rename (there is a literal space after :Move)
-    map <leader>r :Move 
-    " Remove (no confirmation)
-    map <leader>ddd :Remove<CR>
-    " Write a privileged file with sudo
-    map <leader>w :SudoWrite<CR>
-  endif
-"}}}
-NeoBundle 'greyblake/vim-preview' "{{{
-  " vim-preview (markdown, rdoc, textile, html, ronn, rst)
-  if exists(":Preview")
-    " if(!exists('g:PreviewBrowsers'))
-      if(system("uname") =~ "Darwin")
-        let g:PreviewBrowsers = 'open,google-chrome,safari,firefox'
-      else
-        let g:PreviewBrowsers = 'chromium,firefox,epiphany'
-      endif
-    " endif
-    " remove default mapping and add custom one
-    autocmd VimEnter * 
-      \ nunmap <leader>P
-      \ nmap <silent> <leader>p :Preview<CR>
-  endif
-"}}}
-NeoBundle 'tpope/vim-surround' "{{{
-  if exists("g:loaded_surround")
-    map <leader>s ysiw
-  endif
-"}}}
-NeoBundle 'majutsushi/tagbar' "{{{
-  " if exists("g:loaded_tagbar")
-    let g:tagbar_autofocus=1
-    let g:tagbar_sort=0
-    let g:tagbar_autoshowtag=1
-    nmap <silent> <leader>b :TagbarOpenAutoClose<CR>
-  " endif
-"}}}
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'tpope/vim-markdown'
-NeoBundle 'tpope/vim-repeat'
-NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'ervandew/supertab'
-NeoBundle 'tomtom/tcomment_vim'
-NeoBundle 'nelstrom/vim-textobj-rubyblock', {'depends': 'kana/vim-textobj-user'}
-NeoBundle 'Raimondi/delimitMate'
-NeoBundle 'jnwhiteh/vim-golang'
-NeoBundle 'peterhoeg/vim-tmux'
-" NeoBundle 'digitaltoad/vim-jade'
-  " autocmd FileType jade NeoBundleSource 'vim-jade'
-
-" Installation check.
-NeoBundleCheck
-
-if !has('vim_starting')
-  " Call on_source hook when reloading .vimrc.
-  call neobundle#call_hook('on_source')
-endif
-
-" Enable file type detection.
-" Also load indent files, to automatically do language-dependent indenting.
-" neobundle requires the filetypes to be loaded after all bundles are loaded
-filetype plugin indent on
-
-"}}}
-
-"------------------------------------------------------------------------------
-" Appearance
-"------------------------------------------------------------------------------
-"{{{
-
-set background=dark
-set t_Co=16
-let g:solarized_termcolors=16
-colorscheme solarized
-
-" Line number highlight
-hi LineNr ctermfg=239 ctermbg=darkgray guifg=darkslategray
-" hi LineNr ctermfg=darkgray
-
-" Highlight for current line
-set cursorline
-hi cursorline ctermbg=black gui=bold
-
-" always show the status line
-set laststatus=2
-
-" Highlights for status line (must appear after any :colorscheme)
-hi User1 ctermbg=black ctermfg=darkgreen guibg=steelblue4 guifg=darkgray "buffer number
-hi User2 ctermbg=black ctermfg=darkred   guibg=black      guifg=darkred  "filetype
-hi User3 ctermbg=black ctermfg=darkblue  guibg=gray	      guifg=darkblue "fugitive(git)
-hi User4 ctermbg=red	 ctermfg=white     guibg=red        guifg=white    "syntastic
-
-" Set the default statusline highlight
-hi statusline ctermbg=gray ctermfg=black guibg=gray guifg=steelblue4
-
-" Sets the status line highlighting according the current mode
-function! SetInsertStatusline()
-hi statusline ctermbg=gray  ctermfg=red      guibg=gray  guifg=orangered4
-hi User2      ctermbg=red ctermfg=darkred  guibg=white guifg=darkred    "filetype
-hi User3      ctermbg=red ctermfg=darkblue guibg=white	guifg=darkblue  "fugitive(git)
-endfunction
-au InsertEnter * :call SetInsertStatusline()
-
-function! ClearInsertStatusline()
-hi statusline ctermbg=gray  ctermfg=black    guibg=gray  guifg=steelblue4
-hi User2      ctermbg=black ctermfg=darkred  guibg=black guifg=darkred    "filetype
-hi User3      ctermbg=black ctermfg=darkblue guibg=gray	 guifg=darkblue   "fugitive(git)
-endfunction
-au InsertLeave * :call ClearInsertStatusline()
-
-" Statusline formatting	                      (Remember to escape spaces '\ ')
-set statusline=
-set statusline+=%1*[%n]%*	                    " buffer number
-set statusline+=\ %F                          " full filename
-set statusline+=\ %2*                         " switch to User2 highlight
-set statusline+=%y                            " filetype
-set statusline+=%*                            " normal highlight
-set statusline+=\ %3*                         " switch to User3 highlight
-"git status (if the plugin is loaded)
-set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}
-set statusline+=%*                            " normal highlight
-
-set statusline+=%=                            " right align
-set statusline+=%4*                           " switch to User4 highlight
-set statusline+=%{SyntasticStatuslineFlag()}  " syntastic warnings
-set statusline+=%*\                           " normal highlight
-set statusline+=%{&spell?'SP\ ':''}
-set statusline+=%4*%{&paste?'PASTE\ ':''}%*   " paste mode flag
-set statusline+=%h                            " help buffer flag
-set statusline+=%r                            " read only flag
-set statusline+=%m                            " modified flag
-set statusline+=%l/%L                       " line number / total lines
-set statusline+=:%c                           " column
-"}}}
-
 "------------------------------------------------------------------------------
 " Functions and Commands
 "------------------------------------------------------------------------------
@@ -495,6 +307,193 @@ if &diff | map <leader>dp :diffput BASE<CR>| endif
 " toggle spell check
 nmap <silent> <F7> :setlocal spell! spelllang=en_us<CR>
 imap <silent> <F7> <C-o>:setlocal spell! spelllang=en_us<CR>
+"}}}
+
+"------------------------------------------------------------------------------
+" Neobundle and Plugins
+"------------------------------------------------------------------------------
+"{{{
+
+" if has('vim_starting')
+  set runtimepath+=~/.vim/bundle/neobundle
+" endif
+call neobundle#rc(expand('~/.vim/bundle'))
+
+" Let neobundle manage neobundle
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" Plugins
+NeoBundle 'scrooloose/syntastic' "{{{
+  " Move to the next and previous location in the location list
+  " (used to move between syntastic error locations)
+  " map <silent> <leader>g :lfirst<CR>
+  map <silent> <leader>j :lnext<CR>
+  map <silent> <leader>k :lprev<CR>
+
+  if exists("g:loaded_syntastic_plugin")
+    " show error markers in gutter
+    let g:syntastic_enable_signs=1
+    " Syntastic error list will appear when errors are detected
+    let g:syntastic_auto_loc_list=1
+    " Syntastic error list hight
+    let g:syntastic_loc_list_height=5
+    " Toggle Syntastic mode [active|passive]
+    map <leader>z :SyntasticToggleMode<CR>
+    " Manually start a syntax check (syntastic)
+    map <leader>a :SyntasticCheck<CR>
+  endif
+"}}}
+NeoBundle 'sjbach/lusty' "{{{
+  " if exists("g:loaded_lustyexplorer")
+    let g:LustyExplorerSuppressRubyWarning = 1
+    map <silent> <leader>, :LustyJuggler<CR>
+    map <silent> <leader>. :LustyJugglePrevious<CR>
+    map <silent> <leader>f :LustyFilesystemExplorerFromHere<CR>
+    map <silent> <leader>h :LustyFilesystemExplorer $HOME<CR>
+    " map <silent> <leader>b :LustyBufferExplorer<CR> " use <leader>lb
+  " endif
+"}}}
+NeoBundle 'scrooloose/nerdtree' "{{{
+  if exists("g:loaded_nerd_tree")
+    map <silent> <leader>tt :NERDTreeToggle<CR>
+    map <silent> <leader>th :NERDTree $HOME<CR>
+  endif
+"}}}
+NeoBundle 'tpope/vim-eunuch' "{{{
+  if exists("g:loaded_eunuch")
+    " Rename (there is a literal space after :Move)
+    map <leader>r :Move 
+    " Remove (no confirmation)
+    map <leader>ddd :Remove<CR>
+    " Write a privileged file with sudo
+    map <leader>w :SudoWrite<CR>
+  endif
+"}}}
+NeoBundle 'greyblake/vim-preview' "{{{
+  " vim-preview (markdown, rdoc, textile, html, ronn, rst)
+  if exists(":Preview")
+    " if(!exists('g:PreviewBrowsers'))
+      if(system("uname") =~ "Darwin")
+        let g:PreviewBrowsers = 'open,google-chrome,safari,firefox'
+      else
+        let g:PreviewBrowsers = 'chromium,firefox,epiphany'
+      endif
+    " endif
+    " remove default mapping and add custom one
+    autocmd VimEnter * 
+      \ nunmap <leader>P
+      \ nmap <silent> <leader>p :Preview<CR>
+  endif
+"}}}
+NeoBundle 'tpope/vim-surround' "{{{
+  if exists("g:loaded_surround")
+    map <leader>s ysiw
+  endif
+"}}}
+NeoBundle 'majutsushi/tagbar' "{{{
+  " if exists("g:loaded_tagbar")
+    let g:tagbar_autofocus=1
+    let g:tagbar_sort=0
+    let g:tagbar_autoshowtag=1
+    nmap <silent> <leader>b :TagbarOpenAutoClose<CR>
+  " endif
+"}}}
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-markdown'
+NeoBundle 'tpope/vim-repeat'
+NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'ervandew/supertab'
+NeoBundle 'tomtom/tcomment_vim'
+NeoBundle 'nelstrom/vim-textobj-rubyblock', {'depends': 'kana/vim-textobj-user'}
+NeoBundle 'Raimondi/delimitMate'
+NeoBundle 'jnwhiteh/vim-golang'
+NeoBundle 'peterhoeg/vim-tmux'
+" NeoBundle 'digitaltoad/vim-jade'
+  " autocmd FileType jade NeoBundleSource 'vim-jade'
+
+if !has('vim_starting')
+  " Call on_source hook when reloading .vimrc.
+  call neobundle#call_hook('on_source')
+endif
+
+" Enable file type detection.
+" Also load indent files, to automatically do language-dependent indenting.
+" neobundle requires the filetypes to be loaded after all bundles are loaded
+filetype plugin indent on
+
+" Installation check.
+NeoBundleCheck
+
+"}}}
+
+"------------------------------------------------------------------------------
+" Appearance
+"------------------------------------------------------------------------------
+"{{{
+
+set background=dark
+set t_Co=16
+let g:solarized_termcolors=16
+colorscheme solarized
+
+" Line number highlight
+hi LineNr ctermfg=239 ctermbg=darkgray guifg=darkslategray
+" hi LineNr ctermfg=darkgray
+
+" Highlight for current line
+set cursorline
+hi cursorline ctermbg=black gui=bold
+
+" always show the status line
+set laststatus=2
+
+" Highlights for status line (must appear after any :colorscheme)
+hi User1 ctermbg=black ctermfg=darkgreen guibg=steelblue4 guifg=darkgray "buffer number
+hi User2 ctermbg=black ctermfg=darkred   guibg=black      guifg=darkred  "filetype
+hi User3 ctermbg=black ctermfg=darkblue  guibg=gray	      guifg=darkblue "fugitive(git)
+hi User4 ctermbg=red	 ctermfg=white     guibg=red        guifg=white    "syntastic
+
+" Set the default statusline highlight
+hi statusline ctermbg=gray ctermfg=black guibg=gray guifg=steelblue4
+
+" Sets the status line highlighting according the current mode
+function! SetInsertStatusline()
+hi statusline ctermbg=gray  ctermfg=red      guibg=gray  guifg=orangered4
+hi User2      ctermbg=red ctermfg=darkred  guibg=white guifg=darkred    "filetype
+hi User3      ctermbg=red ctermfg=darkblue guibg=white	guifg=darkblue  "fugitive(git)
+endfunction
+au InsertEnter * :call SetInsertStatusline()
+
+function! ClearInsertStatusline()
+hi statusline ctermbg=gray  ctermfg=black    guibg=gray  guifg=steelblue4
+hi User2      ctermbg=black ctermfg=darkred  guibg=black guifg=darkred    "filetype
+hi User3      ctermbg=black ctermfg=darkblue guibg=gray	 guifg=darkblue   "fugitive(git)
+endfunction
+au InsertLeave * :call ClearInsertStatusline()
+
+" Statusline formatting	                      (Remember to escape spaces '\ ')
+set statusline=
+set statusline+=%1*[%n]%*	                    " buffer number
+set statusline+=\ %F                          " full filename
+set statusline+=\ %2*                         " switch to User2 highlight
+set statusline+=%y                            " filetype
+set statusline+=%*                            " normal highlight
+set statusline+=\ %3*                         " switch to User3 highlight
+"git status (if the plugin is loaded)
+set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}
+set statusline+=%*                            " normal highlight
+
+set statusline+=%=                            " right align
+set statusline+=%4*                           " switch to User4 highlight
+set statusline+=%{SyntasticStatuslineFlag()}  " syntastic warnings
+set statusline+=%*\                           " normal highlight
+set statusline+=%{&spell?'SP\ ':''}
+set statusline+=%4*%{&paste?'PASTE\ ':''}%*   " paste mode flag
+set statusline+=%h                            " help buffer flag
+set statusline+=%r                            " read only flag
+set statusline+=%m                            " modified flag
+set statusline+=%l/%L                       " line number / total lines
+set statusline+=:%c                           " column
 "}}}
 
 "------------------------------------------------------------------------------
