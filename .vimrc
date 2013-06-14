@@ -31,18 +31,20 @@ set mouse=a             " enable mouse
 set scrolloff=5         " Always leave visible lines at top and bottom of window
 set scrolljump=5        " Lines to scroll when cursor leaves screen
 set foldenable          " enable folds, toggle with zi
-
 set formatoptions=cqnl  " settings for formatting (see :help fo-table)
+set nostartofline       " don't move to SOL on many commands (also switching buffers)
+set foldenable          " Auto fold code
+set autoread            " auto read on external file changes
+set hidden              " allow buffers to remain open in the background
+
 set textwidth=100       " wrap lines at 100 chars
 set tabstop=2
 set softtabstop=2
 set shiftwidth=2
-set smarttab
 set expandtab           " expand tabs to spaces
+set smarttab
 set autoindent
 
-set autoread            " auto read on external file changes
-set hidden              " allow buffers to remain open in the background
 set pastetoggle=<F2>    " toggle paste mode (while paste is enabled, all formatting is disabled)
                         " OR :set invpaste<CR>:set paste?<CR>
 
