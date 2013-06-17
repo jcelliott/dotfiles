@@ -334,73 +334,59 @@ NeoBundle 'scrooloose/syntastic' "{{{
   map <silent> <leader>j :lnext<CR>
   map <silent> <leader>k :lprev<CR>
 
-  if exists("g:loaded_syntastic_plugin")
-    " show error markers in gutter
-    let g:syntastic_enable_signs=1
-    " Syntastic error list will appear when errors are detected
-    let g:syntastic_auto_loc_list=1
-    " Syntastic error list hight
-    let g:syntastic_loc_list_height=5
-    " Toggle Syntastic mode [active|passive]
-    map <leader>z :SyntasticToggleMode<CR>
-    " Manually start a syntax check (syntastic)
-    map <leader>a :SyntasticCheck<CR>
-  endif
+  " show error markers in gutter
+  let g:syntastic_enable_signs=1
+  " Syntastic error list will appear when errors are detected
+  let g:syntastic_auto_loc_list=1
+  " Syntastic error list hight
+  let g:syntastic_loc_list_height=5
+  " Toggle Syntastic mode [active|passive]
+  map <leader>z :SyntasticToggleMode<CR>
+  " Manually start a syntax check (syntastic)
+  map <leader>a :SyntasticCheck<CR>
 "}}}
 NeoBundle 'sjbach/lusty' "{{{
-  " if exists("g:loaded_lustyexplorer")
-    let g:LustyExplorerSuppressRubyWarning = 1
-    map <silent> <leader>, :LustyJuggler<CR>
-    map <silent> <leader>. :LustyJugglePrevious<CR>
-    map <silent> <leader>f :LustyFilesystemExplorerFromHere<CR>
-    map <silent> <leader>h :LustyFilesystemExplorer $HOME<CR>
-    " map <silent> <leader>b :LustyBufferExplorer<CR> " use <leader>lb
-  " endif
+  let g:LustyExplorerSuppressRubyWarning = 1
+  map <silent> <leader>, :LustyJuggler<CR>
+  map <silent> <leader>. :LustyJugglePrevious<CR>
+  map <silent> <leader>f :LustyFilesystemExplorerFromHere<CR>
+  map <silent> <leader>h :LustyFilesystemExplorer $HOME<CR>
+  " map <silent> <leader>b :LustyBufferExplorer<CR> " use <leader>lb
 "}}}
 NeoBundle 'scrooloose/nerdtree' "{{{
-  if exists("g:loaded_nerd_tree")
-    map <silent> <leader>tt :NERDTreeToggle<CR>
-    map <silent> <leader>th :NERDTree $HOME<CR>
-  endif
+  map <silent> <leader>tt :NERDTreeToggle<CR>
+  map <silent> <leader>th :NERDTree $HOME<CR>
 "}}}
 NeoBundle 'tpope/vim-eunuch' "{{{
-  if exists("g:loaded_eunuch")
-    " Rename (there is a literal space after :Move)
-    map <leader>r :Move 
-    " Remove (no confirmation)
-    map <leader>ddd :Remove<CR>
-    " Write a privileged file with sudo
-    map <leader>w :SudoWrite<CR>
-  endif
+  " Rename (there is a literal space after :Move)
+  map <leader>r :Move 
+  " Remove (no confirmation)
+  map <leader>ddd :Remove<CR>
+  " Write a privileged file with sudo
+  map <leader>w :SudoWrite<CR>
 "}}}
 NeoBundle 'greyblake/vim-preview' "{{{
   " vim-preview (markdown, rdoc, textile, html, ronn, rst)
-  if exists(":Preview")
-    " if(!exists('g:PreviewBrowsers'))
-      if(system("uname") =~ "Darwin")
-        let g:PreviewBrowsers = 'open,google-chrome,safari,firefox'
-      else
-        let g:PreviewBrowsers = 'chromium,firefox,epiphany'
-      endif
-    " endif
-    " remove default mapping and add custom one
-    autocmd VimEnter * 
-      \ nunmap <leader>P
-      \ nmap <silent> <leader>p :Preview<CR>
-  endif
+  " if(!exists('g:PreviewBrowsers'))
+    if(system("uname") =~ "Darwin")
+      let g:PreviewBrowsers = 'open,google-chrome,safari,firefox'
+    else
+      let g:PreviewBrowsers = 'chromium,firefox,epiphany'
+    endif
+  " endif
+  " remove default mapping and add custom one
+  " autocmd VimEnter * 
+  "   " \ nunmap <leader>P
+  "   \ nmap <silent> <leader>p :Preview<CR>
 "}}}
 NeoBundle 'tpope/vim-surround' "{{{
-  if exists("g:loaded_surround")
-    map <leader>s ysiw
-  endif
+  map <leader>s ysiw
 "}}}
 NeoBundle 'majutsushi/tagbar' "{{{
-  " if exists("g:loaded_tagbar")
-    let g:tagbar_autofocus=1
-    let g:tagbar_sort=0
-    let g:tagbar_autoshowtag=1
-    nmap <silent> <leader>b :TagbarOpenAutoClose<CR>
-  " endif
+  let g:tagbar_autofocus=1
+  let g:tagbar_sort=0
+  let g:tagbar_autoshowtag=1
+  nmap <silent> <leader>b :TagbarOpenAutoClose<CR>
 "}}}
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-markdown'
