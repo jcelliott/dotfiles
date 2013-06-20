@@ -327,7 +327,7 @@ call neobundle#rc(expand('~/.vim/bundle'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " Plugins
-NeoBundle 'scrooloose/syntastic' "{{{
+NeoBundle 'scrooloose/syntastic', '2519d8' "{{{
   " Move to the next and previous location in the location list
   " (used to move between syntastic error locations)
   " map <silent> <leader>g :lfirst<CR>
