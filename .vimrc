@@ -398,8 +398,8 @@ NeoBundle 'nelstrom/vim-textobj-rubyblock', {'depends': 'kana/vim-textobj-user'}
 NeoBundle 'Raimondi/delimitMate'
 NeoBundle 'jnwhiteh/vim-golang'
 NeoBundle 'peterhoeg/vim-tmux'
-" NeoBundle 'digitaltoad/vim-jade'
-  " autocmd FileType jade NeoBundleSource 'vim-jade'
+NeoBundle 'digitaltoad/vim-jade'
+  autocmd FileType jade NeoBundleSource 'vim-jade'
 
 if !has('vim_starting')
   " Call on_source hook when reloading .vimrc.
