@@ -151,6 +151,7 @@ alias gl='git pull'
 alias gs='git push'
 alias gpp='git pull;git push'
 alias gf='git diff'
+alias gba='git branch -a'
 
 # Use hub (github extensions for git) if it's installed
 command -v hub >/dev/null 2>&1
