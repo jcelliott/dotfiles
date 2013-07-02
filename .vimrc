@@ -347,10 +347,13 @@ NeoBundle 'scrooloose/syntastic', '2519d8' "{{{
 "}}}
 NeoBundle 'sjbach/lusty' "{{{
   let g:LustyExplorerSuppressRubyWarning = 1
+  let g:LustyEXplorerDefaultMappings = 0
+  let g:LustyJugglerDefaultMappings = 0
   map <silent> <leader>, :LustyJuggler<CR>
   map <silent> <leader>. :LustyJugglePrevious<CR>
   map <silent> <leader>f :LustyFilesystemExplorerFromHere<CR>
   map <silent> <leader>h :LustyFilesystemExplorer $HOME<CR>
+  map <silent> <leader>g :LustyBufferGrep<CR>
   " map <silent> <leader>b :LustyBufferExplorer<CR> " use <leader>lb
 "}}}
 NeoBundle 'scrooloose/nerdtree' "{{{
