@@ -104,8 +104,10 @@ autocmd BufReadPost *
 autocmd BufWinLeave ?* mkview
 autocmd BufWinEnter ?* silent loadview
 
-autocmd BufLeave * let b:winview = winsaveview()
-autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+" attempt to return to the same view when switching buffers
+" causing problems, look into it later
+" autocmd BufLeave * let b:winview = winsaveview()
+" autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 
 " Really set formatoptions. Filetype-specific plugins will override the default setting.
 " This autocommand will execute after any filetype plugins.
