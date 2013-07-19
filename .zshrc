@@ -26,13 +26,14 @@ ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="afowler"
 
 # Comment this out to enable weekly auto-update checks
-DISABLE_AUTO_UPDATE="true"
+#DISABLE_AUTO_UPDATE="true"
 
 # Plugins (~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-plugins=(brew node npm osx ruby rvm screen)
+plugins=(git brew node npm osx ruby rvm screen golang)
 
 source $ZSH/oh-my-zsh.sh
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}*%{$fg[yellow]%}"
 
 ### zsh options ###
 # GLOBDOTS lets files beginning with a . be matched without explicitly specifying the dot
@@ -188,9 +189,9 @@ fi
 
 ### Fix git autocompletion ###
 # from: <http://talkings.org/post/5236392664/zsh-and-slow-git-completion>
-__git_files() {
-  _wanted files expl 'local files' _files
-}
+# __git_files() {
+#   _wanted files expl 'local files' _files
+# }
 
 ### Local customizations ###
 if [ -f "$HOME/.zshrc.local" ]; then
