@@ -35,8 +35,10 @@ set foldenable          " enable folds, toggle with zi
 set nostartofline       " don't move to SOL on many commands (also switching buffers)
 set autoread            " auto read on external file changes
 set hidden              " allow buffers to remain open in the background
+set undofile            " undo tree persists between vim sessions
+set undodir=$HOME/.vim/undohist
 
-set formatoptions=cqnl  " settings for formatting (see :help fo-table)
+set formatoptions=cqnlj " settings for formatting (see :help fo-table)
 set textwidth=100       " wrap lines at 100 chars
 set tabstop=2
 set softtabstop=2
@@ -47,6 +49,7 @@ set autoindent
 
 set pastetoggle=<F2>    " toggle paste mode (while paste is enabled, all formatting is disabled)
                         " OR :set invpaste<CR>:set paste?<CR>
+set ttyfast             " improves redrawing for fast terminal connection
 
 if $TMUX == ''
   if(system("uname") =~ "Darwin")
@@ -111,7 +114,7 @@ autocmd BufWinEnter ?* silent loadview
 
 " Really set formatoptions. Filetype-specific plugins will override the default setting.
 " This autocommand will execute after any filetype plugins.
-" autocmd FileType * setlocal formatoptions=cqnl
+" autocmd FileType * setlocal formatoptions=cqnlj
 "}}}
 
 "------------------------------------------------------------------------------
@@ -174,6 +177,9 @@ nnoremap Y y$
 " yank entire file
 nnoremap <leader>y ggyG`` :echo "yanked entire file"<CR>
 
+" allow repeat operator with a visual selection
+vnoremap . :normal .<cr>
+
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
@@ -181,10 +187,14 @@ inoremap <C-U> <C-G>u<C-U>
 
 " ----- Movement and Selection ----- "{{{
 " Move lines and blocks up and down
-map <C-Down> ddp
-map <C-Up> ddkP
-vmap <C-Down> dpV`]
-vmap <C-Up> dkPV`]
+" map <C-Down> ddp
+" map <C-Up> ddkP
+map <C-Down> :m .+1<CR>==
+map <C-Up> :m .-2<CR>==
+" vmap <C-Down> dpV`]
+" vmap <C-Up> dkPV`]
+vmap <C-Down> :m '>+1<CR>gv=gv
+vmap <C-Up> :m '<-2<CR>gv=gv
 
 " Insert lines above or below
 noremap go o<esc>k
@@ -206,11 +216,17 @@ nnoremap k gk
 xnoremap j gj
 xnoremap k gk
 
-" J and K move more lines at a time
+" J and K move faster
 nmap J 5j
 nmap K 5k
 xmap J 5j
 xmap K 5k
+
+" Even faster!
+nmap ∆ 10j
+nmap ˚ 10k
+" nmap <M-j> 10j
+" nmap <M-k> 10k
 
 " Replace J(oin) with \j (because of above mapping)
 nmap \j :join<CR>
