@@ -7,3 +7,6 @@ set tw=72
 " Start on the first line in insert mode
 au BufEnter * call setpos('.', [0,1,1,0])
 startinsert
+
+" enable spell check
+setlocal spell
