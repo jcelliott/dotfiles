@@ -65,7 +65,7 @@ endif
 " remove the delay when exiting insert mode (purely cosmetic, updates the statusline color immediately)
 " doesn't wait to receive key codes, doesn't affect multi-character mappings (imap jk <esc> won't work)
 if ! has('gui_running')
-    set ttimeoutlen=10
+   set ttimeoutlen=10
     augroup FastEscape
         autocmd!
         au InsertEnter * set timeoutlen=0
@@ -109,8 +109,8 @@ autocmd BufWinEnter ?* silent loadview
 
 " attempt to return to the same view when switching buffers
 " causing problems, look into it later
-" autocmd BufLeave * let b:winview = winsaveview()
-" autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+autocmd BufLeave * let b:winview = winsaveview()
+autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 
 " Really set formatoptions. Filetype-specific plugins will override the default setting.
 " This autocommand will execute after any filetype plugins.
@@ -170,12 +170,12 @@ nnoremap ; :
 
 " Use , for leader (easier to type, standard location)
 let mapleader = ','
+"}}}
+
+" ----- Editing ----- "{{{
 
 " Yank from cursor to eol (like D, C)
 nnoremap Y y$
-
-" yank entire file
-nnoremap <leader>y ggyG`` :echo "yanked entire file"<CR>
 
 " allow repeat operator with a visual selection
 vnoremap . :normal .<cr>
@@ -183,6 +183,9 @@ vnoremap . :normal .<cr>
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
+
+" use <M-k> for digraphs instead of <C-k>
+inoremap ˚ <C-k>
 "}}}
 
 " ----- Movement and Selection ----- "{{{
@@ -236,16 +239,16 @@ vnoremap < <gv
 vnoremap > >gv
 
 " Move between splits with ctrl + hjkl
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-h> <C-w>h
-map <C-l> <C-w>l
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-h> <C-w>h
+noremap <C-l> <C-w>l
 
 " Easier movement in insert mode
-imap <C-h> <home>
-imap <C-j> <down>
-imap <C-k> <up>
-imap <C-l> <end>
+inoremap <C-h> <home>
+inoremap <C-j> <down>
+inoremap <C-k> <up>
+inoremap <C-l> <end>
 
 " select last modified text
 nmap <leader>x `[v`]
@@ -308,16 +311,16 @@ map <silent> \v :.s/^\[[x ]\][ ]\?//e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<C
 "}}}
 
 " ----- Files and Navigation ----- "{{{
+
+" yank entire file
+nnoremap <leader>y ggyG`` :echo "yanked entire file"<CR>
+
 " Vim built-in explorer (Split Explore)
 map <leader>e :Sexplore<CR>
 
 " close current buffer
 map <silent> <leader>q :bd<CR> 
 "}}}
-
-" use <leader>c for comments (gcc from tComment)
-nmap <leader>c gcc
-vmap <leader>c gc
 
 " redraw screen
 map \l :redraw!<CR>
@@ -409,12 +412,16 @@ NeoBundle 'majutsushi/tagbar' "{{{
   let g:tagbar_autoshowtag=1
   nmap <silent> <leader>b :TagbarOpenAutoClose<CR>
 "}}}
+NeoBundle 'tomtom/tcomment_vim' "{{{
+  " use <leader>c for comments (gcc from tComment)
+  nmap <leader>c gcc
+  vmap <leader>c gc
+"}}}
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-markdown'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'ervandew/supertab'
-NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'nelstrom/vim-textobj-rubyblock', {'depends': 'kana/vim-textobj-user'}
 NeoBundle 'Raimondi/delimitMate'
 NeoBundle 'jnwhiteh/vim-golang'
@@ -574,4 +581,8 @@ endif
 " experimenting with ESC
 " imap jk <ESC>
 " imap kj <ESC>
+
+" show trailing spaces and tabs
+" set list listchars=tab:\ \ ,trail:·
+" set list listchars=tab:\ \ ,trail:»
 "}}}
