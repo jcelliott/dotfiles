@@ -158,6 +158,15 @@ function! TabMessage(cmd)
 endfunction
 command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>)
 
+" switch between number and relativenumber
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set nornu
+  else
+    set relativenumber
+  endif
+endfunc
+
 "}}}
 
 "------------------------------------------------------------------------------
@@ -321,6 +330,9 @@ map <leader>e :Sexplore<CR>
 " close current buffer
 map <silent> <leader>q :bd<CR> 
 "}}}
+
+" toggle between number and relativenumber
+nnoremap <leader>n :call NumberToggle()<CR>
 
 " redraw screen
 map \l :redraw!<CR>
