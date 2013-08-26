@@ -49,6 +49,8 @@ unsetopt correctall
 
 # Use vi style bindings
 #bindkey -v
+# use <C-space> like up arrow
+bindkey '^ ' up-line-or-search
 
 ### Check OS ###
 platform='unknown'
