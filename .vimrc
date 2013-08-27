@@ -438,8 +438,13 @@ NeoBundle 'nelstrom/vim-textobj-rubyblock', {'depends': 'kana/vim-textobj-user'}
 NeoBundle 'Raimondi/delimitMate'
 NeoBundle 'jnwhiteh/vim-golang'
 NeoBundle 'peterhoeg/vim-tmux'
-NeoBundle 'digitaltoad/vim-jade'
+NeoBundleLazy 'digitaltoad/vim-jade' "{{{
   autocmd FileType jade NeoBundleSource 'vim-jade'
+"}}}
+NeoBundle 'mattn/gist-vim', {'depends': 'mattn/webapi-vim'} "{{{
+  let g:gist_detect_filetype = 1
+  let g:gist_open_browser_after_post = 1
+"}}}
 
 if !has('vim_starting')
   " Call on_source hook when reloading .vimrc.

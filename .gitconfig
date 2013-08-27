@@ -12,3 +12,5 @@
 	tool = vimdiff
 [mergetool "vimdiff"]
 	trustExitCode = false
+[github]
+	user = jcelliott
