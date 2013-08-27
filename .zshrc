@@ -8,14 +8,13 @@
 
 # colorized output
 function cinfo() {
-  # echo -e "\x1b[34m$1\x1b[0m" # blue
   echo -e "\x1b[32m$1\x1b[0m" # green
 }
 function cwarn() {
-  echo -e "\x1b[33m$1\x1b[0m"
+  echo -e "\x1b[33m$1\x1b[0m" # yellow
 }
 function cerror() {
-  echo -e "\x1b[31m$1\x1b[0m"
+  echo -e "\x1b[31m$1\x1b[0m" # red
 }
 
 ### oh-my-zsh setup ###
@@ -30,9 +29,10 @@ ZSH_THEME="afowler"
 
 # Plugins (~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-plugins=(git brew node npm osx ruby rvm screen golang)
+plugins=(gitfast brew node npm osx ruby screen golang tmux zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
+
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}*%{$fg[yellow]%}"
 
 ### zsh options ###
@@ -156,10 +156,14 @@ alias gpp='git pull;git push'
 alias gf='git diff'
 alias gba='git branch -a'
 
+# turn off globbing for rake commands (rake task[arg] breaks)
+alias rake="noglob rake"
+
 # Use hub (github extensions for git) if it's installed
 command -v hub >/dev/null 2>&1
 if [ $? -eq 0 ]; then
-  alias git='hub'
+  eval "$(hub alias -s)"
+  # alias git='hub'
 else
   cwarn "You should install hub (defunkt.io/hub)"
 fi
@@ -200,7 +204,6 @@ if [ -f "$HOME/.zshrc.local" ]; then
   cinfo "loading .zshrc.local"
   source "$HOME/.zshrc.local" ]
 fi
-
 
 ### Start in home directory and Confirm load ###
 # cd $HOME
