@@ -4,6 +4,9 @@
 # (_)___/___/_//_/_/  \__/
 #
 # Joshua Elliott
+#
+# TODO:
+#   - Move from oh-my-zsh to just antigen
 # --------------------------
 
 # colorized output
@@ -17,31 +20,40 @@ function cerror() {
   echo -e "\x1b[31m$1\x1b[0m" # red
 }
 
-### oh-my-zsh setup ###
-# Path to your oh-my-zsh configuration.
-ZSH=$HOME/.oh-my-zsh
+### antigen ###
+ZSH_CUSTOM="$HOME/.zsh"
+ADOTDIR="$HOME/.zsh"
+source "$HOME/.zsh/plugins/antigen/antigen.zsh"
 
-# Look in ~/.oh-my-zsh/themes/
-ZSH_THEME="afowler"
+# Bundles
+antigen use oh-my-zsh
+antigen bundle tmux
+antigen bundle gitfast
+antigen bundle ruby
+antigen bundle python
+antigen bundle golang
 
-# Comment this out to enable weekly auto-update checks
-#DISABLE_AUTO_UPDATE="true"
+if [[ $platform == 'darwin' ]]; then
+  antigen bundle osx
+  antigen bundle brew
+fi
 
-# Plugins (~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-plugins=(gitfast brew node npm osx ruby screen golang tmux zsh-syntax-highlighting)
+antigen bundle zsh-users/zsh-syntax-highlighting
 
-source $ZSH/oh-my-zsh.sh
+# Theme
+antigen theme afowler
 
+antigen apply
+
+# TODO: move this to a more appropriate place
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}*%{$fg[yellow]%}"
 
 ### zsh options ###
 # GLOBDOTS lets files beginning with a . be matched without explicitly specifying the dot
 setopt globdots
-
 # HISTIGNOREDUPS prevents the current line from being saved in the history if it is the same as the previous one
 setopt histignoredups
-
+# TODO: look into getting corrections working better
 # CORRECT turns on spelling correction for commands
 unsetopt correct
 # CORRECTALL turns on spelling correction for all arguments.
@@ -89,15 +101,7 @@ export TERM=xterm-256color
 ### Editor ###
 export EDITOR='vim -f'
 
-### Man Pager ###
-# This method leaves a "Vim: Reading from stdin..." message on the screen
-# export MANPAGER="/bin/sh -c \"unset PAGER;col -b -x | \
-#     vim -MRn -c 'set ft=man nomod nolist nonumber' \
-#     -c 'map q :q<CR>' \
-#     -c 'map <SPACE> <C-D>' \
-#     -c 'map b <C-U>' \
-#     -c 'nmap K :Man <C-R>=expand(\\\"<cword>\\\")<CR><CR>' -\""
-
+### Use vim for man pager ###
 function vman {
   vim -MRn -c 'set ft=man nomod nolist nonumber' \
     -c 'map q :q<CR>' \
@@ -137,6 +141,7 @@ alias vimconf='vim ~/.vimrc'
 alias zshconf='vim ~/.zshrc'
 
 # Git aliases
+# TODO: move these to real git aliases?
 alias gst='git status'
 alias gc='git commit -v'
 alias glg='git log --all --stat --graph --decorate'
@@ -168,14 +173,6 @@ else
   cwarn "You should install hub (defunkt.io/hub)"
 fi
 
-# Use MacVim's build of vim if it exists on the system
-# Using custom compiled vim instead now
-# command -v mvim >/dev/null 2>&1
-# if [ $? -eq 0 ]; then
-#   echo "Vim: Using macvim build"
-#   alias vim='/usr/local/Cellar/macvim/7.3-64/MacVim.app/Contents/MacOS/Vim'
-# fi
-
 ### directory colors on linux (for using solarized color scheme) ###
 if [ -f "$HOME/.config/.dircolors" ]; then
   #echo "using .dircolors"
@@ -192,12 +189,6 @@ if [ -d "$HOME/.rvm" ]; then
   PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
   [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 fi
-
-### Fix git autocompletion ###
-# from: <http://talkings.org/post/5236392664/zsh-and-slow-git-completion>
-# __git_files() {
-#   _wanted files expl 'local files' _files
-# }
 
 ### Local customizations ###
 if [ -f "$HOME/.zshrc.local" ]; then

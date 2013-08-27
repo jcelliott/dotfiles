@@ -1,9 +1,9 @@
 [submodule ".config/gnome-terminal-colors-solarized"]
 	path = .config/gnome-terminal-colors-solarized
 	url = https://github.com/sigurdga/gnome-terminal-colors-solarized.git
-[submodule ".oh-my-zsh"]
-	path = .oh-my-zsh
-	url = git://github.com/robbyrussell/oh-my-zsh.git
 [submodule ".vim/bundle/neobundle"]
 	path = .vim/bundle/neobundle
 	url = git://github.com/Shougo/neobundle.vim.git
+[submodule ".zsh/plugins/antigen"]
+	path = .zsh/plugins/antigen
+	url = https://github.com/zsh-users/antigen.git
