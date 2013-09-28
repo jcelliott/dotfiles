@@ -21,9 +21,6 @@ set nocompatible        " vim settings instead of vi settings
 
 set bs=indent,eol,start " allow backspacing over everything in insert mode
 set history=100         " keep x lines of command line history
-set ruler               " show the cursor position all the time
-set number              " Show line numbers
-set showcmd             " display incomplete commands
 set incsearch           " do incremental searching
 set hlsearch            " highlight search
 set ignorecase          " case insensitive search
@@ -36,7 +33,15 @@ set nostartofline       " don't move to SOL on many commands (also switching buf
 set autoread            " auto read on external file changes
 set hidden              " allow buffers to remain open in the background
 set undofile            " undo tree persists between vim sessions
+set confirm             " confirm dialog instead of fail
 set undodir=$HOME/.vim/undohist
+set cot=menu,longest,preview
+
+set ruler               " show the cursor position all the time
+set number              " Show line numbers
+set showcmd             " display incomplete commands
+set pumheight=30        " popup completion menu max height
+set splitright          " vertical splits go to the right
 
 set formatoptions=cqnlj " settings for formatting (see :help fo-table)
 set textwidth=100       " wrap lines at 100 chars
@@ -419,9 +424,9 @@ NeoBundle 'tpope/vim-surround' "{{{
   map <leader>s ysiw
 "}}}
 NeoBundle 'majutsushi/tagbar' "{{{
-  let g:tagbar_autofocus=1
-  let g:tagbar_sort=0
-  let g:tagbar_autoshowtag=1
+  let g:tagbar_autofocus = 1
+  let g:tagbar_sort = 0
+  let g:tagbar_autoshowtag = 1
   nmap <silent> <leader>b :TagbarOpenAutoClose<CR>
 "}}}
 NeoBundle 'tomtom/tcomment_vim' "{{{
@@ -433,18 +438,24 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-markdown'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'ervandew/supertab'
+NeoBundle 'ervandew/supertab' "{{{
+  let g:SuperTabDefaultCompletionType = "context"
+  let g:SuperTabLongestEnhanced = 1
+  let g:SuperTabLongestHighlight = 1
+  let g:SuperTabClosePreviewOnPopupClose = 1
+"}}}
 NeoBundle 'nelstrom/vim-textobj-rubyblock', {'depends': 'kana/vim-textobj-user'}
 NeoBundle 'Raimondi/delimitMate'
 NeoBundle 'jnwhiteh/vim-golang'
 NeoBundle 'peterhoeg/vim-tmux'
-NeoBundleLazy 'digitaltoad/vim-jade' "{{{
-  autocmd FileType jade NeoBundleSource 'vim-jade'
+NeoBundle 'digitaltoad/vim-jade' "{{{
+  " autocmd FileType jade NeoBundleSource 'vim-jade'
 "}}}
 NeoBundle 'mattn/gist-vim', {'depends': 'mattn/webapi-vim'} "{{{
   let g:gist_detect_filetype = 1
   let g:gist_open_browser_after_post = 1
 "}}}
+NeoBundle 'Blackrush/vim-gocode'
 
 if !has('vim_starting')
   " Call on_source hook when reloading .vimrc.
@@ -472,7 +483,8 @@ let g:solarized_termcolors=16
 colorscheme solarized
 
 " Line number highlight
-hi LineNr ctermfg=239 ctermbg=darkgray guifg=darkslategray
+" hi LineNr ctermfg=239 ctermbg=darkgray guifg=darkslategray
+" hi LineNr ctermfg=10 ctermbg=0 guifg=darkslategray
 " hi LineNr ctermfg=darkgray
 
 " Highlight for current line
