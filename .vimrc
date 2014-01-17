@@ -356,16 +356,17 @@ imap <silent> <F7> <C-o>:setlocal spell! spelllang=en_us<CR>
 "------------------------------------------------------------------------------
 "{{{
 
-" if has('vim_starting')
-  set runtimepath+=~/.vim/bundle/neobundle
-" endif
+if has('vim_starting')
+  set runtimepath+=~/.vim/bundle/neobundle.vim
+endif
 call neobundle#rc(expand('~/.vim/bundle'))
 
 " Let neobundle manage neobundle
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " Plugins
-NeoBundle 'scrooloose/syntastic', '2519d8' "{{{
+NeoBundle 'scrooloose/syntastic' "{{{
+" NeoBundle 'scrooloose/syntastic', '2519d8' "{{{
   " Move to the next and previous location in the location list
   " (used to move between syntastic error locations)
   " map <silent> <leader>g :lfirst<CR>
