@@ -6,23 +6,29 @@ case $1 in
     echo " Shutting Down..."
     dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" \
     /org/freedesktop/ConsoleKit/Manager \
-    org.freedesktop.ConsoleKit.Manager.Stop > /dev/null                       ;;
+    org.freedesktop.ConsoleKit.Manager.Stop > /dev/null
+    ;;
   restart   | R )
     echo " Restarting System..."
     dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" \
     /org/freedesktop/ConsoleKit/Manager \
-    org.freedesktop.ConsoleKit.Manager.Restart > /dev/null                    ;;
+    org.freedesktop.ConsoleKit.Manager.Restart > /dev/null
+    ;;
   suspend   | s )
     echo " Suspending to RAM..."
-    dbus-send --system --print-reply --dest="org.freedesktop.UPower" \
-    /org/freedesktop/UPower org.freedesktop.UPower.Suspend > /dev/null        ;;
+    dbus-send --system --print-reply --dest="org.freedesktop.login1" \
+    /org/freedesktop/login1 org.freedesktop.login1.Manager.Suspend \
+    boolean:true > /dev/null  
+    ;;
   hibernate | h )
     echo " Suspending to Disk..."
     dbus-send --system --print-reply --dest="org.freedesktop.UPower" \
-    /org/freedesktop/UPower org.freedesktop.UPower.Hibernate > /dev/null      ;;
+    /org/freedesktop/UPower org.freedesktop.UPower.Hibernate > /dev/null
+    ;;
   blankmon  | b )
     echo " Sleeping Monitor..."
-    sleep 1 && xset s activate                                                ;;
-  *         )
+    sleep 1 && xset s activate
+    ;;
+  * )
     echo " ${0##*/} <shutdown(S)|restart(R)|suspend(s)|hibernate(h)|blank(b)>"
 esac
