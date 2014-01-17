@@ -233,30 +233,26 @@ nnoremap k gk
 xnoremap j gj
 xnoremap k gk
 
-" J and K move faster
-nmap J 5j
-nmap K 5k
-xmap J 5j
-xmap K 5k
-
-" Even faster!
-nmap ∆ 10j
-nmap ˚ 10k
-" nmap <M-j> 10j
-" nmap <M-k> 10k
+" <C-j> and <C-k> move 5 lines at a time
+nmap <C-j> 5j
+nmap <C-k> 5k
+xmap <C-j> 5j
+xmap <C-k> 5k
 
 " Replace J(oin) with \j (because of above mapping)
-nmap \j :join<CR>
+" not needed after changing to <C-j>
+" nmap \j :join<CR>
 
 " Visual shifting (without exiting Visual mode)
 vnoremap < <gv
 vnoremap > >gv
 
-" Move between splits with ctrl + hjkl
-noremap <C-j> <C-w>j
-noremap <C-k> <C-w>k
-noremap <C-h> <C-w>h
-noremap <C-l> <C-w>l
+" " Move between splits with ctrl + hjkl
+" used for fast scroll now, were used infrequently
+" noremap <C-j> <C-w>j
+" noremap <C-k> <C-w>k
+" noremap <C-h> <C-w>h
+" noremap <C-l> <C-w>l
 
 " Easier movement in insert mode
 inoremap <C-h> <home>
@@ -287,6 +283,10 @@ map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 "}}}
 
 " ----- Commands ----- "{{{
+" Save from insert mode
+imap ;w <C-o>:w<CR>
+imap asdf <C-o>:echo What was that?<CR>
+
 " Edit and reload vimrc
 nmap <silent> <leader>v :e $MYVIMRC<CR>
 nmap <silent> \s :source $MYVIMRC<CR>:echo "sourced vimrc"<CR>
