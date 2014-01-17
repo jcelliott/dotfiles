@@ -7,9 +7,9 @@
 " Created 6/28/12
 "
 " TODO: "{{{
-"	  - Command to toggle autocompletion (tab, delimeters, etc.)
 "	  - marks and highlights system (like current <leader>l) with <leader>1-9
 "   - LaTeX support
+"   - Organize into separate files?
 "}}}
 
 "------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ set hidden              " allow buffers to remain open in the background
 set undofile            " undo tree persists between vim sessions
 set confirm             " confirm dialog instead of fail
 set undodir=$HOME/.vim/undohist
-set cot=menu,longest,preview
+set completeopt=menu,longest,preview
 
 set ruler               " show the cursor position all the time
 set number              " Show line numbers
@@ -456,6 +456,19 @@ NeoBundle 'mattn/gist-vim', {'depends': 'mattn/webapi-vim'} "{{{
   let g:gist_open_browser_after_post = 1
 "}}}
 NeoBundle 'Blackrush/vim-gocode'
+NeoBundle 'rking/ag.vim'
+NeoBundle 'hdima/python-syntax' "{{{
+  let python_highlight_all = 1
+"}}}
+NeoBundle 'fs111/pydoc.vim' "{{{
+  let g:pydoc_cmd = 'python -m pydoc'
+  let g:pydoc_window_lines=15
+"}}}
+" NeoBundle 'MarcWeber/ultisnips' "{{{
+NeoBundle 'SirVer/ultisnips' "{{{
+  let g:UltiSnipsExpandTrigger="<C-j>"
+  let g:UltiSnipsJumpForwardTrigger="<C-j>"
+"}}}
 
 if !has('vim_starting')
   " Call on_source hook when reloading .vimrc.
