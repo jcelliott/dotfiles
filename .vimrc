@@ -7,6 +7,7 @@
 " Created 6/28/12
 "
 " TODO: "{{{
+"	  - Command to toggle autocompletion (tab, delimeters, etc.)
 "	  - marks and highlights system (like current <leader>l) with <leader>1-9
 "   - LaTeX support
 "   - Organize into separate files?
@@ -21,6 +22,9 @@ set nocompatible        " vim settings instead of vi settings
 
 set bs=indent,eol,start " allow backspacing over everything in insert mode
 set history=100         " keep x lines of command line history
+set ruler               " show the cursor position all the time
+set number              " Show line numbers
+set showcmd             " display incomplete commands
 set incsearch           " do incremental searching
 set hlsearch            " highlight search
 set ignorecase          " case insensitive search
@@ -356,9 +360,9 @@ imap <silent> <F7> <C-o>:setlocal spell! spelllang=en_us<CR>
 "------------------------------------------------------------------------------
 "{{{
 
-if has('vim_starting')
-  set runtimepath+=~/.vim/bundle/neobundle.vim
-endif
+" if has('vim_starting')
+  set runtimepath+=~/.vim/bundle/neobundle
+" endif
 call neobundle#rc(expand('~/.vim/bundle'))
 
 " Let neobundle manage neobundle
@@ -503,6 +507,7 @@ let g:solarized_termcolors=16
 colorscheme solarized
 
 " Line number highlight
+" :h cterm-colors
 " hi LineNr ctermfg=239 ctermbg=darkgray guifg=darkslategray
 " hi LineNr ctermfg=10 ctermbg=0 guifg=darkslategray
 " hi LineNr ctermfg=darkgray
