@@ -27,7 +27,10 @@ source "$HOME/.zsh/plugins/antigen/antigen.zsh"
 
 # Bundles
 antigen use oh-my-zsh
-antigen bundle tmux
+ZSH_TMUX_AUTOCONNECT=false
+# don't let the plugin override our TERM setting
+# ZSH_TMUX_FIXTERM=false
+# antigen bundle tmux
 antigen bundle gitfast
 antigen bundle ruby
 antigen bundle python
@@ -96,7 +99,8 @@ fi
 export PATH
 
 ### Term ###
-export TERM=xterm-256color
+# export TERM='xterm-256color'
+# export TERM='xterm-16color'
 
 ### Editor ###
 export EDITOR='vim -f'
@@ -127,6 +131,9 @@ elif [[ $platform == 'linux' ]]; then
   alias ll='ls -lah --color=auto'
   alias la='ls -a --color=auto'
   if [[ $distro == 'arch' ]]; then
+    # alias tmux='tmux -2'
+    # alias tmux='TERMINFO=/usr/share/terminfo/x/xterm-16color TERM=xterm-16color tmux -2'
+    alias tmux='TERM=screen-256color-bce tmux'
     if [ -f "/usr/bin/pacman-color" ]; then
       alias pacman='pacman-color'
     else
