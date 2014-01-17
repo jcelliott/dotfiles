@@ -66,6 +66,8 @@ unsetopt correctall
 #bindkey -v
 # use <C-space> like up arrow
 bindkey '^ ' up-line-or-search
+# use <C-B> instead of <C-A> (tmux prefix)
+bindkey '^B' beginning-of-line
 
 ### Check OS ###
 platform='unknown'
@@ -116,7 +118,7 @@ function vman {
     # zsh process substitution: =(...) is replaced with the name of a file containing its output
     # this is not the same as <(...) which creates a named pipe (FIFO) instead
 }
-alias man='vman'
+# alias man='vman'
 
 ### Aliases ###
 if [[ $platform == 'darwin' ]]; then
@@ -179,6 +181,9 @@ if [ $? -eq 0 ]; then
 else
   cwarn "You should install hub (defunkt.io/hub)"
 fi
+
+# easy json pretty print (e.g., `curl something | json`)
+alias json='python -m json.tool'
 
 ### directory colors on linux (for using solarized color scheme) ###
 if [ -f "$HOME/.config/.dircolors" ]; then
