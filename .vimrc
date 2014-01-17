@@ -360,9 +360,9 @@ imap <silent> <F7> <C-o>:setlocal spell! spelllang=en_us<CR>
 "------------------------------------------------------------------------------
 "{{{
 
-" if has('vim_starting')
-  set runtimepath+=~/.vim/bundle/neobundle
-" endif
+if has('vim_starting')
+  set runtimepath+=~/.vim/bundle/neobundle.vim
+endif
 call neobundle#rc(expand('~/.vim/bundle'))
 
 " Let neobundle manage neobundle
