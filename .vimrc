@@ -439,12 +439,12 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-markdown'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'ervandew/supertab' "{{{
-  let g:SuperTabDefaultCompletionType = "context"
-  let g:SuperTabLongestEnhanced = 1
-  let g:SuperTabLongestHighlight = 1
-  let g:SuperTabClosePreviewOnPopupClose = 1
-"}}}
+" NeoBundle 'ervandew/supertab' "{{{ "obsolete with YouCompleteMe
+"   let g:SuperTabDefaultCompletionType = "context"
+"   let g:SuperTabLongestEnhanced = 1
+"   let g:SuperTabLongestHighlight = 1
+"   let g:SuperTabClosePreviewOnPopupClose = 1
+" "}}}
 NeoBundle 'nelstrom/vim-textobj-rubyblock', {'depends': 'kana/vim-textobj-user'}
 NeoBundle 'Raimondi/delimitMate'
 NeoBundle 'jnwhiteh/vim-golang'
@@ -469,6 +469,12 @@ NeoBundle 'fs111/pydoc.vim' "{{{
 NeoBundle 'SirVer/ultisnips' "{{{
   let g:UltiSnipsExpandTrigger="<C-j>"
   let g:UltiSnipsJumpForwardTrigger="<C-j>"
+"}}}
+NeoBundle 'Valloric/YouCompleteMe' "{{{
+  let g:ycm_complete_in_strings = 0
+  let g:ycm_collect_identifiers_from_tags_files = 1
+  let g:ycm_seed_identifiers_with_syntax = 1
+  let g:ycm_autoclose_preview_window_after_completion = 1
 "}}}
 
 if !has('vim_starting')
