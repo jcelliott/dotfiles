@@ -259,10 +259,10 @@ vnoremap > >gv
 " noremap <C-l> <C-w>l
 
 " Easier movement in insert mode
-inoremap <C-h> <home>
-inoremap <C-j> <down>
-inoremap <C-k> <up>
-inoremap <C-l> <end>
+" inoremap <C-h> <home>
+" inoremap <C-j> <down>
+" inoremap <C-k> <up>
+" inoremap <C-l> <end>
 
 " select last modified text
 nmap <leader>x `[v`]
@@ -370,7 +370,6 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
 " Plugins
 NeoBundle 'scrooloose/syntastic' "{{{
-" NeoBundle 'scrooloose/syntastic', '2519d8' "{{{
   " Move to the next and previous location in the location list
   " (used to move between syntastic error locations)
   " map <silent> <leader>g :lfirst<CR>
@@ -386,7 +385,8 @@ NeoBundle 'scrooloose/syntastic' "{{{
   " Toggle Syntastic mode [active|passive]
   map <leader>z :SyntasticToggleMode<CR>
   " Manually start a syntax check (syntastic)
-  map <leader>a :SyntasticCheck<CR>
+  " map <leader>a :SyntasticCheck<CR>
+  map <leader>a :SyntasticReset<CR>
 "}}}
 NeoBundle 'sjbach/lusty' "{{{
   let g:LustyExplorerSuppressRubyWarning = 1
@@ -462,14 +462,14 @@ NeoBundle 'mattn/gist-vim', {'depends': 'mattn/webapi-vim'} "{{{
 "}}}
 NeoBundle 'Blackrush/vim-gocode'
 NeoBundle 'rking/ag.vim'
-NeoBundle 'hdima/python-syntax' "{{{
-  let python_highlight_all = 1
-"}}}
+" NeoBundle 'hdima/python-syntax' "{{{
+"   let python_highlight_all = 1
+" "}}}
+NeoBundle 'sentientmachine/Pretty-Vim-Python'
 NeoBundle 'fs111/pydoc.vim' "{{{
   let g:pydoc_cmd = 'python -m pydoc'
   let g:pydoc_window_lines=15
 "}}}
-" NeoBundle 'MarcWeber/ultisnips' "{{{
 NeoBundle 'SirVer/ultisnips' "{{{
   let g:UltiSnipsExpandTrigger="<C-j>"
   let g:UltiSnipsJumpForwardTrigger="<C-j>"
@@ -480,6 +480,12 @@ NeoBundle 'Valloric/YouCompleteMe' "{{{
   let g:ycm_seed_identifiers_with_syntax = 1
   let g:ycm_autoclose_preview_window_after_completion = 1
 "}}}
+NeoBundle 'jmcantrell/vim-virtualenv' "{{{
+  let g:virtualenv_auto_activate = 1
+"}}}
+NeoBundle 'elzr/vim-json' "{{{
+"}}}
+
 
 if !has('vim_starting')
   " Call on_source hook when reloading .vimrc.
@@ -520,10 +526,11 @@ hi cursorline ctermbg=black gui=bold
 set laststatus=2
 
 " Highlights for status line (must appear after any :colorscheme)
-hi User1 ctermbg=black ctermfg=darkgreen guibg=steelblue4 guifg=darkgray "buffer number
-hi User2 ctermbg=black ctermfg=darkred   guibg=black      guifg=darkred  "filetype
-hi User3 ctermbg=black ctermfg=darkblue  guibg=gray	      guifg=darkblue "fugitive(git)
-hi User4 ctermbg=red	 ctermfg=white     guibg=red        guifg=white    "syntastic
+hi User1 ctermbg=black ctermfg=darkgreen guibg=steelblue4 guifg=darkgray  "buffer number
+hi User2 ctermbg=black ctermfg=darkred   guibg=black      guifg=darkred   "filetype
+hi User3 ctermbg=black ctermfg=darkblue  guibg=gray	      guifg=darkblue  "fugitive(git)
+hi User4 ctermbg=red	 ctermfg=white     guibg=red        guifg=white     "syntastic
+hi User5 ctermbg=black ctermfg=darkgreen guibg=gray	      guifg=darkgreen "virtualenv
 
 " Set the default statusline highlight
 hi statusline ctermbg=gray ctermfg=black guibg=gray guifg=steelblue4
@@ -543,6 +550,15 @@ hi User3      ctermbg=black ctermfg=darkblue guibg=gray	 guifg=darkblue   "fugit
 endfunction
 au InsertLeave * :call ClearInsertStatusline()
 
+function! RenderVirtualenvStatus()
+  let venv_stat = virtualenv#statusline()
+  if (venv_stat == '')
+    return ''
+  else
+    return '[venv:'.venv_stat.']'
+  endif
+endfunction
+
 " Statusline formatting	                      (Remember to escape spaces '\ ')
 set statusline=
 set statusline+=%1*[%n]%*	                    " buffer number
@@ -554,6 +570,9 @@ set statusline+=\ %3*                         " switch to User3 highlight
 "git status (if the plugin is loaded)
 set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}
 set statusline+=%*                            " normal highlight
+set statusline+=\ %5*                         " switch to User5 highlight
+set statusline+=%{exists('g:virtualenv_loaded')?RenderVirtualenvStatus():''}
+set statusline+=%*\                           " normal highlight
 
 set statusline+=%=                            " right align
 set statusline+=%4*                           " switch to User4 highlight
