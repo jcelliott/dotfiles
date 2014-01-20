@@ -284,6 +284,9 @@ nnoremap <silent> <leader><Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>:matc
 " <leader>/ highlights occurrences of the word under cursor. Like * but doesn't move
 map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 
+" What is the current syntax highlighting group?
+map \h :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#") . " BG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"bg#")<CR>
+
 "}}}
 
 " ----- Commands ----- "{{{
@@ -386,7 +389,7 @@ NeoBundle 'scrooloose/syntastic' "{{{
   map <leader>z :SyntasticToggleMode<CR>
   " Manually start a syntax check (syntastic)
   " map <leader>a :SyntasticCheck<CR>
-  map <leader>a :SyntasticReset<CR>
+  map <silent> <leader>a :SyntasticReset<CR>
 "}}}
 NeoBundle 'sjbach/lusty' "{{{
   let g:LustyExplorerSuppressRubyWarning = 1
@@ -473,6 +476,7 @@ NeoBundle 'fs111/pydoc.vim' "{{{
 NeoBundle 'SirVer/ultisnips' "{{{
   let g:UltiSnipsExpandTrigger="<C-j>"
   let g:UltiSnipsJumpForwardTrigger="<C-j>"
+  let g:UltiSnipsSnippetDirectories=["UltiSnips", "snippets"]
 "}}}
 NeoBundle 'Valloric/YouCompleteMe' "{{{
   let g:ycm_complete_in_strings = 0
