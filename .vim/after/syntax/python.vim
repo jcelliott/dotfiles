@@ -12,6 +12,7 @@ syn keyword pythonSelf self containedin=pythonParameters
 highlight link pythonDocstring Comment
 " bold the word 'self'
 highlight link pythonSelf Question
+highlight link pythonSelf Comment
 
 " dependent on Pretty-Vim-Python plugin
 highlight link pythonClass Special

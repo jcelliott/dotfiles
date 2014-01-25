@@ -1,5 +1,17 @@
+# insert docstring markers
 snippet doc "docstring"
 """
 ${1:documentation}
 """
+endsnippet
+
+# simple function declaration
+snippet defs "simple function declaration"
+def ${1:function}(`!p
+if snip.indent:
+	snip.rv = 'self' + (", " if len(t[2]) else "")`${2:arg1}):
+	"""
+	${4:@todo: Docstring for $1.}
+	"""
+	${0:pass}
 endsnippet
