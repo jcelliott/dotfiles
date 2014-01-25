@@ -489,6 +489,9 @@ NeoBundle 'jmcantrell/vim-virtualenv' "{{{
 "}}}
 NeoBundle 'elzr/vim-json' "{{{
 "}}}
+NeoBundle 'jayflo/vim-skip' "{{{
+  " let g:vimskip_wraptocenter = 1
+"}}}
 
 
 if !has('vim_starting')
