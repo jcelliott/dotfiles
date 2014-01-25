@@ -68,6 +68,11 @@ if $TMUX == ''
   endif
 endif
 
+" have vim use a more POSIX compatible shell than fish
+if &shell =~# 'fish$'
+  set shell=sh
+endif
+
 " get rid of 'X more files to edit' message on quit
 " autocmd VimEnter * last|rewind
 
@@ -491,6 +496,8 @@ NeoBundle 'elzr/vim-json' "{{{
 NeoBundle 'jayflo/vim-skip' "{{{
   " let g:vimskip_wraptocenter = 1
 "}}}
+NeoBundle 'tpope/vim-endwise'
+NeoBundle 'dag/vim-fish'
 
 
 if !has('vim_starting')
