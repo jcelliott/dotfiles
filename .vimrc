@@ -454,7 +454,6 @@ NeoBundle 'altercation/vim-colors-solarized'
 " "}}}
 NeoBundle 'nelstrom/vim-textobj-rubyblock', {'depends': 'kana/vim-textobj-user'}
 NeoBundle 'Raimondi/delimitMate'
-NeoBundle 'jnwhiteh/vim-golang'
 NeoBundle 'peterhoeg/vim-tmux'
 NeoBundle 'digitaltoad/vim-jade' "{{{
   " autocmd FileType jade NeoBundleSource 'vim-jade'
