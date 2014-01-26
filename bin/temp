@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Get temperature information on a mac computer
+
+# Get just the most relevant CPU temp
+tempmonitor -ds -c -a -l | grep DIODE | sed -e 's/^[^:]*: //'
+
+# Get all temp information
+# tempmonitor -c -l -a
