@@ -505,6 +505,9 @@ if !has('vim_starting')
   call neobundle#call_hook('on_source')
 endif
 
+" built-in macros:
+runtime macros/matchit.vim
+
 " Enable file type detection.
 " Also load indent files, to automatically do language-dependent indenting.
 " neobundle requires the filetypes to be loaded after all bundles are loaded
