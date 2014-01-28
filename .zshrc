@@ -136,11 +136,6 @@ elif [[ $platform == 'linux' ]]; then
     # alias tmux='tmux -2'
     # alias tmux='TERMINFO=/usr/share/terminfo/x/xterm-16color TERM=xterm-16color tmux -2'
     alias tmux='TERM=screen-256color-bce tmux'
-    if [ -f "/usr/bin/pacman-color" ]; then
-      alias pacman='pacman-color'
-    else
-      # cwarn "You should install pacman-color (AUR)"
-    fi
   fi
 fi
 
