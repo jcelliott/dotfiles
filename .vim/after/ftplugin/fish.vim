@@ -8,3 +8,6 @@ setlocal textwidth=79
 
 " Enable folding of block structures in fish.
 setlocal foldmethod=expr
+
+" Start editing a fish file with all folds open
+setlocal foldlevel=99

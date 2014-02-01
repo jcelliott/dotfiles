@@ -7,6 +7,8 @@ function add_abbr
   set -U fish_user_abbreviations $fish_user_abbreviations $argv
 end
 
+# first clear all abbreviations
+set -U fish_user_abbreviations ''
 add_abbr 'g=git'
 add_abbr 'gst=git status'
 add_abbr 'gc=git commit -v'
