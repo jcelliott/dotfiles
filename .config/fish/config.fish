@@ -33,3 +33,26 @@ add_abbr 's=ssh'
 add_abbr 'c=cat'
 add_abbr 'e=echo'
 
+set -x LS_COLORS (bash -c 'eval `dircolors ~/.config/.dircolors`; echo $LS_COLORS')
+
+set -U fish_color_user blue
+set -U fish_color_host cyan
+
+# Path
+set -U fish_user_paths "$HOME/bin"
+
+# Editor
+set -x EDITOR vim
+
+# Fish Git prompt
+set __fish_git_prompt_color yellow
+# set __fish_git_prompt_stateseparator ""
+# have to hack it because it defaults to space if it's empty
+set ___fish_git_prompt_char_stateseparator ""
+set __fish_git_prompt_showdirtystate true
+set __fish_git_prompt_color_dirtystate red
+set __fish_git_prompt_color_stagedstate green
+set __fish_git_prompt_showstashstate true
+set __fish_git_prompt_color_flags purple
+set __fish_git_prompt_showuntrackedfiles true
+
