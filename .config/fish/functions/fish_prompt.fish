@@ -11,8 +11,8 @@ function fish_prompt --description 'Write out the prompt'
 		set -g __fish_prompt_normal (set_color normal)
 	end
 	
-	if not set -q -g __fish_classic_git_functions_defined
-		set -g __fish_classic_git_functions_defined
+	if not set -q -g __fish_update_functions_defined
+		set -g __fish_update_functions_defined
 
 		function __fish_repaint_user --on-variable fish_color_user --description "Event handler, repaint when fish_color_user changes"
 			if status --is-interactive
@@ -34,7 +34,18 @@ function fish_prompt --description 'Write out the prompt'
 				commandline -f repaint ^/dev/null
 			end
 		end
+    
+    function __fish_set_virtualenv_prompt --on-variable VIRTUAL_ENV --description "Event handler; change virtualenv prompt when VIRTUAL_ENV changes"
+      if status --is-interactive
+        if set -q VIRTUAL_ENV
+          set -g __fish_prompt_virtualenv (set_color purple)"("(basename "$VIRTUAL_ENV")")"(set_color normal)
+        else
+          set -g __fish_prompt_virtualenv
+        end
+      end
+    end
 	end
+
 
 	set -l delim '>'
 
@@ -73,5 +84,5 @@ function fish_prompt --description 'Write out the prompt'
 		set -g __fish_prompt_host (set_color $fish_color_host)
 	end
 
-	echo -n -s "$__fish_prompt_user" "$USER" "$__fish_prompt_normal" @ "$__fish_prompt_host" "$__fish_prompt_hostname" "$__fish_prompt_normal" ' ' "$__fish_prompt_cwd" (prompt_pwd) (__fish_git_prompt) "$__fish_prompt_normal" "$prompt_status" "$delim" ' '
+	echo -n -s "$__fish_prompt_virtualenv" "$__fish_prompt_user" "$USER" "$__fish_prompt_normal" @ "$__fish_prompt_host" "$__fish_prompt_hostname" "$__fish_prompt_normal" ' ' "$__fish_prompt_cwd" (prompt_pwd) (__fish_git_prompt) "$__fish_prompt_normal" "$prompt_status" "$delim" ' '
 end

@@ -56,3 +56,6 @@ set __fish_git_prompt_showstashstate true
 set __fish_git_prompt_color_flags purple
 set __fish_git_prompt_showuntrackedfiles true
 
+# Virtualfish (Python virtualenv)
+set -g VIRTUALFISH_COMPAT_ALIASES
+source "$HOME/.local/share/virtualfish/virtual.fish"
