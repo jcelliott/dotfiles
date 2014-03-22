@@ -39,7 +39,7 @@ set -U fish_color_user blue
 set -U fish_color_host cyan
 
 # Path
-set -U fish_user_paths "$HOME/bin"
+set -U fish_user_paths "$HOME/bin" "/usr/local/bin"
 
 # Editor
 set -x EDITOR vim
