@@ -44,6 +44,11 @@ function fish_prompt --description 'Write out the prompt'
         end
       end
     end
+
+    # function __fish_about_to_display_prompt --on-event fish_prompt
+    #   echo "about to display prompt"
+    # end
+    # set -g __fish_last_status 0
 	end
 
 
@@ -69,6 +74,19 @@ function fish_prompt --description 'Write out the prompt'
 
 	end
 
+	# set -l prompt_status
+  # if test $last_status -ne $__fish_last_status -o $history[1] != $history[2]
+  #   # doesn't work because $history is not updated with last command before
+  #   # prompt is displayed
+  #   if test $last_status -ne 0
+  #     if not set -q __fish_prompt_status
+  #       set -g __fish_prompt_status (set_color $fish_color_status)
+  #     end
+  #     set prompt_status "$__fish_prompt_status [$last_status]$__fish_prompt_normal"
+  #   end
+  #   set -g __fish_last_status $last_status
+  # end
+
 	set -l prompt_status
 	if test $last_status -ne 0
 		if not set -q __fish_prompt_status
@@ -83,6 +101,10 @@ function fish_prompt --description 'Write out the prompt'
 	if not set -q __fish_prompt_host
 		set -g __fish_prompt_host (set_color $fish_color_host)
 	end
+
+  if set -q CMD_DURATION
+    echo (set_color yellow) "> $CMD_DURATION" "$__fish_prompt_normal"
+  end
 
 	echo -n -s "$__fish_prompt_virtualenv" "$__fish_prompt_user" "$USER" "$__fish_prompt_normal" @ "$__fish_prompt_host" "$__fish_prompt_hostname" "$__fish_prompt_normal" ' ' "$__fish_prompt_cwd" (prompt_pwd) (__fish_git_prompt) "$__fish_prompt_normal" "$prompt_status" "$delim" ' '
 end
