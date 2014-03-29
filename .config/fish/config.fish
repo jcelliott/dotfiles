@@ -13,14 +13,14 @@ set -U fish_color_host cyan
 set -U fish_color_status red
 set -U fish_color_search_match --background=red
 
+# Go
+set -x GOPATH "$HOME/projects/go"
+
 # Path
-set -U fish_user_paths "$HOME/bin" "/usr/local/bin"
+set -U fish_user_paths "$HOME/bin" "/usr/local/bin" "$GOPATH/bin"
 
 # Editor
 set -x EDITOR vim
-
-# Go
-set -x GOPATH "$HOME/projects/go"
 
 # Fish Git prompt
 set __fish_git_prompt_color yellow
