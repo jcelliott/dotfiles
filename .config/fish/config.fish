@@ -2,6 +2,11 @@
 #
 # Joshua Elliott
 
+# put anything needed for a non-interactive shell before this
+if not status --is-interactive
+  exit 0
+end
+
 # set -x LS_COLORS (bash -c 'eval `dircolors ~/.config/.dircolors`; echo $LS_COLORS')
 
 if not set -q fish_user_abbreviations
@@ -17,7 +22,7 @@ set -U fish_color_search_match --background=red
 set -x GOPATH "$HOME/projects/go"
 
 # Path
-set -U fish_user_paths "$HOME/bin" "/usr/local/bin" "$GOPATH/bin"
+set -U fish_user_paths "$HOME/bin" "/usr/local/bin" "$GOPATH/bin" "$HOME/.local/bin"
 
 # Editor
 set -x EDITOR vim
@@ -40,3 +45,10 @@ source "$HOME/.local/share/virtualfish/virtual.fish"
 
 # Base16 Shell
 # eval sh $HOME/.base16-default.dark.sh
+
+# Autojump
+# installed with ./install.py -d ~/.local
+if test -f $HOME/.local/etc/profile.d/autojump.fish
+  source $HOME/.local/etc/profile.d/autojump.fish
+end
+
