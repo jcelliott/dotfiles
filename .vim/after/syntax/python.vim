@@ -12,12 +12,12 @@ syn keyword pythonSelf self containedin=pythonParameters
 highlight link pythonDocstring Comment
 " bold the word 'self'
 highlight link pythonSelf Question
-highlight link pythonSelf Comment
+" highlight link pythonSelf Comment
 
 " dependent on Pretty-Vim-Python plugin
 highlight link pythonClass Special
 " highlight link pythonClassParameters Underlined
-highlight link pythonParameters Underlined
+" highlight link pythonParameters Underlined
 
 " look here for something better eventually:
 " http://stackoverflow.com/questions/18120713/vim-syntax-highlighting-of-doxygen-style-docstrings-in-python
