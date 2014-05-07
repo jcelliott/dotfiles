@@ -540,6 +540,7 @@ NeoBundle 'mhinz/vim-tmuxify'
 NeoBundle 'vim-scripts/restore_view.vim'
 NeoBundle 'chriskempson/base16-vim'
 NeoBundle 'groenewege/vim-less'
+NeoBundle 'dart-lang/dart-vim-plugin'
 
 if !has('vim_starting')
   " Call on_source hook when reloading .vimrc.
