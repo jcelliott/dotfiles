@@ -20,6 +20,12 @@
 
 set nocompatible        " vim settings instead of vi settings
 
+" have vim use a more POSIX compatible shell than fish
+if &shell =~# 'fish$'
+  set shell=sh
+endif
+
+set autochdir           " automatically chdir into directory of current file
 set bs=indent,eol,start " allow backspacing over everything in insert mode
 set history=100         " keep x lines of command line history
 set ruler               " show the cursor position all the time
@@ -31,13 +37,15 @@ set ignorecase          " case insensitive search
 set smartcase           " case sensitive search if using uppercase chars
 set mouse=a             " enable mouse
 set scrolloff=5         " Always leave visible lines at top and bottom of window
-set scrolljump=5        " Lines to scroll when cursor leaves screen
+" set scrolljump=5        " Lines to scroll when cursor leaves screen
 set foldenable          " enable folds, toggle with zi
 set nostartofline       " don't move to SOL on many commands (also switching buffers)
 set autoread            " auto read on external file changes
 set hidden              " allow buffers to remain open in the background
 set undofile            " undo tree persists between vim sessions
 set confirm             " confirm dialog instead of fail
+set wildmenu						" autocomplete menu for command line
+set wildmode=longest,list,full
 set undodir=$HOME/.vim/undohist
 set completeopt=menu,longest,preview
 
@@ -53,7 +61,9 @@ set tabstop=2
 set softtabstop=2
 set shiftwidth=2
 set smarttab
+" set nosmarttab
 set expandtab           " expand tabs to spaces
+" set noexpandtab         " don't expand tabs to spaces
 set autoindent
 
 set pastetoggle=<F2>    " toggle paste mode (while paste is enabled, all formatting is disabled)
@@ -66,11 +76,6 @@ if $TMUX == ''
   else
     set clipboard=unnamedplus " Use the X window clipboard (+ register)
   endif
-endif
-
-" have vim use a more POSIX compatible shell than fish
-if &shell =~# 'fish$'
-  set shell=sh
 endif
 
 " get rid of 'X more files to edit' message on quit
@@ -96,11 +101,11 @@ endif
 set viminfo='25,\"10000,:50,%,n$HOME/.vim/.viminfo
 
 " Load plugins
-runtime bundle/pathogen/autoload/pathogen.vim
-if exists('g:loaded_pathogen')
-  call pathogen#infect()
-  " call LoadPluginMaps()
-endif
+" runtime bundle/pathogen/autoload/pathogen.vim
+" if exists('g:loaded_pathogen')
+"   call pathogen#infect()
+"   " call LoadPluginMaps()
+" endif
 " silent! call pathogen#infect()
 
 " Enable syntax highlighting and keep current colors
@@ -118,13 +123,19 @@ autocmd BufReadPost *
   \ endif
 
 " automatically save folds and attempt to load them when opening a file
-autocmd BufWinLeave ?* mkview
-autocmd BufWinEnter ?* silent loadview
+" autocmd BufWinLeave ?* mkview
+" autocmd BufWinEnter ?* silent loadview
+
+" automatically close location list window when leaving a buffer
+" prevents the annoying case where the location list stays open after closing
+" its associated file buffer
+" TODO: bug - this closes the location list window when you try to switch to it
+autocmd BufLeave * lclose
 
 " attempt to return to the same view when switching buffers
 " causing problems, look into it later
-autocmd BufLeave * let b:winview = winsaveview()
-autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+" autocmd BufLeave * let b:winview = winsaveview()
+" autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 
 " Really set formatoptions. Filetype-specific plugins will override the default setting.
 " This autocommand will execute after any filetype plugins.
@@ -136,7 +147,7 @@ autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 "------------------------------------------------------------------------------
 "{{{
 
-" Convenient command to see the difference between the current buffer and the file it was loaded 
+" See the difference between the current buffer and the file it was loaded 
 " from, thus the changes you made. Only define it when not defined already.
 if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
@@ -292,6 +303,8 @@ map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 " What is the current syntax highlighting group?
 map \h :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#") . " BG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"bg#")<CR>
 
+" Toggle show whitespace
+map \w :<C-U>setlocal lcs=tab:>-,trail:-,eol:$ list! list? <CR>
 "}}}
 
 " ----- Commands ----- "{{{
@@ -320,7 +333,7 @@ map <F4> :call REPL()<CR>
 map <F3> mnggO<C-R>%<ESC>gcc'n
 
 " copy the output of an ex command to a new tab
-map \t :TabMessage 
+" map \t :TabMessage 
 
 " go to shell (exit the shell to return to vim)
 map gs :sh<CR>
@@ -378,18 +391,29 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
 " Plugins
 NeoBundle 'scrooloose/syntastic' "{{{
-  " Move to the next and previous location in the location list
-  " (used to move between syntastic error locations)
-  " map <silent> <leader>g :lfirst<CR>
-  map <silent> <leader>j :lnext<CR>
-  map <silent> <leader>k :lprev<CR>
-
   " show error markers in gutter
   let g:syntastic_enable_signs=1
   " Syntastic error list will appear when errors are detected
   let g:syntastic_auto_loc_list=1
   " Syntastic error list hight
   let g:syntastic_loc_list_height=5
+	" Always add errors (:Errors) to location list
+	let g:syntastic_always_populate_loc_list=1
+	" Run all checkers in parallel instead of stopping after the first
+	let g:syntastic_aggregate_errors = 1
+	" Symbols to display in the gutter
+	let g:syntastic_error_symbol = '✗'
+	let g:syntastic_warning_symbol = '⚠'
+  let g:syntastic_style_warning_symbol = 's'
+  let g:syntastic_style_error_symbol = 'S'
+	" Customize syntastic status line message
+	let g:syntastic_stl_format = '[%E{Err: %e}%B{, }%W{Warn: %w}]'
+
+  " Move to the next and previous location in the location list
+  " (used to move between syntastic error locations)
+  " map <silent> <leader>g :lfirst<CR>
+  map <silent> <leader>j :lnext<CR>
+  map <silent> <leader>k :lprev<CR>
   " Toggle Syntastic mode [active|passive]
   map <leader>z :SyntasticToggleMode<CR>
   " Manually start a syntax check (syntastic)
@@ -405,6 +429,7 @@ NeoBundle 'sjbach/lusty' "{{{
   map <silent> <leader>f :LustyFilesystemExplorerFromHere<CR>
   map <silent> <leader>h :LustyFilesystemExplorer $HOME<CR>
   map <silent> <leader>g :LustyBufferGrep<CR>
+  map <silent> <leader>b :LustyBufferExplorer<CR>
   " map <silent> <leader>b :LustyBufferExplorer<CR> " use <leader>lb
 "}}}
 NeoBundle 'scrooloose/nerdtree' "{{{
@@ -440,12 +465,13 @@ NeoBundle 'majutsushi/tagbar' "{{{
   let g:tagbar_autofocus = 1
   let g:tagbar_sort = 0
   let g:tagbar_autoshowtag = 1
-  nmap <silent> <leader>b :TagbarOpenAutoClose<CR>
+  nmap <silent> <leader>t :TagbarOpenAutoClose<CR>
 "}}}
 NeoBundle 'tomtom/tcomment_vim' "{{{
   " use <leader>c for comments (gcc from tComment)
   nmap <leader>c gcc
   vmap <leader>c gc
+  let g:tcomment_types = { 'tmux': '# ' }
 "}}}
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-markdown'
@@ -467,7 +493,8 @@ NeoBundle 'mattn/gist-vim', {'depends': 'mattn/webapi-vim'} "{{{
   let g:gist_detect_filetype = 1
   let g:gist_open_browser_after_post = 1
 "}}}
-NeoBundle 'Blackrush/vim-gocode'
+" NeoBundle 'Blackrush/vim-gocode' " completion isn't working well with this
+NeoBundle 'fsouza/go.vim' " this one creates stupid maps with no option to disable
 NeoBundle 'rking/ag.vim'
 " NeoBundle 'hdima/python-syntax' "{{{
 "   let python_highlight_all = 1
@@ -483,10 +510,10 @@ NeoBundle 'SirVer/ultisnips' "{{{
   let g:UltiSnipsSnippetDirectories=["UltiSnips", "snippets"]
 "}}}
 NeoBundle 'Valloric/YouCompleteMe' "{{{
-  let g:ycm_complete_in_strings = 0
+  " let g:ycm_complete_in_strings = 0
   let g:ycm_collect_identifiers_from_tags_files = 1
   let g:ycm_seed_identifiers_with_syntax = 1
-  let g:ycm_autoclose_preview_window_after_completion = 1
+  let g:ycm_autoclose_preview_window_after_insertion = 1
 "}}}
 NeoBundle 'jmcantrell/vim-virtualenv' "{{{
   let g:virtualenv_auto_activate = 1
@@ -498,7 +525,21 @@ NeoBundle 'jayflo/vim-skip' "{{{
 "}}}
 NeoBundle 'tpope/vim-endwise'
 NeoBundle 'dag/vim-fish'
-
+" NeoBundle 'benmills/vimux' "{{{
+" 	let g:VimuxPromptString = "vimux> "
+" 	let g:VimuxUseNearest = 0
+" 	let g:VimuxHeight = 15
+" "}}}
+NeoBundle 'mhinz/vim-tmuxify'
+" NeoBundle 'vim-scripts/ShowMarks'
+" NeoBundle 'vim-scripts/highlight.vim'
+" NeoBundle 'vim-scripts/quickhl.vim' "{{{
+"   nmap <leader>m <Plug>(quickhl-manual-this)
+"   let g:quickhl_cword_hl_command = 'link QuickhlCword Todo'
+" "}}}
+NeoBundle 'vim-scripts/restore_view.vim'
+NeoBundle 'chriskempson/base16-vim'
+NeoBundle 'groenewege/vim-less'
 
 if !has('vim_starting')
   " Call on_source hook when reloading .vimrc.
@@ -523,23 +564,43 @@ NeoBundleCheck
 "------------------------------------------------------------------------------
 "{{{
 
+" --- Settings ---
 set background=dark
-set t_Co=16
-let g:solarized_termcolors=16
-colorscheme solarized
+set cursorline
+set laststatus=2 " always show the status line
+" set t_Co=16
+set t_Co=256
+" set term=screen-256color
 
-" Line number highlight
+" --- Colorscheme ---
+" let g:solarized_termcolors=16
+" colorscheme solarized
+" let base16colorspace=256
+colorscheme base16-default
+
+" --- Highlights ---
 " :h cterm-colors
 " hi LineNr ctermfg=239 ctermbg=darkgray guifg=darkslategray
-" hi LineNr ctermfg=10 ctermbg=0 guifg=darkslategray
-" hi LineNr ctermfg=darkgray
+hi LineNr ctermfg=237 ctermbg=234
+" hi CursorLineNr ctermbg=235
+" hi CursorLineNr ctermbg=237
 
-" Highlight for current line
-set cursorline
-hi cursorline ctermbg=black gui=bold
+" hi cursorline ctermbg=0 gui=bold
+hi cursorline ctermbg=234
 
-" always show the status line
-set laststatus=2
+" Highlight for the omnicompletion menu
+hi Pmenu ctermbg=234 ctermfg=7
+" hi Pmenu ctermbg=8 ctermfg=7
+" hi Pmenu ctermbg=7 ctermfg=0
+
+hi SignColumn ctermbg=234
+hi FoldColumn ctermbg=234
+
+hi Question ctermfg=4
+hi Operator ctermfg=3
+hi MatchParen ctermfg=4
+hi Search ctermbg=3 ctermfg=0
+hi IncSearch ctermbg=1 ctermfg=0
 
 " Highlights for status line (must appear after any :colorscheme)
 hi User1 ctermbg=black ctermfg=darkgreen guibg=steelblue4 guifg=darkgray  "buffer number
