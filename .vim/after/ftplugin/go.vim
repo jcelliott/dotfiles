@@ -1,10 +1,19 @@
 " Settings for go files
 
 let b:interpreter = 'go run'
-set makeprg = "go build %"
+setlocal makeprg = "go build %"
+
+" don't show preview window for Go completions
+" (it doesn't have any useful information)
+setlocal completeopt-=preview
+
+" use real tabs in Go sources
+setlocal noexpandtab
 
 " run file through goformat before saving
-autocmd BufWritePre *.go :silent Fmt
+" already done in plugin
+" autocmd BufWritePre *.go :silent Fmt
+autocmd BufWritePre <buffer> :silent Fmt
 
 let g:tagbar_type_go = {
     \ 'ctagstype' : 'go',
