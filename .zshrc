@@ -127,6 +127,7 @@ if [[ $platform == 'darwin' ]]; then
   alias ll='gls -lah --color=auto'
   alias la='gls -a --color=auto'
   alias ql='quick-look'
+  alias tmux='TERM=xterm-256color tmux -2'
 
 elif [[ $platform == 'linux' ]]; then
   alias ls='ls --color=auto'

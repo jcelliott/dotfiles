@@ -7,10 +7,16 @@ if not status --is-interactive
   exit 0
 end
 
-# set -x LS_COLORS (bash -c 'eval `dircolors ~/.config/.dircolors`; echo $LS_COLORS')
+os_detect
 
 if not set -q fish_user_abbreviations
   abbr_set
+end
+
+if test $_platform = "darwin"
+  set -x LS_COLORS (bash -c 'eval `gdircolors ~/.config/.dircolors`; echo $LS_COLORS')
+else
+  set -x LS_COLORS (bash -c 'eval `dircolors ~/.config/.dircolors`; echo $LS_COLORS')
 end
 
 set -U fish_color_user blue
