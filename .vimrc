@@ -507,9 +507,16 @@ NeoBundle 'fs111/pydoc.vim' "{{{
 NeoBundle 'SirVer/ultisnips' "{{{
   let g:UltiSnipsExpandTrigger="<C-j>"
   let g:UltiSnipsJumpForwardTrigger="<C-j>"
-  let g:UltiSnipsSnippetDirectories=["UltiSnips", "snippets"]
+  let g:UltiSnipsSnippetDirectories=["UltiSnips", "ultisnips"]
 "}}}
-NeoBundle 'Valloric/YouCompleteMe' "{{{
+NeoBundle 'honza/vim-snippets' " snippets collection
+" NeoBundle 'Valloric/YouCompleteMe' {{{
+NeoBundle 'Valloric/YouCompleteMe', {
+\   'build' : {
+\     'unix' : './install.sh',
+\     'mac' : './install.sh',
+\   } 
+\ }
   " let g:ycm_complete_in_strings = 0
   let g:ycm_collect_identifiers_from_tags_files = 1
   let g:ycm_seed_identifiers_with_syntax = 1
