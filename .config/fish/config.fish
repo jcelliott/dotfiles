@@ -19,10 +19,8 @@ else
   set -x LS_COLORS (bash -c 'eval `dircolors ~/.config/.dircolors`; echo $LS_COLORS')
 end
 
-set -U fish_color_user blue
-set -U fish_color_host cyan
-set -U fish_color_status red
-set -U fish_color_search_match --background=red
+# this only sets the variables if they aren't defined
+set_fish_colors
 
 # Go
 set -x GOPATH "$HOME/projects/go"
