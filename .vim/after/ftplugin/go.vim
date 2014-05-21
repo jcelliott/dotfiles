@@ -15,6 +15,9 @@ setlocal noexpandtab
 " autocmd BufWritePre *.go :silent Fmt
 autocmd BufWritePre <buffer> :silent Fmt
 
+map \i :Import 
+map \d :Drop 
+
 let g:tagbar_type_go = {
     \ 'ctagstype' : 'go',
     \ 'kinds'     : [
