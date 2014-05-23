@@ -74,10 +74,13 @@ function fish_prompt --description 'Write out the prompt'
 
 	end
 
+  # echo "--- $history[1]"
+  # echo "--- $history[2]"
 	# set -l prompt_status
-  # if test $last_status -ne $__fish_last_status -o $history[1] != $history[2]
+  # # if test $last_status -ne $__fish_last_status -o $history[1] -ne $history[2]
+  # if test $last_status -ne $__fish_last_status
   #   # doesn't work because $history is not updated with last command before
-  #   # prompt is displayed
+  #   # prompt is displayed. See: https://github.com/fish-shell/fish-shell/issues/984
   #   if test $last_status -ne 0
   #     if not set -q __fish_prompt_status
   #       set -g __fish_prompt_status (set_color $fish_color_status)
@@ -103,8 +106,8 @@ function fish_prompt --description 'Write out the prompt'
 	end
 
   if set -q CMD_DURATION
-    echo (set_color yellow) "> $CMD_DURATION" "$__fish_prompt_normal"
+    echo (set_color --bold black) "> $CMD_DURATION" "$__fish_prompt_normal"
   end
 
-	echo -n -s "$__fish_prompt_virtualenv" "$__fish_prompt_user" "$USER" "$__fish_prompt_normal" @ "$__fish_prompt_host" "$__fish_prompt_hostname" "$__fish_prompt_normal" ' ' "$__fish_prompt_cwd" (prompt_pwd) (__fish_git_prompt) "$__fish_prompt_normal" "$prompt_status" "$delim" ' '
+	echo -n -s "$__fish_prompt_virtualenv" "$__fish_prompt_user" "$USER" "$__fish_prompt_normal" @ "$__fish_prompt_host" "$__fish_prompt_hostname" "$__fish_prompt_normal" ' ' "$__fish_prompt_cwd" (prompt_pwd) (__fish_git_prompt) "$__fish_prompt_normal" "$prompt_status" (fish_vi_prompt_mode) ' '
 end
