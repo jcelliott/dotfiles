@@ -26,7 +26,9 @@ set_fish_colors
 set -x GOPATH "$HOME/projects/go"
 
 # Path
-set -U fish_user_paths "$HOME/bin" "/usr/local/bin" "$GOPATH/bin" "$HOME/.local/bin"
+if not set -q -U fish_user_paths
+  set -U fish_user_paths "$HOME/bin" "/usr/local/bin" "$GOPATH/bin" "$HOME/.local/bin"
+end
 
 # Editor
 set -x EDITOR vim

@@ -9,5 +9,6 @@ function set_fish_colors --description 'set fish user colors if not set or if --
     set -U fish_color_host cyan
     set -U fish_color_status red
     set -U fish_color_search_match --background=red
+    set -U fish_color_selection --background=green
   end
 end
