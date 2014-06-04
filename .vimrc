@@ -87,7 +87,7 @@ if ! has('gui_running')
    set ttimeoutlen=10
     augroup FastEscape
         autocmd!
-        au InsertEnter * set timeoutlen=0
+        au InsertEnter * set timeoutlen=100
         au InsertLeave * set timeoutlen=1000
     augroup END
 endif
@@ -220,6 +220,7 @@ inoremap <C-U> <C-G>u<C-U>
 
 " use <M-k> for digraphs instead of <C-k>
 inoremap ˚ <C-k>
+
 "}}}
 
 " ----- Movement and Selection ----- "{{{
@@ -254,10 +255,10 @@ xnoremap j gj
 xnoremap k gk
 
 " <C-j> and <C-k> move 5 lines at a time
-nmap <C-j> 5j
-nmap <C-k> 5k
-xmap <C-j> 5j
-xmap <C-k> 5k
+" nmap <C-j> 5j
+" nmap <C-k> 5k
+" xmap <C-j> 5j
+" xmap <C-k> 5k
 
 " Replace J(oin) with \j (because of above mapping)
 " not needed after changing to <C-j>
@@ -269,12 +270,13 @@ vnoremap > >gv
 
 " " Move between splits with ctrl + hjkl
 " used for fast scroll now, were used infrequently
-" noremap <C-j> <C-w>j
-" noremap <C-k> <C-w>k
-" noremap <C-h> <C-w>h
-" noremap <C-l> <C-w>l
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-h> <C-w>h
+noremap <C-l> <C-w>l
 
 " Easier movement in insert mode
+" Don't spend time in insert mode!
 " inoremap <C-h> <home>
 " inoremap <C-j> <down>
 " inoremap <C-k> <up>
@@ -310,7 +312,7 @@ map \w :<C-U>setlocal lcs=tab:>-,trail:-,eol:$ list! list? <CR>
 " ----- Commands ----- "{{{
 " Save from insert mode
 imap ;w <C-o>:w<CR>
-imap asdf <C-o>:echo What was that?<CR>
+imap ;w<CR> <C-o>:w<CR>
 
 " Edit and reload vimrc
 nmap <silent> <leader>v :e $MYVIMRC<CR>
@@ -432,10 +434,6 @@ NeoBundle 'sjbach/lusty' "{{{
   map <silent> <leader>b :LustyBufferExplorer<CR>
   " map <silent> <leader>b :LustyBufferExplorer<CR> " use <leader>lb
 "}}}
-NeoBundle 'scrooloose/nerdtree' "{{{
-  map <silent> <leader>tt :NERDTreeToggle<CR>
-  map <silent> <leader>th :NERDTree $HOME<CR>
-"}}}
 NeoBundle 'tpope/vim-eunuch' "{{{
   " Rename (there is a literal space after :Move)
   map <leader>r :Move 
@@ -443,20 +441,6 @@ NeoBundle 'tpope/vim-eunuch' "{{{
   map <leader>ddd :Remove<CR>
   " Write a privileged file with sudo
   map <leader>w :SudoWrite<CR>
-"}}}
-NeoBundle 'greyblake/vim-preview' "{{{
-  " vim-preview (markdown, rdoc, textile, html, ronn, rst)
-  " if(!exists('g:PreviewBrowsers'))
-    if(system("uname") =~ "Darwin")
-      let g:PreviewBrowsers = 'open,google-chrome,safari,firefox'
-    else
-      let g:PreviewBrowsers = 'chromium,firefox,epiphany'
-    endif
-  " endif
-  " remove default mapping and add custom one
-  " autocmd VimEnter * 
-  "   " \ nunmap <leader>P
-  "   \ nmap <silent> <leader>p :Preview<CR>
 "}}}
 NeoBundle 'tpope/vim-surround' "{{{
   map <leader>s ysiw
@@ -476,13 +460,8 @@ NeoBundle 'tomtom/tcomment_vim' "{{{
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-markdown'
 NeoBundle 'tpope/vim-repeat'
-NeoBundle 'altercation/vim-colors-solarized'
-" NeoBundle 'ervandew/supertab' "{{{ "obsolete with YouCompleteMe
-"   let g:SuperTabDefaultCompletionType = "context"
-"   let g:SuperTabLongestEnhanced = 1
-"   let g:SuperTabLongestHighlight = 1
-"   let g:SuperTabClosePreviewOnPopupClose = 1
-" "}}}
+NeoBundle 'tpope/vim-endwise'
+NeoBundle 'tpope/vim-vinegar'
 NeoBundle 'nelstrom/vim-textobj-rubyblock', {'depends': 'kana/vim-textobj-user'}
 NeoBundle 'Raimondi/delimitMate'
 NeoBundle 'peterhoeg/vim-tmux'
@@ -496,9 +475,6 @@ NeoBundle 'mattn/gist-vim', {'depends': 'mattn/webapi-vim'} "{{{
 " NeoBundle 'Blackrush/vim-gocode' " completion isn't working well with this
 NeoBundle 'fsouza/go.vim' " this one creates stupid maps with no option to disable
 NeoBundle 'rking/ag.vim'
-" NeoBundle 'hdima/python-syntax' "{{{
-"   let python_highlight_all = 1
-" "}}}
 NeoBundle 'sentientmachine/Pretty-Vim-Python'
 NeoBundle 'fs111/pydoc.vim' "{{{
   let g:pydoc_cmd = 'python -m pydoc'
@@ -525,29 +501,55 @@ NeoBundle 'Valloric/YouCompleteMe', {
 NeoBundle 'jmcantrell/vim-virtualenv' "{{{
   let g:virtualenv_auto_activate = 1
 "}}}
-NeoBundle 'elzr/vim-json' "{{{
-"}}}
+NeoBundle 'elzr/vim-json'
 NeoBundle 'jayflo/vim-skip' "{{{
   " let g:vimskip_wraptocenter = 1
 "}}}
-NeoBundle 'tpope/vim-endwise'
 NeoBundle 'dag/vim-fish'
+NeoBundle 'mhinz/vim-tmuxify'
+NeoBundle 'vim-scripts/restore_view.vim'
+NeoBundle 'chriskempson/base16-vim'
+NeoBundle 'groenewege/vim-less'
+NeoBundle 'dart-lang/dart-vim-plugin'
+NeoBundle 'vim-scripts/quickhl.vim' "{{{
+  nmap <leader>m <Plug>(quickhl-manual-this)
+  let g:quickhl_cword_hl_command = 'link QuickhlCword Todo'
+"}}}
+
+" Unused {{{
 " NeoBundle 'benmills/vimux' "{{{
 " 	let g:VimuxPromptString = "vimux> "
 " 	let g:VimuxUseNearest = 0
 " 	let g:VimuxHeight = 15
 " "}}}
-NeoBundle 'mhinz/vim-tmuxify'
+" NeoBundle 'scrooloose/nerdtree' "{{{
+"   map <silent> <leader>tt :NERDTreeToggle<CR>
+"   map <silent> <leader>th :NERDTree $HOME<CR>
+" "}}}
+" NeoBundle 'greyblake/vim-preview' "{{{
+"   " vim-preview (markdown, rdoc, textile, html, ronn, rst)
+"   " if(!exists('g:PreviewBrowsers'))
+"     if(system("uname") =~ "Darwin")
+"       let g:PreviewBrowsers = 'open,google-chrome,safari,firefox'
+"     else
+"       let g:PreviewBrowsers = 'chromium,firefox,epiphany'
+"     endif
+"   " endif
+"   " remove default mapping and add custom one
+"   " autocmd VimEnter * 
+"   "   " \ nunmap <leader>P
+"   "   \ nmap <silent> <leader>p :Preview<CR>
+" "}}}
 " NeoBundle 'vim-scripts/ShowMarks'
 " NeoBundle 'vim-scripts/highlight.vim'
-" NeoBundle 'vim-scripts/quickhl.vim' "{{{
-"   nmap <leader>m <Plug>(quickhl-manual-this)
-"   let g:quickhl_cword_hl_command = 'link QuickhlCword Todo'
+" NeoBundle 'altercation/vim-colors-solarized'
+" NeoBundle 'ervandew/supertab' "{{{ "obsolete with YouCompleteMe
+"   let g:SuperTabDefaultCompletionType = "context"
+"   let g:SuperTabLongestEnhanced = 1
+"   let g:SuperTabLongestHighlight = 1
+"   let g:SuperTabClosePreviewOnPopupClose = 1
 " "}}}
-NeoBundle 'vim-scripts/restore_view.vim'
-NeoBundle 'chriskempson/base16-vim'
-NeoBundle 'groenewege/vim-less'
-NeoBundle 'dart-lang/dart-vim-plugin'
+"}}}
 
 if !has('vim_starting')
   " Call on_source hook when reloading .vimrc.
@@ -731,6 +733,13 @@ endif
 " UNSORTED / EXPERIMENTAL
 " -----------------------------------------------------------------------------
 "{{{
+
+" insert a line above the current line
+function! Add_blank_line_above() 
+  let failed = append(line('.')-1, "")
+endfunction
+" C-j used for moving between snippet fields, find a better map
+" inoremap <C-j> <C-o>:call Add_blank_line_above()<CR>
 
 " temporary map in order to use instant-markdown
 " in a separate terminal run `instant-markdown-d`
