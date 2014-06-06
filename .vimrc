@@ -445,6 +445,11 @@ NeoBundle 'tpope/vim-eunuch' "{{{
 NeoBundle 'tpope/vim-surround' "{{{
   map <leader>s ysiw
 "}}}
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-markdown'
+NeoBundle 'tpope/vim-repeat'
+NeoBundle 'tpope/vim-endwise'
+NeoBundle 'tpope/vim-vinegar'
 NeoBundle 'majutsushi/tagbar' "{{{
   let g:tagbar_autofocus = 1
   let g:tagbar_sort = 0
@@ -457,11 +462,6 @@ NeoBundle 'tomtom/tcomment_vim' "{{{
   vmap <leader>c gc
   let g:tcomment_types = { 'tmux': '# ' }
 "}}}
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'tpope/vim-markdown'
-NeoBundle 'tpope/vim-repeat'
-NeoBundle 'tpope/vim-endwise'
-NeoBundle 'tpope/vim-vinegar'
 NeoBundle 'nelstrom/vim-textobj-rubyblock', {'depends': 'kana/vim-textobj-user'}
 NeoBundle 'Raimondi/delimitMate'
 NeoBundle 'peterhoeg/vim-tmux'
@@ -516,15 +516,12 @@ NeoBundle 'vim-scripts/quickhl.vim' "{{{
   let g:quickhl_cword_hl_command = 'link QuickhlCword Todo'
 "}}}
 
+
 " Unused {{{
 " NeoBundle 'benmills/vimux' "{{{
 " 	let g:VimuxPromptString = "vimux> "
 " 	let g:VimuxUseNearest = 0
 " 	let g:VimuxHeight = 15
-" "}}}
-" NeoBundle 'scrooloose/nerdtree' "{{{
-"   map <silent> <leader>tt :NERDTreeToggle<CR>
-"   map <silent> <leader>th :NERDTree $HOME<CR>
 " "}}}
 " NeoBundle 'greyblake/vim-preview' "{{{
 "   " vim-preview (markdown, rdoc, textile, html, ronn, rst)
@@ -542,13 +539,6 @@ NeoBundle 'vim-scripts/quickhl.vim' "{{{
 " "}}}
 " NeoBundle 'vim-scripts/ShowMarks'
 " NeoBundle 'vim-scripts/highlight.vim'
-" NeoBundle 'altercation/vim-colors-solarized'
-" NeoBundle 'ervandew/supertab' "{{{ "obsolete with YouCompleteMe
-"   let g:SuperTabDefaultCompletionType = "context"
-"   let g:SuperTabLongestEnhanced = 1
-"   let g:SuperTabLongestHighlight = 1
-"   let g:SuperTabClosePreviewOnPopupClose = 1
-" "}}}
 "}}}
 
 if !has('vim_starting')

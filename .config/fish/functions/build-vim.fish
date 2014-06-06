@@ -25,9 +25,8 @@ function build-vim --description 'Build vim from source'
   ./configure \
     --with-compiledby=jelliott \
     --with-features=huge \
-    --with-x=no \
     --disable-gui \
-    --enable-clipboard \
+    --with-x=yes \
     --enable-rubyinterp \
     --enable-pythoninterp \
     --enable-luainterp \
