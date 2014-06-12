@@ -436,9 +436,9 @@ NeoBundle 'sjbach/lusty' "{{{
 "}}}
 NeoBundle 'tpope/vim-eunuch' "{{{
   " Rename (there is a literal space after :Move)
-  map <leader>r :Move 
+  map <leader>r :Rename 
   " Remove (no confirmation)
-  map <leader>ddd :Remove<CR>
+  map \ddd :Remove<CR>
   " Write a privileged file with sudo
   map <leader>w :SudoWrite<CR>
 "}}}
@@ -450,6 +450,9 @@ NeoBundle 'tpope/vim-markdown'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'tpope/vim-endwise'
 NeoBundle 'tpope/vim-vinegar'
+NeoBundle 'tpope/vim-dispatch' "{{{
+  map <leader>d :Dispatch<CR>
+"}}}
 NeoBundle 'majutsushi/tagbar' "{{{
   let g:tagbar_autofocus = 1
   let g:tagbar_sort = 0
