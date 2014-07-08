@@ -4,6 +4,7 @@ abbr_add 'gst=git status'
 abbr_add 'gc=git commit -v'
 # abbr_add 'glg=git log --all --stat --graph --decorate'
 abbr_add 'glg=git log-detail'
+abbr_add 'glb=git log-branch'
 abbr_add 'glgs=git log-summary'
 abbr_add 'ga=git add'
 abbr_add 'gsa=git submodule add' # gsa <repo> <directory>

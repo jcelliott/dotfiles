@@ -26,6 +26,7 @@
 
 [alias]
   log-detail = log --all --stat --graph
+  log-branch = log --stat --graph
   ; log-summary = log --all --graph --oneline
   log-summary = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
   revision = rev-parse HEAD
