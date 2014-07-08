@@ -95,10 +95,10 @@ endif
 " Tell vim to remember certain things when we exit
 "  '25  :  marks will be remembered for up to 25 previously edited files
 "  "1000:  will save up to 1000 lines for each register
-"  :50  :  up to 50 lines of command-line history will be remembered
+"  :100  :  up to 50 lines of command-line history will be remembered
 "  %    :  saves and restores the buffer list
 "  n... :  where to save the viminfo files
-set viminfo='25,\"10000,:50,%,n$HOME/.vim/.viminfo
+set viminfo='25,\"10000,:100,%,n$HOME/.vim/.viminfo
 
 " Load plugins
 " runtime bundle/pathogen/autoload/pathogen.vim
@@ -130,7 +130,7 @@ autocmd BufReadPost *
 " prevents the annoying case where the location list stays open after closing
 " its associated file buffer
 " TODO: bug - this closes the location list window when you try to switch to it
-autocmd BufLeave * lclose
+" autocmd BufLeave * lclose
 
 " attempt to return to the same view when switching buffers
 " causing problems, look into it later
@@ -453,11 +453,12 @@ NeoBundle 'tpope/vim-vinegar'
 NeoBundle 'tpope/vim-dispatch' "{{{
   map <leader>d :Dispatch<CR>
 "}}}
+NeoBundle 'tpope/vim-abolish'
 NeoBundle 'majutsushi/tagbar' "{{{
   let g:tagbar_autofocus = 1
   let g:tagbar_sort = 0
   let g:tagbar_autoshowtag = 1
-  nmap <silent> <leader>t :TagbarOpenAutoClose<CR>
+  nmap <silent> <leader>y :TagbarOpenAutoClose<CR>
 "}}}
 NeoBundle 'tomtom/tcomment_vim' "{{{
   " use <leader>c for comments (gcc from tComment)
@@ -467,7 +468,7 @@ NeoBundle 'tomtom/tcomment_vim' "{{{
 "}}}
 NeoBundle 'nelstrom/vim-textobj-rubyblock', {'depends': 'kana/vim-textobj-user'}
 NeoBundle 'Raimondi/delimitMate'
-NeoBundle 'peterhoeg/vim-tmux'
+NeoBundle 'peterhoeg/vim-tmux' " tmux syntax
 NeoBundle 'digitaltoad/vim-jade' "{{{
   " autocmd FileType jade NeoBundleSource 'vim-jade'
 "}}}
@@ -509,15 +510,25 @@ NeoBundle 'jayflo/vim-skip' "{{{
   " let g:vimskip_wraptocenter = 1
 "}}}
 NeoBundle 'dag/vim-fish'
-NeoBundle 'mhinz/vim-tmuxify'
-NeoBundle 'vim-scripts/restore_view.vim'
+NeoBundle 'mhinz/vim-tmuxify' "{{{
+  let g:tmuxify_map_prefix = '<leader>t'
+"}}}
 NeoBundle 'chriskempson/base16-vim'
 NeoBundle 'groenewege/vim-less'
 NeoBundle 'dart-lang/dart-vim-plugin'
+NeoBundle 'vim-scripts/restore_view.vim'
 NeoBundle 'vim-scripts/quickhl.vim' "{{{
   nmap <leader>m <Plug>(quickhl-manual-this)
   let g:quickhl_cword_hl_command = 'link QuickhlCword Todo'
 "}}}
+NeoBundle 'wellle/targets.vim' "{{{
+  let g:targets_pairs = '()b {}B []r <> ' " disable 'a' for 'angle-brackets'
+"}}}
+NeoBundle 'b4winckler/vim-angry'
+" NeoBundle 'xolox/vim-lua-ftplugin', {'depends': 'xolox/vim-misc'} "{{{
+"   let g:lua_compiler_name = 'luac5.1'
+"   let g:lua_interpreter_path = 'lua5.1'
+" "}}}
 
 
 " Unused {{{
