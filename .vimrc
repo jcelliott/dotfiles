@@ -54,6 +54,7 @@ set number              " Show line numbers
 set showcmd             " display incomplete commands
 set pumheight=30        " popup completion menu max height
 set splitright          " vertical splits go to the right
+set splitbelow          " horizontal splits to below
 
 set formatoptions=cqnlj " settings for formatting (see :help fo-table)
 set textwidth=100       " wrap lines at 100 chars
@@ -529,6 +530,15 @@ NeoBundle 'b4winckler/vim-angry'
 "   let g:lua_compiler_name = 'luac5.1'
 "   let g:lua_interpreter_path = 'lua5.1'
 " "}}}
+NeoBundle 'christoomey/vim-tmux-navigator' "{{{
+  let g:tmux_navigator_no_mappings = 1
+  nnoremap <silent> <C-h> :TmuxNavigateLeft<CR>
+  nnoremap <silent> <C-j> :TmuxNavigateDown<CR>
+  nnoremap <silent> <C-k> :TmuxNavigateUp<CR>
+  nnoremap <silent> <C-l> :TmuxNavigateRight<CR>
+  " this doesn't work right now, terminal doesn't see a unique keycap for C-, vs just ,
+  " nnoremap <silent> <C-,> :TmuxNavigatePrevious<CR>
+"}}}
 
 
 " Unused {{{
