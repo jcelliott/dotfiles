@@ -539,6 +539,7 @@ NeoBundle 'christoomey/vim-tmux-navigator' "{{{
   " this doesn't work right now, terminal doesn't see a unique keycap for C-, vs just ,
   " nnoremap <silent> <C-,> :TmuxNavigatePrevious<CR>
 "}}}
+NeoBundle 'honza/dockerfile.vim'
 
 
 " Unused {{{
