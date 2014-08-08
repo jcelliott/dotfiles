@@ -33,6 +33,7 @@ abbr_add 'drml=docker rm (docker ps -lq)'
 abbr_add 'dsl=docker stop (docker ps -lq)'
 abbr_add 'dsa=docker stop (docker ps -aq)'
 abbr_add 'drmdi=docker rmi (docker images -qf dangling=true)'
+abbr_add 'dimg=docker_images'
 
 abbr_add 's=ssh'
 abbr_add 'c=cat'
