@@ -21,7 +21,7 @@ abbr_add 'gmm=git merge master'
 
 abbr_add 'v=vim'
 abbr_add 'vv=vim ~/.vimrc'
-abbr_add 'vf=vim ~/.config/fish/config.fish'
+abbr_add 'vfc=vim ~/.config/fish/config.fish'
 
 abbr_add 'd=docker'
 abbr_add 'dl=docker ps -lq'
