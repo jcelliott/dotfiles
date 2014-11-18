@@ -543,6 +543,12 @@ NeoBundle 'christoomey/vim-tmux-navigator' "{{{
   " nnoremap <silent> <C-,> :TmuxNavigatePrevious<CR>
 "}}}
 NeoBundle 'honza/dockerfile.vim'
+NeoBundle 'sjl/gundo.vim' "{{{
+  nnoremap <leader>u :GundoToggle<CR>
+  let g:gundo_width = 40
+  let g:gundo_preview_height = 20
+  let g:gundo_close_on_revert = 1
+"}}}
 
 
 " Unused {{{
