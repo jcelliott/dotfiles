@@ -23,6 +23,9 @@ abbr_add 'v=vim'
 abbr_add 'vv=vim ~/.vimrc'
 abbr_add 'vfc=vim ~/.config/fish/config.fish'
 
+abbr_add 'vup=vagrant up'
+abbr_add 'vsh=vagrant ssh'
+
 abbr_add 'd=docker'
 abbr_add 'dl=docker ps -lq'
 abbr_add 'dim=docker images'
