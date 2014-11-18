@@ -387,16 +387,10 @@ imap <silent> <F7> <C-o>:setlocal spell! spelllang=en_us<CR>
 "------------------------------------------------------------------------------
 "{{{
 
-if has('vim_starting')
-  set runtimepath+=~/.vim/bundle/neobundle.vim
-endif
-call neobundle#rc(expand('~/.vim/bundle'))
-
-" Let neobundle manage neobundle
-NeoBundleFetch 'Shougo/neobundle.vim'
+call plug#begin('~/.vim/bundle')
 
 " Plugins
-NeoBundle 'scrooloose/syntastic' "{{{
+Plug 'scrooloose/syntastic' "{{{
   " show error markers in gutter
   let g:syntastic_enable_signs=1
   " Syntastic error list will appear when errors are detected
@@ -426,7 +420,7 @@ NeoBundle 'scrooloose/syntastic' "{{{
   " map <leader>a :SyntasticCheck<CR>
   map <silent> <leader>a :SyntasticReset<CR>
 "}}}
-NeoBundle 'sjbach/lusty' "{{{
+Plug 'sjbach/lusty' "{{{
   let g:LustyExplorerSuppressRubyWarning = 1
   let g:LustyEXplorerDefaultMappings = 0
   let g:LustyJugglerDefaultMappings = 0
@@ -438,7 +432,7 @@ NeoBundle 'sjbach/lusty' "{{{
   map <silent> <leader>b :LustyBufferExplorer<CR>
   " map <silent> <leader>b :LustyBufferExplorer<CR> " use <leader>lb
 "}}}
-NeoBundle 'tpope/vim-eunuch' "{{{
+Plug 'tpope/vim-eunuch' "{{{
   " Rename (there is a literal space after :Move)
   map <leader>r :Rename 
   " Remove (no confirmation)
@@ -446,94 +440,87 @@ NeoBundle 'tpope/vim-eunuch' "{{{
   " Write a privileged file with sudo
   map <leader>w :SudoWrite<CR>
 "}}}
-NeoBundle 'tpope/vim-surround' "{{{
+Plug 'tpope/vim-surround' "{{{
   map <leader>s ysiw
 "}}}
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'tpope/vim-markdown'
-NeoBundle 'tpope/vim-repeat'
-NeoBundle 'tpope/vim-endwise'
-NeoBundle 'tpope/vim-vinegar'
-NeoBundle 'tpope/vim-dispatch' "{{{
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-markdown'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-dispatch' "{{{
   map <leader>d :Dispatch<CR>
 "}}}
-NeoBundle 'tpope/vim-abolish'
-NeoBundle 'majutsushi/tagbar' "{{{
+Plug 'tpope/vim-abolish'
+Plug 'majutsushi/tagbar' "{{{
   let g:tagbar_autofocus = 1
   let g:tagbar_sort = 0
   let g:tagbar_autoshowtag = 1
   nmap <silent> <leader>y :TagbarOpenAutoClose<CR>
 "}}}
-NeoBundle 'tomtom/tcomment_vim' "{{{
+Plug 'tomtom/tcomment_vim' "{{{
   " use <leader>c for comments (gcc from tComment)
   nmap <leader>c gcc
   vmap <leader>c gc
   let g:tcomment_types = { 'tmux': '# ' }
 "}}}
-NeoBundle 'nelstrom/vim-textobj-rubyblock', {'depends': 'kana/vim-textobj-user'}
-NeoBundle 'Raimondi/delimitMate'
-NeoBundle 'peterhoeg/vim-tmux' " tmux syntax
-NeoBundle 'digitaltoad/vim-jade' "{{{
+Plug 'kana/vim-textobj-user'
+Plug 'nelstrom/vim-textobj-rubyblock'
+Plug 'Raimondi/delimitMate'
+Plug 'peterhoeg/vim-tmux' " tmux syntax
+Plug 'digitaltoad/vim-jade' "{{{
   " autocmd FileType jade NeoBundleSource 'vim-jade'
 "}}}
-NeoBundle 'mattn/gist-vim', {'depends': 'mattn/webapi-vim'} "{{{
+Plug 'mattn/webapi-vim'
+Plug 'mattn/gist-vim' "{{{
   let g:gist_detect_filetype = 1
   let g:gist_open_browser_after_post = 1
 "}}}
-" NeoBundle 'Blackrush/vim-gocode' " completion isn't working well with this
-NeoBundle 'fsouza/go.vim' " this one creates stupid maps with no option to disable
-NeoBundle 'rking/ag.vim'
-NeoBundle 'sentientmachine/Pretty-Vim-Python'
-NeoBundle 'fs111/pydoc.vim' "{{{
+" Plug 'Blackrush/vim-gocode' " completion isn't working well with this
+Plug 'fsouza/go.vim' " this one creates stupid maps with no option to disable
+Plug 'rking/ag.vim'
+Plug 'sentientmachine/Pretty-Vim-Python'
+Plug 'fs111/pydoc.vim' "{{{
   let g:pydoc_cmd = 'python -m pydoc'
   let g:pydoc_window_lines=15
 "}}}
-NeoBundle 'SirVer/ultisnips' "{{{
+Plug 'SirVer/ultisnips' "{{{
   let g:UltiSnipsExpandTrigger="<C-j>"
   let g:UltiSnipsJumpForwardTrigger="<C-j>"
   let g:UltiSnipsSnippetDirectories=["UltiSnips", "ultisnips"]
 "}}}
-NeoBundle 'honza/vim-snippets' " snippets collection
-" NeoBundle 'Valloric/YouCompleteMe' {{{
-NeoBundle 'Valloric/YouCompleteMe', {
-\   'build' : {
-\     'unix' : './install.sh',
-\     'mac' : './install.sh',
-\   } 
-\ }
+Plug 'honza/vim-snippets' " snippets collection
+" Plug 'Valloric/YouCompleteMe' {{{
+Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' } "{{{
   " let g:ycm_complete_in_strings = 0
   let g:ycm_collect_identifiers_from_tags_files = 1
   let g:ycm_seed_identifiers_with_syntax = 1
   let g:ycm_autoclose_preview_window_after_insertion = 1
 "}}}
-NeoBundle 'jmcantrell/vim-virtualenv' "{{{
+Plug 'jmcantrell/vim-virtualenv' "{{{
   let g:virtualenv_auto_activate = 1
 "}}}
-NeoBundle 'elzr/vim-json'
-NeoBundle 'jayflo/vim-skip' "{{{
+Plug 'elzr/vim-json'
+Plug 'jayflo/vim-skip' "{{{
   " let g:vimskip_wraptocenter = 1
 "}}}
-NeoBundle 'dag/vim-fish'
-NeoBundle 'mhinz/vim-tmuxify' "{{{
+Plug 'dag/vim-fish'
+Plug 'mhinz/vim-tmuxify' "{{{
   let g:tmuxify_map_prefix = '<leader>t'
 "}}}
-NeoBundle 'chriskempson/base16-vim'
-NeoBundle 'groenewege/vim-less'
-NeoBundle 'dart-lang/dart-vim-plugin'
-NeoBundle 'vim-scripts/restore_view.vim'
-NeoBundle 'vim-scripts/quickhl.vim' "{{{
+Plug 'chriskempson/base16-vim'
+Plug 'groenewege/vim-less'
+Plug 'dart-lang/dart-vim-plugin'
+Plug 'vim-scripts/restore_view.vim'
+Plug 'vim-scripts/quickhl.vim' "{{{
   nmap <leader>m <Plug>(quickhl-manual-this)
   let g:quickhl_cword_hl_command = 'link QuickhlCword Todo'
 "}}}
-NeoBundle 'wellle/targets.vim' "{{{
+Plug 'wellle/targets.vim' "{{{
   let g:targets_pairs = '()b {}B []r <> ' " disable 'a' for 'angle-brackets'
 "}}}
-NeoBundle 'b4winckler/vim-angry'
-" NeoBundle 'xolox/vim-lua-ftplugin', {'depends': 'xolox/vim-misc'} "{{{
-"   let g:lua_compiler_name = 'luac5.1'
-"   let g:lua_interpreter_path = 'lua5.1'
-" "}}}
-NeoBundle 'christoomey/vim-tmux-navigator' "{{{
+Plug 'b4winckler/vim-angry'
+Plug 'christoomey/vim-tmux-navigator' "{{{
   let g:tmux_navigator_no_mappings = 1
   nnoremap <silent> <C-h> :TmuxNavigateLeft<CR>
   nnoremap <silent> <C-j> :TmuxNavigateDown<CR>
@@ -542,23 +529,22 @@ NeoBundle 'christoomey/vim-tmux-navigator' "{{{
   " this doesn't work right now, terminal doesn't see a unique keycap for C-, vs just ,
   " nnoremap <silent> <C-,> :TmuxNavigatePrevious<CR>
 "}}}
-NeoBundle 'honza/dockerfile.vim'
-NeoBundle 'sjl/gundo.vim' "{{{
+Plug 'honza/dockerfile.vim'
+Plug 'sjl/gundo.vim' "{{{
   nnoremap <leader>u :GundoToggle<CR>
   let g:gundo_width = 40
   let g:gundo_preview_height = 20
   let g:gundo_close_on_revert = 1
 "}}}
-NeoBundle 'kylef/apiblueprint.vim'
-
+Plug 'kylef/apiblueprint.vim'
 
 " Unused {{{
-" NeoBundle 'benmills/vimux' "{{{
+" Plug 'benmills/vimux' "{{{
 " 	let g:VimuxPromptString = "vimux> "
 " 	let g:VimuxUseNearest = 0
 " 	let g:VimuxHeight = 15
 " "}}}
-" NeoBundle 'greyblake/vim-preview' "{{{
+" Plug 'greyblake/vim-preview' "{{{
 "   " vim-preview (markdown, rdoc, textile, html, ronn, rst)
 "   " if(!exists('g:PreviewBrowsers'))
 "     if(system("uname") =~ "Darwin")
@@ -572,25 +558,22 @@ NeoBundle 'kylef/apiblueprint.vim'
 "   "   " \ nunmap <leader>P
 "   "   \ nmap <silent> <leader>p :Preview<CR>
 " "}}}
-" NeoBundle 'vim-scripts/ShowMarks'
-" NeoBundle 'vim-scripts/highlight.vim'
+" Plug 'vim-scripts/ShowMarks'
+" Plug 'vim-scripts/highlight.vim'
+" Plug 'xolox/vim-lua-ftplugin', {'depends': 'xolox/vim-misc'} "{{{
+"   let g:lua_compiler_name = 'luac5.1'
+"   let g:lua_interpreter_path = 'lua5.1'
+" "}}}
 "}}}
 
-if !has('vim_starting')
-  " Call on_source hook when reloading .vimrc.
-  call neobundle#call_hook('on_source')
-endif
+call plug#end()
 
 " built-in macros:
 runtime macros/matchit.vim
 
 " Enable file type detection.
 " Also load indent files, to automatically do language-dependent indenting.
-" neobundle requires the filetypes to be loaded after all bundles are loaded
 filetype plugin indent on
-
-" Installation check.
-NeoBundleCheck
 
 "}}}
 
