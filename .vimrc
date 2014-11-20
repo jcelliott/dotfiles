@@ -137,10 +137,6 @@ autocmd BufReadPost *
 " causing problems, look into it later
 " autocmd BufLeave * let b:winview = winsaveview()
 " autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
-
-" Really set formatoptions. Filetype-specific plugins will override the default setting.
-" This autocommand will execute after any filetype plugins.
-" autocmd FileType * setlocal formatoptions=cqnlj
 "}}}
 
 "------------------------------------------------------------------------------
@@ -361,7 +357,7 @@ map <silent> \v :.s/^\[[x ]\][ ]\?//e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<C
 nnoremap <leader>y ggyG`` :echo "yanked entire file"<CR>
 
 " Vim built-in explorer (Split Explore)
-map <leader>e :Sexplore<CR>
+map <leader>- :Sexplore<CR>
 
 " close current buffer
 map <silent> <leader>q :bd<CR> 
@@ -383,14 +379,14 @@ imap <silent> <F7> <C-o>:setlocal spell! spelllang=en_us<CR>
 "}}}
 
 "------------------------------------------------------------------------------
-" Neobundle and Plugins
+" Plugins
 "------------------------------------------------------------------------------
 "{{{
 
 call plug#begin('~/.vim/bundle')
 
 " Plugins
-Plug 'scrooloose/syntastic' "{{{
+Plug 'scrooloose/syntastic', { 'on': 'SyntasticToggleMode' } "{{{
   " show error markers in gutter
   let g:syntastic_enable_signs=1
   " Syntastic error list will appear when errors are detected
@@ -422,7 +418,7 @@ Plug 'scrooloose/syntastic' "{{{
 "}}}
 Plug 'sjbach/lusty' "{{{
   let g:LustyExplorerSuppressRubyWarning = 1
-  let g:LustyEXplorerDefaultMappings = 0
+  let g:LustyExplorerDefaultMappings = 0
   let g:LustyJugglerDefaultMappings = 0
   map <silent> <leader>, :LustyJuggler<CR>
   map <silent> <leader>. :LustyJugglePrevious<CR>
@@ -448,11 +444,11 @@ Plug 'tpope/vim-markdown'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-vinegar'
-Plug 'tpope/vim-dispatch' "{{{
+Plug 'tpope/vim-dispatch', { 'on': 'Dispatch' } "{{{
   map <leader>d :Dispatch<CR>
 "}}}
 Plug 'tpope/vim-abolish'
-Plug 'majutsushi/tagbar' "{{{
+Plug 'majutsushi/tagbar', { 'on': ['TagbarOpenAutoClose'] } "{{{
   let g:tagbar_autofocus = 1
   let g:tagbar_sort = 0
   let g:tagbar_autoshowtag = 1
@@ -464,15 +460,13 @@ Plug 'tomtom/tcomment_vim' "{{{
   vmap <leader>c gc
   let g:tcomment_types = { 'tmux': '# ' }
 "}}}
-Plug 'kana/vim-textobj-user'
-Plug 'nelstrom/vim-textobj-rubyblock'
+Plug 'kana/vim-textobj-user', { 'for': 'ruby' } " only used for vim-textobj-rubyblock
+Plug 'nelstrom/vim-textobj-rubyblock', { 'for': 'ruby' }
 Plug 'Raimondi/delimitMate'
 Plug 'peterhoeg/vim-tmux' " tmux syntax
-Plug 'digitaltoad/vim-jade' "{{{
-  " autocmd FileType jade NeoBundleSource 'vim-jade'
-"}}}
+Plug 'digitaltoad/vim-jade'
 Plug 'mattn/webapi-vim'
-Plug 'mattn/gist-vim' "{{{
+Plug 'mattn/gist-vim', { 'on': 'Gist' } "{{{
   let g:gist_detect_filetype = 1
   let g:gist_open_browser_after_post = 1
 "}}}
@@ -484,14 +478,13 @@ Plug 'fs111/pydoc.vim' "{{{
   let g:pydoc_cmd = 'python -m pydoc'
   let g:pydoc_window_lines=15
 "}}}
-Plug 'SirVer/ultisnips' "{{{
+Plug 'SirVer/ultisnips', { 'on': [] } "{{{
   let g:UltiSnipsExpandTrigger="<C-j>"
   let g:UltiSnipsJumpForwardTrigger="<C-j>"
   let g:UltiSnipsSnippetDirectories=["UltiSnips", "ultisnips"]
 "}}}
 Plug 'honza/vim-snippets' " snippets collection
-" Plug 'Valloric/YouCompleteMe' {{{
-Plug 'Valloric/YouCompleteMe', { 'do': './install.sh' } "{{{
+Plug 'Valloric/YouCompleteMe', { 'do': './install.sh', 'on': [] } " {{{
   " let g:ycm_complete_in_strings = 0
   let g:ycm_collect_identifiers_from_tags_files = 1
   let g:ycm_seed_identifiers_with_syntax = 1
@@ -512,7 +505,7 @@ Plug 'chriskempson/base16-vim'
 Plug 'groenewege/vim-less'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'vim-scripts/restore_view.vim'
-Plug 'vim-scripts/quickhl.vim' "{{{
+Plug 'vim-scripts/quickhl.vim', { 'on': '<Plug>(quickhl-manual-this)' } "{{{
   nmap <leader>m <Plug>(quickhl-manual-this)
   let g:quickhl_cword_hl_command = 'link QuickhlCword Todo'
 "}}}
@@ -530,7 +523,7 @@ Plug 'christoomey/vim-tmux-navigator' "{{{
   " nnoremap <silent> <C-,> :TmuxNavigatePrevious<CR>
 "}}}
 Plug 'honza/dockerfile.vim'
-Plug 'sjl/gundo.vim' "{{{
+Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' } "{{{
   nnoremap <leader>u :GundoToggle<CR>
   let g:gundo_width = 40
   let g:gundo_preview_height = 20
@@ -567,6 +560,15 @@ Plug 'kylef/apiblueprint.vim'
 "}}}
 
 call plug#end()
+
+" Manually loaded plugins {{{
+augroup plugins_load_insert_enter
+  autocmd!
+  autocmd InsertEnter * call plug#load('ultisnips', 'YouCompleteMe')
+                     \| call youcompleteme#Enable()
+                     \| autocmd! plugins_load_insert_enter
+augroup END
+"}}}
 
 " built-in macros:
 runtime macros/matchit.vim
@@ -671,7 +673,7 @@ set statusline+=%*\                           " normal highlight
 
 set statusline+=%=                            " right align
 set statusline+=%4*                           " switch to User4 highlight
-set statusline+=%{SyntasticStatuslineFlag()}  " syntastic warnings
+set statusline+=%{exists('g:loaded_syntastic_plugin')?SyntasticStatuslineFlag():''}
 set statusline+=%*\                           " normal highlight
 set statusline+=%{&spell?'SP\ ':''}
 set statusline+=%4*%{&paste?'PASTE\ ':''}%*   " paste mode flag
