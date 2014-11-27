@@ -15,6 +15,8 @@ function fish_user_key_bindings --description "User key bindings for fish"
   bind -M insert -k home beginning-of-line
   bind -M insert \cw beginning-of-line
   bind -M insert \ce end-of-line
+  bind -M insert \cf accept-autosuggestion
+  bind -M insert \cg suppress-autosuggestion
 
 end
 
