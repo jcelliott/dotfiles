@@ -5,18 +5,14 @@ setlocal makeprg = "go build %"
 
 " don't show preview window for Go completions
 " (it doesn't have any useful information)
-setlocal completeopt-=preview
+" setlocal completeopt-=preview
+" (but I like having the function signature stick around while I fill it in)
 
 " use real tabs in Go sources
 setlocal noexpandtab
 
-" run file through goformat before saving
-" already done in plugin
-" autocmd BufWritePre *.go :silent Fmt
-autocmd BufWritePre <buffer> :silent Fmt
-
-map \i :Import 
-map \d :Drop 
+map \i :GoImport 
+map \d :GoDrop 
 
 let g:tagbar_type_go = {
     \ 'ctagstype' : 'go',

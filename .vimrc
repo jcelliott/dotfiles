@@ -404,6 +404,8 @@ Plug 'scrooloose/syntastic', { 'on': 'SyntasticToggleMode' } "{{{
   let g:syntastic_style_error_symbol = 'S'
 	" Customize syntastic status line message
 	let g:syntastic_stl_format = '[%E{Err: %e}%B{, }%W{Warn: %w}]'
+  " default to passive, so when we toggle (for lazy load) it starts in active mode
+  let g:syntastic_mode_map = { 'mode': 'passive' }
 
   " Move to the next and previous location in the location list
   " (used to move between syntastic error locations)
@@ -470,8 +472,15 @@ Plug 'mattn/gist-vim', { 'on': 'Gist' } "{{{
   let g:gist_detect_filetype = 1
   let g:gist_open_browser_after_post = 1
 "}}}
-" Plug 'Blackrush/vim-gocode' " completion isn't working well with this
-Plug 'fsouza/go.vim' " this one creates stupid maps with no option to disable
+Plug 'nsf/gocode', { 'rtp': 'vim/' }
+Plug 'fatih/vim-go' "{{{
+  let g:go_highlight_functions = 1
+  let g:go_highlight_methods = 1
+  " let g:go_highlight_structs = 1
+  " let g:go_higlight_operators = 1
+  let g:go_fmt_fail_silently = 1
+  " let g:go_fmt_experimental = 1 " doesn't seem to work
+"}}}
 Plug 'rking/ag.vim'
 Plug 'sentientmachine/Pretty-Vim-Python'
 Plug 'fs111/pydoc.vim' "{{{
