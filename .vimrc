@@ -48,6 +48,7 @@ set wildmenu						" autocomplete menu for command line
 set wildmode=longest,list,full
 set undodir=$HOME/.vim/undohist
 set completeopt=menu,longest,preview
+set wildignore=*.swp,*.pyc
 
 set ruler               " show the cursor position all the time
 set number              " Show line numbers
