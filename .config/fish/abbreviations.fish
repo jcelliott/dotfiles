@@ -27,16 +27,21 @@ abbr_add 'vup=vagrant up'
 abbr_add 'vsh=vagrant ssh'
 
 abbr_add 'd=docker'
-abbr_add 'dl=docker ps -lq'
+abbr_add 'dl=docker ps -lq' # display id of latest created container
 abbr_add 'dim=docker images'
 abbr_add 'dps=docker ps'
 abbr_add 'dpsa=docker ps -a'
-abbr_add 'drma=docker rm (docker ps -aq)'
-abbr_add 'drml=docker rm (docker ps -lq)'
-abbr_add 'dsl=docker stop (docker ps -lq)'
-abbr_add 'dsa=docker stop (docker ps -aq)'
-abbr_add 'drmdi=docker rmi (docker images -qf dangling=true)'
-abbr_add 'dimg=docker_images'
+abbr_add 'drma=docker rm (docker ps -aq)' # delete all stopped containers
+abbr_add 'drml=docker rm (docker ps -lq)' # delete last container
+abbr_add 'dsa=docker stop (docker ps -aq)' # stop all containers
+abbr_add 'dsl=docker stop (docker ps -lq)' # stop last container
+abbr_add 'drmdi=docker rmi (docker images -qf dangling=true)' # delete dangling images
+abbr_add 'dimg=docker_images' # grep through images
+abbr_add 'dpid=docker inspect --format \'{{.State.Pid}}\' (docker ps -lq)'
+abbr_add 'dcl=docker rm (docker ps -aq); docker rmi (docker images -qf dangling=true)' # clean
+abbr_add 'dc=docker-compose'
+abbr_add 'dcu=docker-compose up -d'
+abbr_add 'dcs=docker-compose stop'
 
 abbr_add 's=ssh'
 abbr_add 'c=cat'
