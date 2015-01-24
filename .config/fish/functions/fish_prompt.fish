@@ -108,7 +108,7 @@ function fish_prompt --description 'Write out the prompt'
   if set -q CMD_DURATION
     # show duration if longer than 5s
     if test $CMD_DURATION -gt "3000"
-      echo (set_color --bold black) ">" (duration_fmt "$CMD_DURATION") "$__fish_prompt_normal"
+      echo (set_color --bold black) ">" (duration-fmt "$CMD_DURATION") "$__fish_prompt_normal"
     end
   end
 

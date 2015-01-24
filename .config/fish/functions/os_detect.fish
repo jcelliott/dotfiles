@@ -20,6 +20,5 @@ function os_detect --description "detect and print the current platform and dist
     end
   end
 
-  pinfo "Operating System: $_platform $_distro"
-  pinfo "Shell: fish"
+  # pinfo "Operating System: $_platform $_distro"
 end
