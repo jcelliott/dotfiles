@@ -53,8 +53,12 @@ source "$HOME/.local/share/virtualfish/virtual.fish"
 # eval sh $HOME/.base16-default.dark.sh
 
 # Autojump
-# installed with ./install.py -d ~/.local
-if test -f $HOME/.local/etc/profile.d/autojump.fish
+if test -f /usr/share/autojump/autojump.fish
+  source /usr/share/autojump/autojump.fish
+else if test -f $HOME/.local/etc/profile.d/autojump.fish
+  # installed with ./install.py -d ~/.local
   source $HOME/.local/etc/profile.d/autojump.fish
+else
+  perror "autojump not installed"
 end
 
