@@ -466,7 +466,7 @@ Plug 'tomtom/tcomment_vim' "{{{
 Plug 'kana/vim-textobj-user', { 'for': 'ruby' } " only used for vim-textobj-rubyblock
 Plug 'nelstrom/vim-textobj-rubyblock', { 'for': 'ruby' }
 Plug 'Raimondi/delimitMate'
-Plug 'peterhoeg/vim-tmux' " tmux syntax
+Plug 'zaiste/tmux.vim' " tmux syntax
 Plug 'digitaltoad/vim-jade'
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim', { 'on': 'Gist' } "{{{
