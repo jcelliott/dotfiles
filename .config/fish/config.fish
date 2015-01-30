@@ -62,3 +62,17 @@ else
   perror "autojump not installed"
 end
 
+function fish_command_not_found --on-event fish_command_not_found
+  echo "fish: Unknown command '$argv'" >&2
+  if functions  -q __fish_command_not_found_setup
+    functions -e __fish_command_not_found_setup
+  end
+  if which pkgfile ^/dev/null >/dev/null
+    if pkgfile --binaries $argv[1] ^/dev/null >/dev/null
+      echo -e "\n'$argv[1]' can be found in these packages:"
+      for pkg in (pkgfile --binaries "$argv[1]")
+        echo -e "\t$pkg"
+      end
+    end
+  end
+end
