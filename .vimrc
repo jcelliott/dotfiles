@@ -43,6 +43,7 @@ set nostartofline       " don't move to SOL on many commands (also switching buf
 set autoread            " auto read on external file changes
 set hidden              " allow buffers to remain open in the background
 set undofile            " undo tree persists between vim sessions
+set updatetime=1000     " timeout for CursorHold autocmd and writing swap file
 set confirm             " confirm dialog instead of fail
 set wildmenu						" autocomplete menu for command line
 set wildmode=longest,list,full
