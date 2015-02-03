@@ -7,6 +7,9 @@ if not status --is-interactive
   exit 0
 end
 
+# set base16 colors
+eval sh $HOME/.config/base16-shell/base16-default.dark.sh
+
 os_detect
 
 if not set -q fish_user_abbreviations

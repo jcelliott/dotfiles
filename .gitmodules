@@ -10,3 +10,6 @@
 [submodule ".config/base16-gnome-terminal"]
 	path = .config/base16-gnome-terminal
 	url = git@github.com:chriskempson/base16-gnome-terminal.git
+[submodule ".config/base16-shell"]
+	path = .config/base16-shell
+	url = git@github.com:chriskempson/base16-shell.git

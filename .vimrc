@@ -22,7 +22,7 @@ set nocompatible        " vim settings instead of vi settings
 
 " have vim use a more POSIX compatible shell than fish
 if &shell =~# 'fish$'
-  set shell=sh
+  set shell=bash
 endif
 
 set autochdir           " automatically chdir into directory of current file
@@ -605,32 +605,34 @@ set t_Co=256
 " --- Colorscheme ---
 " let g:solarized_termcolors=16
 " colorscheme solarized
-" let base16colorspace=256
+let g:base16_shell_path="$HOME/.config/base16-shell"
+let base16colorspace=256
 colorscheme base16-default
 
 " --- Highlights ---
 " :h cterm-colors
-" hi LineNr ctermfg=239 ctermbg=darkgray guifg=darkslategray
 hi LineNr ctermfg=237 ctermbg=234
-" hi CursorLineNr ctermbg=235
-" hi CursorLineNr ctermbg=237
+" hi CursorLineNr ctermfg=4
 
 " hi cursorline ctermbg=0 gui=bold
 hi cursorline ctermbg=234
-
-" Highlight for the omnicompletion menu
-hi Pmenu ctermbg=234 ctermfg=7
-" hi Pmenu ctermbg=8 ctermfg=7
-" hi Pmenu ctermbg=7 ctermfg=0
-
+"
+" " Highlight for the omnicompletion menu
+" hi Pmenu ctermbg=234 ctermfg=7
+"
 hi SignColumn ctermbg=234
-hi FoldColumn ctermbg=234
-
-hi Question ctermfg=4
-hi Operator ctermfg=3
-hi MatchParen ctermfg=4
-hi Search ctermbg=3 ctermfg=0
-hi IncSearch ctermbg=1 ctermfg=0
+" hi FoldColumn ctermbg=234
+"
+" hi Question ctermfg=4
+" hi Operator ctermfg=3
+" hi MatchParen ctermfg=4
+hi Todo term=standout ctermfg=16 ctermbg=18
+"
+" diff highlight options
+hi DiffAdd ctermfg=2 ctermbg=0
+hi DiffDelete ctermfg=1 ctermbg=0
+hi DiffChange ctermfg=3 ctermbg=0
+hi DiffText ctermfg=16 ctermbg=0
 
 " Highlights for status line (must appear after any :colorscheme)
 hi User1 ctermbg=black ctermfg=darkgreen guibg=steelblue4 guifg=darkgray  "buffer number
