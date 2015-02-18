@@ -20,8 +20,11 @@ abbr_add 'gds=git diff --stat'
 abbr_add 'gmm=git merge master'
 
 abbr_add 'v=vim'
-abbr_add 'vv=vim ~/.vimrc'
-abbr_add 'vfc=vim ~/.config/fish/config.fish'
+abbr_add 'ev=vim ~/.vimrc'
+abbr_add 'et=vim ~/.tmux.conf'
+abbr_add 'efc=vim ~/.config/fish/config.fish'
+abbr_add 'eff=vim ~/.config/fish/functions'
+abbr_add 'ef=vim ~/.config/fish'
 
 abbr_add 'vup=vagrant up'
 abbr_add 'vsh=vagrant ssh'
