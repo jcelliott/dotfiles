@@ -28,9 +28,6 @@ endif
 set autochdir           " automatically chdir into directory of current file
 set bs=indent,eol,start " allow backspacing over everything in insert mode
 set history=100         " keep x lines of command line history
-set ruler               " show the cursor position all the time
-set number              " Show line numbers
-set showcmd             " display incomplete commands
 set incsearch           " do incremental searching
 set hlsearch            " highlight search
 set ignorecase          " case insensitive search
@@ -57,6 +54,7 @@ set showcmd             " display incomplete commands
 set pumheight=30        " popup completion menu max height
 set splitright          " vertical splits go to the right
 set splitbelow          " horizontal splits to below
+set display=lastline    " show as much of last line as possible, instead of "@"
 
 set formatoptions=cqnlj " settings for formatting (see :help fo-table)
 set textwidth=100       " wrap lines at 100 chars
@@ -103,31 +101,11 @@ endif
 "  n... :  where to save the viminfo files
 set viminfo='25,\"10000,:100,%,n$HOME/.vim/.viminfo
 
-" Load plugins
-" runtime bundle/pathogen/autoload/pathogen.vim
-" if exists('g:loaded_pathogen')
-"   call pathogen#infect()
-"   " call LoadPluginMaps()
-" endif
-" silent! call pathogen#infect()
-
 " Enable syntax highlighting and keep current colors
 syntax enable
 
 " automatically source vimrc when written
 autocmd! BufWritePost .vimrc,_vimrc,vimrc source $MYVIMRC
-
-" When editing a file, always jump to the last known cursor position. Don't do it when the 
-" position is invalid or when inside an event handler (happens when dropping a file on gvim). Also 
-" don't do it when the mark is in the first line, that is the default position when opening a file.
-autocmd BufReadPost *
-  \ if line("'\"") > 1 && line("'\"") <= line("$") |
-  \   exe "normal! g`\"" |
-  \ endif
-
-" automatically save folds and attempt to load them when opening a file
-" autocmd BufWinLeave ?* mkview
-" autocmd BufWinEnter ?* silent loadview
 
 " automatically close location list window when leaving a buffer
 " prevents the annoying case where the location list stays open after closing
@@ -135,10 +113,6 @@ autocmd BufReadPost *
 " TODO: bug - this closes the location list window when you try to switch to it
 " autocmd BufLeave * lclose
 
-" attempt to return to the same view when switching buffers
-" causing problems, look into it later
-" autocmd BufLeave * let b:winview = winsaveview()
-" autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 "}}}
 
 "------------------------------------------------------------------------------
@@ -218,7 +192,7 @@ vnoremap . :normal .<cr>
 inoremap <C-U> <C-G>u<C-U>
 
 " use <M-k> for digraphs instead of <C-k>
-inoremap ˚ <C-k>
+inoremap k <C-k>
 
 "}}}
 
@@ -256,50 +230,26 @@ nnoremap k gk
 xnoremap j gj
 xnoremap k gk
 
-" <C-j> and <C-k> move 5 lines at a time
-" nmap <C-j> 5j
-" nmap <C-k> 5k
-" xmap <C-j> 5j
-" xmap <C-k> 5k
-
-" Replace J(oin) with \j (because of above mapping)
-" not needed after changing to <C-j>
-" nmap \j :join<CR>
-
 " Visual shifting (without exiting Visual mode)
 vnoremap < <gv
 vnoremap > >gv
-
-" " Move between splits with ctrl + hjkl
-" used for fast scroll now, were used infrequently
-noremap <C-j> <C-w>j
-noremap <C-k> <C-w>k
-noremap <C-h> <C-w>h
-noremap <C-l> <C-w>l
-
-" Easier movement in insert mode
-" Don't spend time in insert mode!
-" inoremap <C-h> <home>
-" inoremap <C-j> <down>
-" inoremap <C-k> <up>
-" inoremap <C-l> <end>
 
 " select last modified text
 nmap <leader>x `[v`]
 "}}}
 
 " ----- Marks and Highlighting ----- "{{{
-" <leader>l will highlight the current line and set mark l.
+" \l will highlight the current line and set mark l.
 " Use 'l to return and :match to clear
-nnoremap <silent> <leader>l ml:execute 'match Search /\%'.line('.').'l/'<CR>
+" nnoremap <silent> \l ml:execute 'match Search /\%'.line('.').'l/'<CR>
 
 " <Space> turn off highlighting, clear search pattern, clear messages
-nnoremap <silent> <Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+nnoremap <silent> <Space> :let @/ = ""<CR>:noh<Bar>:echo<CR>
 
 " <leader><Space> Really clear:
 " turn off highlighting, clear search pattern, clear messages, clear match highlight, 
 " clear quickfix list, clear location list :cgetexpr [] :lgetexpr []
-nnoremap <silent> <leader><Space> :let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>:match<CR>:cgetexpr[]<CR>:lgetexpr[]<CR>
+nnoremap <silent> <leader><Space> :let @/ = ""<CR>:noh<Bar>:echo<CR>:match<CR>:cgetexpr[]<CR>:lgetexpr[]<CR>
 
 " <leader>/ highlights occurrences of the word under cursor. Like * but doesn't move
 map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
@@ -308,7 +258,7 @@ map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 map \h :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#") . " BG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"bg#")<CR>
 
 " Toggle show whitespace
-map \w :<C-U>setlocal lcs=tab:>-,trail:-,eol:$ list! list? <CR>
+map \w :<C-U>setlocal lcs=tab:‣·,trail:␠,eol:⏎ list! list? <CR>
 "}}}
 
 " ----- Commands ----- "{{{
@@ -343,14 +293,14 @@ map <F3> mnggO<C-R>%<ESC>gcc'n
 map gs :sh<CR>
 
 " TODO lists. Changes the first occurence of - to ✓ and vice-versa
-" map <silent> \c :.s/-/✓/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
-" map <silent> \x :.s/✓/-/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+" map <silent> \c :.s/-/✓/e<CR>:let @/ = ""<CR>:noh<Bar>:echo<CR>
+" map <silent> \x :.s/✓/-/e<CR>:let @/ = ""<CR>:noh<Bar>:echo<CR>
 " Changes [ ] to [x] and vice-versa. '/e' flag ignores errors
-map <silent> \c :.s/^\[x\]/\[ \]/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
-map <silent> \x :.s/^\[ \]/\[x\]/e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+map <silent> \c :let _s=@/<Bar>:.s/^\[x\]/\[ \]/e<Bar>:let @/=_s<Bar>:noh<Bar>:echo<CR>
+map <silent> \x :let _s=@/<Bar>:.s/^\[ \]/\[x\]/e<Bar>:let @/=_s<Bar>:noh<Bar>:echo<CR>
 " add and remove check boxes ([ ]) at the beginning of the line
 map <silent> \z ^i[ ] <esc>$
-map <silent> \v :.s/^\[[x ]\][ ]\?//e<CR>:let @/ = ""<CR>:nohlsearch<Bar>:echo<CR>
+map <silent> \v :let _s=@/<Bar>:.s/^\[[x ]\][ ]\?//e<Bar>:let @/=_s<Bar>:noh<Bar>:echo<CR>
 "}}}
 
 " ----- Files and Navigation ----- "{{{
@@ -366,14 +316,14 @@ map <silent> <leader>q :bd<CR>
 "}}}
 
 " toggle between number and relativenumber
-nnoremap <leader>n :call NumberToggle()<CR>
+nnoremap \n :call NumberToggle()<CR>
 
 " redraw screen
-map \l :redraw!<CR>
+map <silent> \l :syntax sync fromstart<CR>:redraw!<CR>
 
 " diff mode maps (vimdiff)
-if &diff | map <silent> <leader>du :diffupdate<CR>| endif
-if &diff | map <leader>dp :diffput BASE<CR>| endif
+" if &diff | map <silent> <leader>du :diffupdate<CR>| endif
+" if &diff | map <leader>dp :diffput BASE<CR>| endif
 
 " toggle spell check
 nmap <silent> <F7> :setlocal spell! spelllang=en_us<CR>
@@ -444,12 +394,12 @@ Plug 'tpope/vim-surround' "{{{
   map <leader>s ysiw
 "}}}
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-markdown'
+Plug 'tpope/vim-markdown', { 'for': 'markdown' }
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-dispatch', { 'on': 'Dispatch' } "{{{
-  map <leader>d :Dispatch<CR>
+  " map <leader>d :Dispatch<CR>
 "}}}
 Plug 'tpope/vim-abolish'
 Plug 'majutsushi/tagbar', { 'on': ['TagbarOpenAutoClose'] } "{{{
@@ -467,15 +417,15 @@ Plug 'tomtom/tcomment_vim' "{{{
 Plug 'kana/vim-textobj-user', { 'for': 'ruby' } " only used for vim-textobj-rubyblock
 Plug 'nelstrom/vim-textobj-rubyblock', { 'for': 'ruby' }
 Plug 'Raimondi/delimitMate'
-Plug 'zaiste/tmux.vim' " tmux syntax
-Plug 'digitaltoad/vim-jade'
+Plug 'zaiste/tmux.vim', { 'for': 'tmux' } " tmux syntax
+Plug 'digitaltoad/vim-jade', { 'for': 'jade' }
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim', { 'on': 'Gist' } "{{{
   let g:gist_detect_filetype = 1
   let g:gist_open_browser_after_post = 1
 "}}}
-Plug 'nsf/gocode', { 'rtp': 'vim/' }
-Plug 'fatih/vim-go' "{{{
+Plug 'nsf/gocode', { 'rtp': 'vim/', 'for': 'go' }
+Plug 'fatih/vim-go', { 'for': 'go' } "{{{
   let g:go_highlight_functions = 1
   let g:go_highlight_methods = 1
   " let g:go_highlight_structs = 1
@@ -484,8 +434,8 @@ Plug 'fatih/vim-go' "{{{
   " let g:go_fmt_experimental = 1 " doesn't seem to work
 "}}}
 Plug 'rking/ag.vim'
-Plug 'sentientmachine/Pretty-Vim-Python'
-Plug 'fs111/pydoc.vim' "{{{
+Plug 'sentientmachine/Pretty-Vim-Python', { 'for': 'python' }
+Plug 'fs111/pydoc.vim', { 'for': 'python' } "{{{
   let g:pydoc_cmd = 'python -m pydoc'
   let g:pydoc_window_lines=15
 "}}}
@@ -504,17 +454,17 @@ Plug 'Valloric/YouCompleteMe', { 'do': './install.sh', 'on': [] } " {{{
 Plug 'jmcantrell/vim-virtualenv' "{{{
   let g:virtualenv_auto_activate = 1
 "}}}
-Plug 'elzr/vim-json'
+Plug 'elzr/vim-json', { 'for': 'json' }
 Plug 'jayflo/vim-skip' "{{{
   " let g:vimskip_wraptocenter = 1
 "}}}
-Plug 'dag/vim-fish'
+Plug 'dag/vim-fish', { 'for': 'fish' }
 Plug 'mhinz/vim-tmuxify' "{{{
   let g:tmuxify_map_prefix = '<leader>t'
 "}}}
 Plug 'chriskempson/base16-vim'
-Plug 'groenewege/vim-less'
-Plug 'dart-lang/dart-vim-plugin'
+Plug 'groenewege/vim-less', { 'for': ['less', 'css'] }
+Plug 'dart-lang/dart-vim-plugin', { 'for': 'dart' }
 Plug 'vim-scripts/restore_view.vim'
 Plug 'vim-scripts/quickhl.vim', { 'on': '<Plug>(quickhl-manual-this)' } "{{{
   nmap <leader>m <Plug>(quickhl-manual-this)
@@ -533,7 +483,7 @@ Plug 'christoomey/vim-tmux-navigator' "{{{
   " this doesn't work right now, terminal doesn't see a unique keycap for C-, vs just ,
   " nnoremap <silent> <C-,> :TmuxNavigatePrevious<CR>
 "}}}
-Plug 'honza/dockerfile.vim'
+Plug 'honza/dockerfile.vim', { 'for': 'dockerfile' }
 Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' } "{{{
   nnoremap <leader>u :GundoToggle<CR>
   let g:gundo_width = 40
@@ -606,7 +556,7 @@ set t_Co=256
 " --- Colorscheme ---
 " let g:solarized_termcolors=16
 " colorscheme solarized
-let g:base16_shell_path="$HOME/.config/base16-shell"
+" let g:base16_shell_path="$HOME/.config/base16-shell"
 let base16colorspace=256
 colorscheme base16-default
 
