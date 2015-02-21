@@ -66,31 +66,23 @@ set smarttab
 set expandtab           " expand tabs to spaces
 " set noexpandtab         " don't expand tabs to spaces
 set autoindent
+set nojoinspaces
 
 set pastetoggle=<F2>    " toggle paste mode (while paste is enabled, all formatting is disabled)
                         " OR :set invpaste<CR>:set paste?<CR>
 set ttyfast             " improves redrawing for fast terminal connection
 
-if $TMUX == ''
-  if(system("uname") =~ "Darwin")
-    set clipboard=unnamed     " Use the system clipboard (* register) on mac
-  else
-    set clipboard=unnamedplus " Use the X window clipboard (+ register)
-  endif
-endif
-
-" get rid of 'X more files to edit' message on quit
-" autocmd VimEnter * last|rewind
+set clipboard=unnamed
 
 " remove the delay when exiting insert mode (purely cosmetic, updates the statusline color immediately)
 " doesn't wait to receive key codes, doesn't affect multi-character mappings (imap jk <esc> won't work)
 if ! has('gui_running')
-   set ttimeoutlen=10
-    augroup FastEscape
-        autocmd!
-        au InsertEnter * set timeoutlen=100
-        au InsertLeave * set timeoutlen=1000
-    augroup END
+  set ttimeoutlen=10
+  augroup FastEscape
+    autocmd!
+    au InsertEnter * set timeoutlen=100
+    au InsertLeave * set timeoutlen=1000
+  augroup END
 endif
 
 " Tell vim to remember certain things when we exit
@@ -258,7 +250,7 @@ map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 map \h :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#") . " BG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"bg#")<CR>
 
 " Toggle show whitespace
-map \w :<C-U>setlocal lcs=tab:‣·,trail:␠,eol:⏎ list! list? <CR>
+map \w :<C-U>setlocal listchars=tab:‣·,trail:␠,eol:⏎ list! list? <CR>
 "}}}
 
 " ----- Commands ----- "{{{
@@ -575,8 +567,9 @@ hi SignColumn ctermbg=234
 " hi FoldColumn ctermbg=234
 "
 " hi Question ctermfg=4
-" hi Operator ctermfg=3
-" hi MatchParen ctermfg=4
+hi Operator ctermfg=3
+hi pythonInclude ctermfg=3 " links to Operator by default
+hi MatchParen ctermfg=16
 hi Todo term=standout ctermfg=16 ctermbg=18
 "
 " diff highlight options
@@ -721,8 +714,4 @@ endfunction
 " experimenting with ESC
 " imap jk <ESC>
 " imap kj <ESC>
-
-" show trailing spaces and tabs
-" set list listchars=tab:\ \ ,trail:·
-" set list listchars=tab:\ \ ,trail:»
 "}}}
