@@ -7,8 +7,8 @@
 " Created 6/28/12
 "
 " TODO: "{{{
-"	  - Command to toggle autocompletion (tab, delimeters, etc.)
-"	  - marks and highlights system (like current <leader>l) with <leader>1-9
+"   - Command to toggle autocompletion (tab, delimeters, etc.)
+"   - marks and highlights system (like current <leader>l) with <leader>1-9
 "   - LaTeX support
 "   - Organize into separate files?
 "}}}
@@ -42,7 +42,7 @@ set hidden              " allow buffers to remain open in the background
 set undofile            " undo tree persists between vim sessions
 set updatetime=1000     " timeout for CursorHold autocmd and writing swap file
 set confirm             " confirm dialog instead of fail
-set wildmenu						" autocomplete menu for command line
+set wildmenu            " autocomplete menu for command line
 set wildmode=longest,list,full
 set undodir=$HOME/.vim/undohist
 set completeopt=menu,longest,preview
@@ -71,17 +71,19 @@ set nojoinspaces
 set pastetoggle=<F2>    " toggle paste mode (while paste is enabled, all formatting is disabled)
                         " OR :set invpaste<CR>:set paste?<CR>
 set ttyfast             " improves redrawing for fast terminal connection
+set lazyredraw          " don't redraw the screen for non-typed commands (smoother looking plugins)
+" doesn't print some command line messages I expect
 
 set clipboard=unnamed
 
 " remove the delay when exiting insert mode (purely cosmetic, updates the statusline color immediately)
-" doesn't wait to receive key codes, doesn't affect multi-character mappings (imap jk <esc> won't work)
+" doesn't wait to receive key codes, doesn't affect multi-character mappings (imap jk <Esc> won't work)
 if ! has('gui_running')
   set ttimeoutlen=10
   augroup FastEscape
     autocmd!
-    au InsertEnter * set timeoutlen=100
-    au InsertLeave * set timeoutlen=1000
+    autocmd InsertEnter * set timeoutlen=100
+    autocmd InsertLeave * set timeoutlen=1000
   augroup END
 endif
 
@@ -97,7 +99,10 @@ set viminfo='25,\"10000,:100,%,n$HOME/.vim/.viminfo
 syntax enable
 
 " automatically source vimrc when written
-autocmd! BufWritePost .vimrc,_vimrc,vimrc source $MYVIMRC
+augroup SourceVIMRC
+  autocmd!
+  autocmd BufWritePost .vimrc,_vimrc,vimrc source $MYVIMRC
+augroup END
 
 " automatically close location list window when leaving a buffer
 " prevents the annoying case where the location list stays open after closing
@@ -112,11 +117,11 @@ autocmd! BufWritePost .vimrc,_vimrc,vimrc source $MYVIMRC
 "------------------------------------------------------------------------------
 "{{{
 
-" See the difference between the current buffer and the file it was loaded 
+" See the difference between the current buffer and the file it was loaded
 " from, thus the changes you made. Only define it when not defined already.
 if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
-		  \ | wincmd p | diffthis
+      \ | wincmd p | diffthis
 endif
 
 " run the current script with <F5>
@@ -177,7 +182,7 @@ let mapleader = ','
 nnoremap Y y$
 
 " allow repeat operator with a visual selection
-vnoremap . :normal .<cr>
+xnoremap . :normal .<CR>
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
@@ -200,8 +205,8 @@ vmap <C-Down> :m '>+1<CR>gv=gv
 vmap <C-Up> :m '<-2<CR>gv=gv
 
 " Insert lines above or below
-noremap go o<esc>k
-noremap gi O<esc>j
+noremap go o<Esc>k
+noremap gi O<Esc>j
 
 " up and down hold cursor while lines scroll
 noremap <Down> <C-e>j
@@ -223,8 +228,8 @@ xnoremap j gj
 xnoremap k gk
 
 " Visual shifting (without exiting Visual mode)
-vnoremap < <gv
-vnoremap > >gv
+xnoremap < <gv
+xnoremap > >gv
 
 " select last modified text
 nmap <leader>x `[v`]
@@ -239,7 +244,7 @@ nmap <leader>x `[v`]
 nnoremap <silent> <Space> :let @/ = ""<CR>:noh<Bar>:echo<CR>
 
 " <leader><Space> Really clear:
-" turn off highlighting, clear search pattern, clear messages, clear match highlight, 
+" turn off highlighting, clear search pattern, clear messages, clear match highlight,
 " clear quickfix list, clear location list :cgetexpr [] :lgetexpr []
 nnoremap <silent> <leader><Space> :let @/ = ""<CR>:noh<Bar>:echo<CR>:match<CR>:cgetexpr[]<CR>:lgetexpr[]<CR>
 
@@ -276,10 +281,10 @@ map <F4> :call REPL()<CR>
 
 " add the name of the current file in a comment at the top of the file
 " (depends on tcomment [mapped to gcc to comment the current line])
-map <F3> mnggO<C-R>%<ESC>gcc'n
+map <F3> mnggO<C-R>%<Esc>gcc'n
 
 " copy the output of an ex command to a new tab
-" map \t :TabMessage 
+" map \t :TabMessage<Space>
 
 " go to shell (exit the shell to return to vim)
 map gs :sh<CR>
@@ -291,7 +296,7 @@ map gs :sh<CR>
 map <silent> \c :let _s=@/<Bar>:.s/^\[x\]/\[ \]/e<Bar>:let @/=_s<Bar>:noh<Bar>:echo<CR>
 map <silent> \x :let _s=@/<Bar>:.s/^\[ \]/\[x\]/e<Bar>:let @/=_s<Bar>:noh<Bar>:echo<CR>
 " add and remove check boxes ([ ]) at the beginning of the line
-map <silent> \z ^i[ ] <esc>$
+map <silent> \z ^i[ ] <Esc>$
 map <silent> \v :let _s=@/<Bar>:.s/^\[[x ]\][ ]\?//e<Bar>:let @/=_s<Bar>:noh<Bar>:echo<CR>
 "}}}
 
@@ -304,7 +309,7 @@ nnoremap <leader>y ggyG`` :echo "yanked entire file"<CR>
 map <leader>- :Sexplore<CR>
 
 " close current buffer
-map <silent> <leader>q :bd<CR> 
+map <silent> <leader>q :bd<CR>
 "}}}
 
 " toggle between number and relativenumber
@@ -337,17 +342,17 @@ Plug 'scrooloose/syntastic', { 'on': 'SyntasticToggleMode' } "{{{
   let g:syntastic_auto_loc_list=1
   " Syntastic error list hight
   let g:syntastic_loc_list_height=5
-	" Always add errors (:Errors) to location list
-	let g:syntastic_always_populate_loc_list=1
-	" Run all checkers in parallel instead of stopping after the first
-	let g:syntastic_aggregate_errors = 1
-	" Symbols to display in the gutter
-	let g:syntastic_error_symbol = '✗'
-	let g:syntastic_warning_symbol = '⚠'
+  " Always add errors (:Errors) to location list
+  let g:syntastic_always_populate_loc_list=1
+  " Run all checkers in parallel instead of stopping after the first
+  let g:syntastic_aggregate_errors = 1
+  " Symbols to display in the gutter
+  let g:syntastic_error_symbol = '✗'
+  let g:syntastic_warning_symbol = '⚠'
   let g:syntastic_style_warning_symbol = 's'
   let g:syntastic_style_error_symbol = 'S'
-	" Customize syntastic status line message
-	let g:syntastic_stl_format = '[%E{Err: %e}%B{, }%W{Warn: %w}]'
+  " Customize syntastic status line message
+  let g:syntastic_stl_format = '[%E{Err: %e}%B{, }%W{Warn: %w}]'
   " default to passive, so when we toggle (for lazy load) it starts in active mode
   let g:syntastic_mode_map = { 'mode': 'passive' }
 
@@ -375,8 +380,7 @@ Plug 'sjbach/lusty' "{{{
   " map <silent> <leader>b :LustyBufferExplorer<CR> " use <leader>lb
 "}}}
 Plug 'tpope/vim-eunuch' "{{{
-  " Rename (there is a literal space after :Move)
-  map <leader>r :Rename 
+  map \r :Rename<Space>
   " Remove (no confirmation)
   map \ddd :Remove<CR>
   " Write a privileged file with sudo
@@ -403,7 +407,7 @@ Plug 'majutsushi/tagbar', { 'on': ['TagbarOpenAutoClose'] } "{{{
 Plug 'tomtom/tcomment_vim' "{{{
   " use <leader>c for comments (gcc from tComment)
   nmap <leader>c gcc
-  vmap <leader>c gc
+  xmap <leader>c gc
   let g:tcomment_types = { 'tmux': '# ' }
 "}}}
 Plug 'kana/vim-textobj-user', { 'for': 'ruby' } " only used for vim-textobj-rubyblock
@@ -420,8 +424,6 @@ Plug 'nsf/gocode', { 'rtp': 'vim/', 'for': 'go' }
 Plug 'fatih/vim-go', { 'for': 'go' } "{{{
   let g:go_highlight_functions = 1
   let g:go_highlight_methods = 1
-  " let g:go_highlight_structs = 1
-  " let g:go_higlight_operators = 1
   let g:go_fmt_fail_silently = 1
   " let g:go_fmt_experimental = 1 " doesn't seem to work
 "}}}
@@ -482,13 +484,14 @@ Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' } "{{{
   let g:gundo_preview_height = 20
   let g:gundo_close_on_revert = 1
 "}}}
-Plug 'kylef/apiblueprint.vim'
+Plug 'kylef/apiblueprint.vim', { 'for': 'apiblueprint' }
+Plug 'dbakker/vim-lint'
 
 " Unused {{{
 " Plug 'benmills/vimux' "{{{
-" 	let g:VimuxPromptString = "vimux> "
-" 	let g:VimuxUseNearest = 0
-" 	let g:VimuxHeight = 15
+"   let g:VimuxPromptString = "vimux> "
+"   let g:VimuxUseNearest = 0
+"   let g:VimuxHeight = 15
 " "}}}
 " Plug 'greyblake/vim-preview' "{{{
 "   " vim-preview (markdown, rdoc, textile, html, ronn, rst)
@@ -500,7 +503,7 @@ Plug 'kylef/apiblueprint.vim'
 "     endif
 "   " endif
 "   " remove default mapping and add custom one
-"   " autocmd VimEnter * 
+"   " autocmd VimEnter *
 "   "   " \ nunmap <leader>P
 "   "   \ nmap <silent> <leader>p :Preview<CR>
 " "}}}
@@ -510,6 +513,7 @@ Plug 'kylef/apiblueprint.vim'
 "   let g:lua_compiler_name = 'luac5.1'
 "   let g:lua_interpreter_path = 'lua5.1'
 " "}}}
+" Plug 'dahu/VimLint'
 "}}}
 
 call plug#end()
@@ -612,9 +616,9 @@ function! RenderVirtualenvStatus()
   endif
 endfunction
 
-" Statusline formatting	                      (Remember to escape spaces '\ ')
+" Statusline formatting                       (Remember to escape spaces '\ ')
 set statusline=
-set statusline+=%1*[%n]%*	                    " buffer number
+set statusline+=%1*[%n]%*                     " buffer number
 set statusline+=\ %F                          " full filename
 set statusline+=\ %2*                         " switch to User2 highlight
 set statusline+=%y                            " filetype
@@ -701,7 +705,7 @@ endif
 "{{{
 
 " insert a line above the current line
-function! Add_blank_line_above() 
+function! Add_blank_line_above()
   let failed = append(line('.')-1, "")
 endfunction
 " C-j used for moving between snippet fields, find a better map
@@ -712,6 +716,6 @@ endfunction
 " autocmd BufWritePost *.md,*.markdown :silent !cat %:p | curl -X PUT -T - http://localhost:8090/
 
 " experimenting with ESC
-" imap jk <ESC>
-" imap kj <ESC>
+" imap jk <Esc>
+" imap kj <Esc>
 "}}}
