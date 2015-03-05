@@ -486,6 +486,7 @@ Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' } "{{{
 "}}}
 Plug 'kylef/apiblueprint.vim', { 'for': 'apiblueprint' }
 Plug 'dbakker/vim-lint'
+Plug 'mustache/vim-mustache-handlebars'
 
 " Unused {{{
 " Plug 'benmills/vimux' "{{{
