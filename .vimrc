@@ -246,7 +246,19 @@ nnoremap <silent> <Space> :let @/ = ""<CR>:noh<Bar>:echo<CR>
 " <leader><Space> Really clear:
 " turn off highlighting, clear search pattern, clear messages, clear match highlight,
 " clear quickfix list, clear location list :cgetexpr [] :lgetexpr []
-nnoremap <silent> <leader><Space> :let @/ = ""<CR>:noh<Bar>:echo<CR>:match<CR>:cgetexpr[]<CR>:lgetexpr[]<CR>
+" clear Quickhl manual highlights if the plugin is loaded
+function! ReallyClear()
+  let @/ = ""
+  nohlsearch
+  echo
+  match
+  cgetexpr[]
+  lgetexpr[]
+  if exists('g:loaded_quickhl')
+    QuickhlManualReset
+  endif
+endfunction
+nnoremap <silent> <leader><Space> :call ReallyClear()<CR>
 
 " <leader>/ highlights occurrences of the word under cursor. Like * but doesn't move
 map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
@@ -467,9 +479,11 @@ Plug 'chriskempson/base16-vim'
 Plug 'groenewege/vim-less', { 'for': ['less', 'css'] }
 Plug 'dart-lang/dart-vim-plugin', { 'for': 'dart' }
 Plug 'vim-scripts/restore_view.vim'
-Plug 'vim-scripts/quickhl.vim', { 'on': '<Plug>(quickhl-manual-this)' } "{{{
+Plug 't9md/vim-quickhl', { 'on': ['<Plug>(quickhl-manual-this)','<Plug>(quickhl-cword-toggle)'] } "{{{
   nmap <leader>m <Plug>(quickhl-manual-this)
-  let g:quickhl_cword_hl_command = 'link QuickhlCword Todo'
+  xmap <leader>m <Plug>(quickhl-manual-this)
+  nmap \m <Plug>(quickhl-cword-toggle)
+  let g:quickhl_cword_hl_command = 'link QuickhlCword Visual'
 "}}}
 Plug 'wellle/targets.vim' "{{{
   let g:targets_pairs = '()b {}B []r <> ' " disable 'a' for 'angle-brackets'
