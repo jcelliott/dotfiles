@@ -11,8 +11,10 @@ setlocal makeprg = "go build %"
 " use real tabs in Go sources
 setlocal noexpandtab
 
-map \i :GoImport 
-map \d :GoDrop 
+nmap \i :GoImport<Space>
+nmap \\i :GoImports<CR>
+nmap \d :GoDrop<Space>
+nmap <leader>r <Plug>(go-rename)
 
 let g:tagbar_type_go = {
     \ 'ctagstype' : 'go',
