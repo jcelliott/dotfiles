@@ -509,6 +509,14 @@ Plug 'kylef/apiblueprint.vim', { 'for': 'apiblueprint' }
 Plug 'dbakker/vim-lint'
 Plug 'mustache/vim-mustache-handlebars'
 
+Plug 'KabbAmine/zeavim.vim' "{{{
+  let g:zv_disable_mapping = 1
+  nmap <leader>d <Plug>Zeavim
+  xmap <leader>d <Plug>ZVVisSelection
+  nmap <leader>D <Plug>ZVKeyword
+  " nmap <leader>DD <Plug>ZVKeyDocset
+"}}}
+
 " Unused {{{
 " Plug 'benmills/vimux' "{{{
 "   let g:VimuxPromptString = "vimux> "
