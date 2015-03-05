@@ -612,66 +612,10 @@ hi DiffDelete ctermfg=1 ctermbg=0
 hi DiffChange ctermfg=3 ctermbg=0
 hi DiffText ctermfg=16 ctermbg=0
 
-" Highlights for status line (must appear after any :colorscheme)
-hi User1 ctermbg=black ctermfg=darkgreen guibg=steelblue4 guifg=darkgray  "buffer number
-hi User2 ctermbg=black ctermfg=darkred   guibg=black      guifg=darkred   "filetype
-hi User3 ctermbg=black ctermfg=darkblue  guibg=gray	      guifg=darkblue  "fugitive(git)
-hi User4 ctermbg=red	 ctermfg=white     guibg=red        guifg=white     "syntastic
-hi User5 ctermbg=black ctermfg=darkgreen guibg=gray	      guifg=darkgreen "virtualenv
-
-" Set the default statusline highlight
-hi statusline ctermbg=gray ctermfg=black guibg=gray guifg=steelblue4
-
-" Sets the status line highlighting according the current mode
-function! SetInsertStatusline()
-hi statusline ctermbg=gray  ctermfg=red      guibg=gray  guifg=orangered4
-hi User2      ctermbg=red ctermfg=darkred  guibg=white guifg=darkred    "filetype
-hi User3      ctermbg=red ctermfg=darkblue guibg=white	guifg=darkblue  "fugitive(git)
-endfunction
-au InsertEnter * :call SetInsertStatusline()
-
-function! ClearInsertStatusline()
-hi statusline ctermbg=gray  ctermfg=black    guibg=gray  guifg=steelblue4
-hi User2      ctermbg=black ctermfg=darkred  guibg=black guifg=darkred    "filetype
-hi User3      ctermbg=black ctermfg=darkblue guibg=gray	 guifg=darkblue   "fugitive(git)
-endfunction
-au InsertLeave * :call ClearInsertStatusline()
-
-function! RenderVirtualenvStatus()
-  let venv_stat = virtualenv#statusline()
-  if (venv_stat == '')
-    return ''
-  else
-    return '[venv:'.venv_stat.']'
-  endif
-endfunction
-
-" Statusline formatting                       (Remember to escape spaces '\ ')
-set statusline=
-set statusline+=%1*[%n]%*                     " buffer number
-set statusline+=\ %F                          " full filename
-set statusline+=\ %2*                         " switch to User2 highlight
-set statusline+=%y                            " filetype
-set statusline+=%*                            " normal highlight
-set statusline+=\ %3*                         " switch to User3 highlight
-"git status (if the plugin is loaded)
-set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}
-set statusline+=%*                            " normal highlight
-set statusline+=\ %5*                         " switch to User5 highlight
-set statusline+=%{exists('g:virtualenv_loaded')?RenderVirtualenvStatus():''}
-set statusline+=%*\                           " normal highlight
-
-set statusline+=%=                            " right align
-set statusline+=%4*                           " switch to User4 highlight
-set statusline+=%{exists('g:loaded_syntastic_plugin')?SyntasticStatuslineFlag():''}
-set statusline+=%*\                           " normal highlight
-set statusline+=%{&spell?'SP\ ':''}
-set statusline+=%4*%{&paste?'PASTE\ ':''}%*   " paste mode flag
-set statusline+=%h                            " help buffer flag
-set statusline+=%r                            " read only flag
-set statusline+=%m                            " modified flag
-set statusline+=%l/%L                       " line number / total lines
-set statusline+=:%c                           " column
+" load my statusline if not using airline
+if !exists('g:loaded_airline')
+  call statusline#load_statusline()
+endif
 "}}}
 
 "------------------------------------------------------------------------------
