@@ -46,9 +46,12 @@ abbr_add 'dc=docker-compose'
 abbr_add 'dcu=docker-compose up -d'
 abbr_add 'dcs=docker-compose stop'
 
-abbr_add 's=ssh'
 abbr_add 'c=cat'
 abbr_add 'e=echo'
 
 abbr_add 'fc=source ~/.config/fish/config.fish'
 abbr_add 'sf=source ~/.config/fish/config.fish'
+
+abbr_add 's=sudo'
+abbr_add 'se=sudo -E'
+abbr_add 'sudoe=sudo -E'
