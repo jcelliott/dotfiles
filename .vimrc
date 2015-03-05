@@ -267,7 +267,14 @@ imap ;w<CR> <C-o>:w<CR>
 nmap <silent> <leader>v :e $MYVIMRC<CR>
 nmap <silent> \s :source $MYVIMRC<CR>:echo "sourced vimrc"<CR>
 
-" Dirty hack for when you forget to sudo. Really write the File 
+" Edit other files
+nmap <leader>ev :e $MYVIMRC<CR>
+nmap <leader>et :e ~/.tmux.conf<CR>
+nmap <leader>efc :e ~/.config/fish/config.fish<CR>
+nmap <leader>eff :e ~/.config/fish/functions<CR>
+nmap <leader>ef :e ~/.config/fish<CR>
+
+" Dirty hack for when you forget to sudo. Really write the File
 cmap w!! w !sudo tee % >/dev/null
 
 " run make
