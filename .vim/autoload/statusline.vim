@@ -41,7 +41,7 @@ function! statusline#load_statusline()
   set statusline+=%{statusline#syntastic_status()}
   set statusline+=%*\                           " normal highlight
   set statusline+=%{&spell?'SP\ ':''}
-  set statusline+=%4*%{&paste?'PASTE\ ':''}%*   " paste mode flag
+  set statusline+=%(%4*%{&paste?'PASTE':''}%*\ %)
   set statusline+=%h                            " help buffer flag
   set statusline+=%r                            " read only flag
   set statusline+=%m                            " modified flag

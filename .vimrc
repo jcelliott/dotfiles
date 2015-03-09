@@ -571,6 +571,10 @@ filetype plugin indent on
 "------------------------------------------------------------------------------
 "{{{
 
+" Window title
+set title
+set titlestring=vim\ %f%(\ [%M%R%H]%)
+
 " --- Settings ---
 set background=dark
 set cursorline
@@ -580,32 +584,25 @@ set t_Co=256
 " set term=screen-256color
 
 " --- Colorscheme ---
-" let g:solarized_termcolors=16
-" colorscheme solarized
 " let g:base16_shell_path="$HOME/.config/base16-shell"
 let base16colorspace=256
 colorscheme base16-default
 
-" --- Highlights ---
+" --- General Highlights ---
 " :h cterm-colors
 hi LineNr ctermfg=237 ctermbg=234
 " hi CursorLineNr ctermfg=4
-
-" hi cursorline ctermbg=0 gui=bold
 hi cursorline ctermbg=234
-"
-" " Highlight for the omnicompletion menu
-" hi Pmenu ctermbg=234 ctermfg=7
-"
 hi SignColumn ctermbg=234
 " hi FoldColumn ctermbg=234
-"
+
+" --- Syntax Highlights ---
 " hi Question ctermfg=4
 hi Operator ctermfg=3
 hi pythonInclude ctermfg=3 " links to Operator by default
 hi MatchParen ctermfg=16
 hi Todo term=standout ctermfg=16 ctermbg=18
-"
+
 " diff highlight options
 hi DiffAdd ctermfg=2 ctermbg=0
 hi DiffDelete ctermfg=1 ctermbg=0
