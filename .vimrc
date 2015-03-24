@@ -300,7 +300,7 @@ map <F4> :call REPL()<CR>
 
 " add the name of the current file in a comment at the top of the file
 " (depends on tcomment [mapped to gcc to comment the current line])
-map <F3> mnggO<C-R>%<Esc>gcc'n
+" map <F3> mnggO<C-R>%<Esc>gcc`n
 
 " copy the output of an ex command to a new tab
 " map \t :TabMessage<Space>
@@ -508,7 +508,6 @@ Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' } "{{{
 Plug 'kylef/apiblueprint.vim', { 'for': 'apiblueprint' }
 Plug 'dbakker/vim-lint'
 Plug 'mustache/vim-mustache-handlebars'
-
 Plug 'KabbAmine/zeavim.vim' "{{{
   let g:zv_disable_mapping = 1
   nmap <leader>d <Plug>Zeavim
@@ -516,6 +515,13 @@ Plug 'KabbAmine/zeavim.vim' "{{{
   nmap <leader>D <Plug>ZVKeyword
   " nmap <leader>DD <Plug>ZVKeyDocset
 "}}}
+Plug 'gregsexton/gitv', { 'on': 'Gitv' } "{{{
+  let g:Gitv_OpenHorizontal = 'auto'
+  nmap \g :Gitv<CR>
+  nmap \G :Gitv!<CR>
+"}}}
+Plug 'junegunn/vim-peekaboo'
+Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 
 " Unused {{{
 " Plug 'benmills/vimux' "{{{
