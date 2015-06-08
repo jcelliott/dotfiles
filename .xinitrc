@@ -19,5 +19,5 @@ _locker="i3lock -c 111111 -d -I 10"
 xss-lock -- "$_locker" &
 xautolock -time 8 -corners "00+0" -cornerdelay 3 -cornerredelay 10 -locker "$_locker" &
 
-exec i3
+exec i3 -c ~/.config/i3/config
 
