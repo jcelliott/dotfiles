@@ -42,6 +42,8 @@ abbr_add 'drmdi=docker rmi (docker images -qf dangling=true)' # delete dangling 
 abbr_add 'dimg=docker_images' # grep through images
 abbr_add 'dpid=docker inspect --format \'{{.State.Pid}}\' (docker ps -lq)'
 abbr_add 'dcl=docker rm (docker ps -aq); docker rmi (docker images -qf dangling=true)' # clean
+abbr_add 'de=docker exec'
+
 abbr_add 'dc=docker-compose'
 abbr_add 'dcu=docker-compose up -d'
 abbr_add 'dcs=docker-compose stop'
