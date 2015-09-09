@@ -104,6 +104,13 @@ augroup SourceVIMRC
   autocmd BufWritePost .vimrc,_vimrc,vimrc source $MYVIMRC
 augroup END
 
+" highlight trailing whitespace
+augroup trailing_whitespace
+  autocmd!
+  autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+  autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+augroup END
+
 " automatically close location list window when leaving a buffer
 " prevents the annoying case where the location list stays open after closing
 " its associated file buffer
@@ -608,6 +615,9 @@ hi Operator ctermfg=3
 hi pythonInclude ctermfg=3 " links to Operator by default
 hi MatchParen ctermfg=16
 hi Todo term=standout ctermfg=16 ctermbg=18
+
+" trailing whitespace
+hi ExtraWhitespace ctermbg=red
 
 " diff highlight options
 hi DiffAdd ctermfg=2 ctermbg=0
