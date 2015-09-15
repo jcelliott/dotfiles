@@ -1,8 +1,8 @@
-"          _              
+"          _
 "    _  __(_)_ _  ________
 "  _| |/ / /  ' \/ __/ __/
-" (_)___/_/_/_/_/_/  \__/ 
-"                        
+" (_)___/_/_/_/_/_/  \__/
+"
 " Joshua Elliott
 " Created 6/28/12
 "
@@ -40,7 +40,7 @@ set nostartofline       " don't move to SOL on many commands (also switching buf
 set autoread            " auto read on external file changes
 set hidden              " allow buffers to remain open in the background
 set undofile            " undo tree persists between vim sessions
-set updatetime=1000     " timeout for CursorHold autocmd and writing swap file
+set updatetime=3000     " timeout for CursorHold autocmd and writing swap file
 set confirm             " confirm dialog instead of fail
 set wildmenu            " autocomplete menu for command line
 set wildmode=longest,list,full
@@ -57,7 +57,7 @@ set splitbelow          " horizontal splits to below
 set display=lastline    " show as much of last line as possible, instead of "@"
 
 set formatoptions=cqnlj " settings for formatting (see :help fo-table)
-set textwidth=100       " wrap lines at 100 chars
+set textwidth=80        " wrap lines at 100 chars
 set tabstop=2
 set softtabstop=2
 set shiftwidth=2
@@ -71,7 +71,7 @@ set nojoinspaces
 set pastetoggle=<F2>    " toggle paste mode (while paste is enabled, all formatting is disabled)
                         " OR :set invpaste<CR>:set paste?<CR>
 set ttyfast             " improves redrawing for fast terminal connection
-set lazyredraw          " don't redraw the screen for non-typed commands (smoother looking plugins)
+" set lazyredraw          " don't redraw the screen for non-typed commands (smoother looking plugins)
 " doesn't print some command line messages I expect
 
 set clipboard=unnamed
@@ -529,6 +529,8 @@ Plug 'gregsexton/gitv', { 'on': 'Gitv' } "{{{
 "}}}
 Plug 'junegunn/vim-peekaboo'
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
+Plug 'elixir-lang/vim-elixir'
+Plug 'dzeban/vim-log-syntax'
 
 " Unused {{{
 " Plug 'benmills/vimux' "{{{
