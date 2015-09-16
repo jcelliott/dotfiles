@@ -5,6 +5,7 @@ URxvt.font: xft:DejaVu Sans Mono:pixelsize=15:antialias=true:autohint=true
 URxvt.scrollBar: false
 URxvt.internalBorder: 0
 URxvt.lineSpace: 1
+URxvt.urgentOnBell: True
 
 ! extensions
 URxvt.perl-ext-common: default,matcher,clipboard
@@ -16,3 +17,7 @@ URxvt.iso14755: false
 URxvt.keysym.Shift-Control-C: perl:clipboard:copy
 URxvt.keysym.Shift-Control-V: perl:clipboard:paste
 
+
+! x11-ssh-askpass
+SshAskpass.indicator.maximumCount: 5
+SshAskpass.inputTimeout: 30
