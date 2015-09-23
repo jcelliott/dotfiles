@@ -39,7 +39,9 @@ abbr_add 'drml=docker rm (docker ps -lq)' # delete last container
 abbr_add 'dsa=docker stop (docker ps -aq)' # stop all containers
 abbr_add 'dsl=docker stop (docker ps -lq)' # stop last container
 abbr_add 'drmdi=docker rmi (docker images -qf dangling=true)' # delete dangling images
-abbr_add 'dimg=docker_images' # grep through images
+abbr_add 'digrep=docker-images' # grep through images
+abbr_add 'dgrep=docker-grep' # grep through containers
+abbr_add 'drmg=docker rm (docker-grep'
 abbr_add 'dpid=docker inspect --format \'{{.State.Pid}}\' (docker ps -lq)'
 abbr_add 'dcl=docker rm (docker ps -aq); docker rmi (docker images -qf dangling=true)' # clean
 abbr_add 'de=docker exec'
