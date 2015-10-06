@@ -1,0 +1,6 @@
+#!/bin/bash
+# print my current IP address
+
+ip=$(curl -s https://api.ipify.org)
+echo $ip
+
