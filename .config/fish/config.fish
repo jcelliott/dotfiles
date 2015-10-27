@@ -30,7 +30,17 @@ set -x GOPATH "$HOME/projects/go"
 
 # Path
 if not set -q -U fish_user_paths
-  set -U fish_user_paths "$HOME/bin" "/usr/local/bin" "$GOPATH/bin" "$HOME/.local/bin"
+  if test $_platform = "darwin"
+    # path for macports
+    set -U fish_user_paths "/opt/local/bin" "/opt/local/sbin"
+  end
+  set -U fish_user_paths $fish_user_paths "$HOME/bin" "$GOPATH/bin" "$HOME/.local/bin" "/usr/local/bin"
+end
+
+# Manpath
+if test $_platform = "darwin"
+  # manpath for macports
+  set -x MANPATH "/opt/local/share/man" "/usr/share/man" "/usr/local/share/man" $MANPATH
 end
 
 # Editor
