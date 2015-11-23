@@ -7,7 +7,7 @@ function fish_user_key_bindings --description "User key bindings for fish"
 
   # normal mode
   bind -m insert \n execute
-  bind \cl clear 'commandline ""' execute
+  bind \cl 'clear; commandline -f repaint'
   bind -e -k home
   bind -k home beginning-of-line
   bind H beginning-of-line
@@ -16,7 +16,7 @@ function fish_user_key_bindings --description "User key bindings for fish"
   bind $argv -k f1 __fish_man_page
 
   # insert mode
-  bind -M insert \cl clear 'commandline ""' execute
+  bind \cl 'clear; commandline -f repaint'
   bind -e -M insert -k home
   bind -M insert -k home beginning-of-line
   bind -M insert \cw beginning-of-line
