@@ -75,3 +75,9 @@ else
   perror "autojump not installed"
 end
 
+# oh-my-fish
+set fish_path $HOME/.config/fish/oh-my-fish
+. $fish_path/oh-my-fish.fish
+Plugin 'peco'
+# custom
+Plugin 'grc'
