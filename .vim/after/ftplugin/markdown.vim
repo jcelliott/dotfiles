@@ -4,7 +4,7 @@ set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 
-setlocal textwidth=100
+setlocal textwidth=80
 " set formatoptions=tqan  " settings for formatting (see :help fo-table)
 set formatoptions=tcqn  " settings for formatting (see :help fo-table)
 
