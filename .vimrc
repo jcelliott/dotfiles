@@ -169,6 +169,23 @@ function! NumberToggle()
   endif
 endfunc
 
+" remove all trailing whitespace
+function! TrimWhitespace()
+  call PreserveCursor("%s/\\s\\+$//e") " escape backslashes
+endfunction
+
+" format current buffer
+function! FormatBuffer()
+  call PreserveCursor("normal gg=G")
+endfunction
+
+" preserve cursor position while executing a command
+function! PreserveCursor(command)
+  " calling a function saves last search for free
+  let l:save_cursor = getpos('.')
+  execute a:command
+  call setpos('.', l:save_cursor)
+endfunction
 "}}}
 
 "------------------------------------------------------------------------------
@@ -324,6 +341,12 @@ map <silent> \x :let _s=@/<Bar>:.s/^\[ \]/\[x\]/e<Bar>:let @/=_s<Bar>:noh<Bar>:e
 " add and remove check boxes ([ ]) at the beginning of the line
 map <silent> \z ^i[ ] <Esc>$
 map <silent> \v :let _s=@/<Bar>:.s/^\[[x ]\][ ]\?//e<Bar>:let @/=_s<Bar>:noh<Bar>:echo<CR>
+
+" trim trailing whitespace
+map \t :call TrimWhitespace()<Bar>:echo "trimmed trailing whitespace"<CR>
+
+" format buffer
+map \f :call FormatBuffer()<CR>
 "}}}
 
 " ----- Files and Navigation ----- "{{{
