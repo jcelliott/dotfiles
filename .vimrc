@@ -40,7 +40,7 @@ set nostartofline       " don't move to SOL on many commands (also switching buf
 set autoread            " auto read on external file changes
 set hidden              " allow buffers to remain open in the background
 set undofile            " undo tree persists between vim sessions
-set updatetime=3000     " timeout for CursorHold autocmd and writing swap file
+set updatetime=2000     " timeout for CursorHold autocmd and writing swap file
 set confirm             " confirm dialog instead of fail
 set wildmenu            " autocomplete menu for command line
 set wildmode=longest,list,full
@@ -79,10 +79,10 @@ set clipboard=unnamed
 " remove the delay when exiting insert mode (purely cosmetic, updates the statusline color immediately)
 " doesn't wait to receive key codes, doesn't affect multi-character mappings (imap jk <Esc> won't work)
 if ! has('gui_running')
-  set ttimeoutlen=10
+  set ttimeoutlen=1
   augroup FastEscape
     autocmd!
-    autocmd InsertEnter * set timeoutlen=100
+    autocmd InsertEnter * set timeoutlen=1
     autocmd InsertLeave * set timeoutlen=1000
   augroup END
 endif
@@ -474,7 +474,6 @@ Plug 'fatih/vim-go', { 'for': 'go' } "{{{
   let g:go_highlight_functions = 1
   let g:go_highlight_methods = 1
   let g:go_fmt_fail_silently = 1
-  " let g:go_fmt_experimental = 1 " doesn't seem to work
 "}}}
 Plug 'rking/ag.vim'
 Plug 'sentientmachine/Pretty-Vim-Python', { 'for': 'python' }
