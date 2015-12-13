@@ -16,3 +16,6 @@
 [submodule ".tmux/plugins/tpm"]
 	path = .tmux/plugins/tpm
 	url = git@github.com:tmux-plugins/tpm.git
+[submodule "/Users/jelliott/.local/share/tacklebox"]
+	path = /Users/jelliott/.local/share/tacklebox
+	url = git@github.com:justinmayer/tacklebox.git

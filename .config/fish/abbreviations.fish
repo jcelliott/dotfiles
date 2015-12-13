@@ -10,6 +10,7 @@ abbr_add 'ga=git add'
 abbr_add 'gsa=git submodule add' # gsa <repo> <directory>
 abbr_add 'gsi=git submodule init'
 abbr_add 'gsu=git submodule update'
+abbr_add 'gss=git submodule status'
 abbr_add 'gsuu=git submodule foreach git pull origin master'
 abbr_add 'gcm=git checkout master'
 abbr_add 'gch=git checkout'
@@ -58,3 +59,5 @@ abbr_add 'sf=source ~/.config/fish/config.fish'
 abbr_add 's=sudo'
 abbr_add 'se=sudo -E'
 abbr_add 'sudoe=sudo -E'
+
+abbr_add 'rp=rsync -rltp --partial --info=progress2'
