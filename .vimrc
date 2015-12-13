@@ -537,12 +537,21 @@ Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' } "{{{
 Plug 'kylef/apiblueprint.vim', { 'for': 'apiblueprint' }
 Plug 'dbakker/vim-lint'
 Plug 'mustache/vim-mustache-handlebars'
-Plug 'KabbAmine/zeavim.vim' "{{{
-  let g:zv_disable_mapping = 1
-  nmap <leader>d <Plug>Zeavim
-  xmap <leader>d <Plug>ZVVisSelection
-  nmap <leader>D <Plug>ZVKeyword
-  " nmap <leader>DD <Plug>ZVKeyDocset
+" Dash / Zeal documentation {{{
+if(system("uname") =~ "Darwin")
+    Plug 'rizzatti/dash.vim' "{{{
+      nmap <silent> <leader>d <Plug>DashSearch
+      nmap <leader>D :Dash<space>
+    "}}}
+else
+    Plug 'KabbAmine/zeavim.vim' "{{{
+      let g:zv_disable_mapping = 1
+      nmap <leader>d <Plug>Zeavim
+      xmap <leader>d <Plug>ZVVisSelection
+      nmap <leader>D <Plug>ZVKeyword
+      " nmap <leader>DD <Plug>ZVKeyDocset
+    "}}}
+endif
 "}}}
 Plug 'gregsexton/gitv', { 'on': 'Gitv' } "{{{
   let g:Gitv_OpenHorizontal = 'auto'
@@ -553,6 +562,9 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 Plug 'elixir-lang/vim-elixir'
 Plug 'dzeban/vim-log-syntax'
+Plug 'tmux-plugins/vim-tmux-focus-events'
+Plug 'cespare/vim-toml', { 'for': 'toml' }
+Plug 'mrk21/yaml-vim', { 'for': 'yaml' }  " fixes indentation
 
 " Unused {{{
 " Plug 'benmills/vimux' "{{{
