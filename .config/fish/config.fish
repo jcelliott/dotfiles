@@ -16,23 +16,50 @@ if not set -q fish_user_abbreviations
   abbr_set
 end
 
+# this only sets the variables if they aren't defined
+set_fish_colors
+
+# Editor
+set -x EDITOR vim
+
+if available vimpager
+  set -x MANPAGER vimpager
+end
+
+### Program-specific settings ###
+
+# ls
 if test $_platform = "darwin"
   set -x LS_COLORS (bash -c 'eval `gdircolors ~/.config/.dircolors`; echo $LS_COLORS')
 else
   set -x LS_COLORS (bash -c 'eval `dircolors ~/.config/.dircolors`; echo $LS_COLORS')
 end
 
-# this only sets the variables if they aren't defined
-set_fish_colors
+# grep
+set -x GREP_OPTIONS "--color=auto"
+
+# rsync
+set -x RSYNC_PARTIAL_DIR .rsync-tmp
+
+# less
+set -x LESS -riW
+
+### PATH ###
 
 # Go
 set -x GOPATH "$HOME/projects/go"
+if test $_platform = "darwin"
+  # macports go root directory
+  set -x GOROOT "/opt/local/lib/go"
+end
 
 # Path
 if not set -q -U fish_user_paths
   if test $_platform = "darwin"
     # path for macports
     set -U fish_user_paths "/opt/local/bin" "/opt/local/sbin"
+    # path for local python packages (pip install --user)
+    set -U fish_user_paths $fish_user_paths "$HOME/Library/Python/2.7/bin"
   end
   set -U fish_user_paths $fish_user_paths "$HOME/bin" "$GOPATH/bin" "$HOME/.local/bin" "/usr/local/bin"
 end
@@ -42,9 +69,6 @@ if test $_platform = "darwin"
   # manpath for macports
   set -x MANPATH "/opt/local/share/man" "/usr/share/man" "/usr/local/share/man" $MANPATH
 end
-
-# Editor
-set -x EDITOR vim
 
 # Fish Git prompt
 set __fish_git_prompt_color yellow
@@ -68,16 +92,11 @@ source "$HOME/.local/share/virtualfish/virtual.fish"
 # Autojump
 if test -f /usr/share/autojump/autojump.fish
   source /usr/share/autojump/autojump.fish
+else if test -f /opt/local/etc/profile.d/autojump.fish
+  source /opt/local/etc/profile.d/autojump.fish
 else if test -f $HOME/.local/etc/profile.d/autojump.fish
   # installed with ./install.py -d ~/.local
   source $HOME/.local/etc/profile.d/autojump.fish
 else
   perror "autojump not installed"
 end
-
-# oh-my-fish
-set fish_path $HOME/.config/fish/oh-my-fish
-. $fish_path/oh-my-fish.fish
-Plugin 'peco'
-# custom
-Plugin 'grc'
