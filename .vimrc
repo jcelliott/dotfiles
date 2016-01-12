@@ -374,6 +374,9 @@ map <silent> \l :syntax sync fromstart<CR>:redraw!<CR>
 " toggle spell check
 nmap <silent> <F7> :setlocal spell! spelllang=en_us<CR>
 imap <silent> <F7> <C-o>:setlocal spell! spelllang=en_us<CR>
+
+" <leader>G recursively searches for the word under the cursor using Ag
+map <leader>G :execute 'Ag ' . expand('<cword>')<CR>
 "}}}
 
 "------------------------------------------------------------------------------
