@@ -568,6 +568,7 @@ Plug 'dzeban/vim-log-syntax'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'cespare/vim-toml', { 'for': 'toml' }
 Plug 'mrk21/yaml-vim', { 'for': 'yaml' }  " fixes indentation
+Plug 'tclh123/vim-thrift', { 'for': 'thrift' }
 
 " Unused {{{
 " Plug 'benmills/vimux' "{{{
