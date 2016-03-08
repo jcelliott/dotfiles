@@ -11,6 +11,7 @@ abbr_add 'gsa=git submodule add' # gsa <repo> <directory>
 abbr_add 'gsi=git submodule init'
 abbr_add 'gsu=git submodule update'
 abbr_add 'gss=git submodule status'
+abbr_add 'gsd=git submodule deinit'
 abbr_add 'gsuu=git submodule foreach git pull origin master'
 abbr_add 'gcm=git checkout master'
 abbr_add 'gch=git checkout'
@@ -50,8 +51,9 @@ abbr_add 'dc=docker-compose'
 abbr_add 'dcu=docker-compose up -d'
 abbr_add 'dcs=docker-compose stop'
 
+abbr_add 'dm=docker-machine'
+
 abbr_add 'c=cat'
-abbr_add 'e=echo'
 
 abbr_add 'fc=source ~/.config/fish/config.fish'
 abbr_add 'sf=source ~/.config/fish/config.fish'
