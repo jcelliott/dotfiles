@@ -42,7 +42,7 @@ set -x GREP_OPTIONS "--color=auto"
 set -x RSYNC_PARTIAL_DIR .rsync-tmp
 
 # less
-set -x LESS -riW
+set -x LESS -RiW
 
 ### PATH ###
 
@@ -55,13 +55,15 @@ end
 
 # Path
 if not set -q -U fish_user_paths
+  set -U fish_user_paths "$HOME/bin" "$GOPATH/bin" "$HOME/.local/bin"
   if test $_platform = "darwin"
-    # path for macports
-    set -U fish_user_paths "/opt/local/bin" "/opt/local/sbin"
     # path for local python packages (pip install --user)
-    set -U fish_user_paths $fish_user_paths "$HOME/Library/Python/2.7/bin"
+    set -U fish_user_paths $fish_user_paths "$HOME/Library/Python/3.5/bin"
+    # set -U fish_user_paths $fish_user_patsh "$HOME/Library/Python/2.7/bin"
+    # path for macports
+    set -U fish_user_paths $fish_user_paths "/opt/local/bin" "/opt/local/sbin"
   end
-  set -U fish_user_paths $fish_user_paths "$HOME/bin" "$GOPATH/bin" "$HOME/.local/bin" "/usr/local/bin"
+  set -U fish_user_paths $fish_user_paths "/usr/local/bin"
 end
 
 # Manpath
@@ -86,17 +88,19 @@ set __fish_git_prompt_showuntrackedfiles true
 set -g VIRTUALFISH_COMPAT_ALIASES
 source "$HOME/.local/share/virtualfish/virtual.fish"
 
+fundle plugin 'oh-my-fish/plugin-peco'
+fundle plugin 'tuvistavie/fish-completion-helpers'
+fundle init
+
+# fasd
+if type -q fasd
+  # hook fasd into fish preexec event
+  function __fasd_run -e fish_preexec
+    command fasd --proc (command fasd --sanitize "$argv") > "/dev/null" 2>&1 &
+  end
+else
+  perror "fasd is not installed"
+end
+
 # Base16 Shell
 # eval sh $HOME/.base16-default.dark.sh
-
-# Autojump
-if test -f /usr/share/autojump/autojump.fish
-  source /usr/share/autojump/autojump.fish
-else if test -f /opt/local/etc/profile.d/autojump.fish
-  source /opt/local/etc/profile.d/autojump.fish
-else if test -f $HOME/.local/etc/profile.d/autojump.fish
-  # installed with ./install.py -d ~/.local
-  source $HOME/.local/etc/profile.d/autojump.fish
-else
-  perror "autojump not installed"
-end
