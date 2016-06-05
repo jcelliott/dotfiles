@@ -468,12 +468,11 @@ Plug 'tomtom/tcomment_vim' "{{{
   " use <leader>c for comments (gcc from tComment)
   nmap <leader>c gcc
   xmap <leader>c gc
-  let g:tcomment_types = { 'tmux': '# ' }
 "}}}
 Plug 'kana/vim-textobj-user', { 'for': 'ruby' } " only used for vim-textobj-rubyblock
 Plug 'nelstrom/vim-textobj-rubyblock', { 'for': 'ruby' }
 Plug 'Raimondi/delimitMate'
-Plug 'zaiste/tmux.vim', { 'for': 'tmux' } " tmux syntax
+Plug 'tmux-plugins/vim-tmux'
 Plug 'digitaltoad/vim-jade', { 'for': 'jade' }
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim', { 'on': 'Gist' } "{{{
@@ -487,7 +486,6 @@ Plug 'fatih/vim-go', { 'for': 'go' } "{{{
   let g:go_fmt_fail_silently = 1
 "}}}
 Plug 'rking/ag.vim'
-Plug 'sentientmachine/Pretty-Vim-Python', { 'for': 'python' }
 Plug 'fs111/pydoc.vim', { 'for': 'python' } "{{{
   let g:pydoc_cmd = 'python -m pydoc'
   let g:pydoc_window_lines=15
@@ -498,7 +496,7 @@ Plug 'SirVer/ultisnips', { 'on': [] } "{{{
   let g:UltiSnipsSnippetDirectories=["UltiSnips", "ultisnips"]
 "}}}
 Plug 'honza/vim-snippets' " snippets collection
-Plug 'Valloric/YouCompleteMe', { 'do': './install.sh', 'on': [] } " {{{
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] } " {{{
   " let g:ycm_complete_in_strings = 0
   let g:ycm_collect_identifiers_from_tags_files = 1
   let g:ycm_seed_identifiers_with_syntax = 1
@@ -572,11 +570,13 @@ Plug 'gregsexton/gitv', { 'on': 'Gitv' } "{{{
 Plug 'junegunn/vim-peekaboo'
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 Plug 'elixir-lang/vim-elixir'
+Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
 Plug 'dzeban/vim-log-syntax'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'cespare/vim-toml', { 'for': 'toml' }
 Plug 'mrk21/yaml-vim', { 'for': 'yaml' }  " fixes indentation
 Plug 'tclh123/vim-thrift', { 'for': 'thrift' }
+Plug 'niklasl/vim-rdf'
 
 " Unused {{{
 " Plug 'benmills/vimux' "{{{
