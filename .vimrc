@@ -286,13 +286,23 @@ endfunction
 nnoremap <silent> <leader><Space> :call ReallyClear()<CR>
 
 " <leader>/ highlights occurrences of the word under cursor. Like * but doesn't move
-map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
+map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<CR><Bar>:%s///gn<CR>
 
 " What is the current syntax highlighting group?
 map \h :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#") . " BG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"bg#")<CR>
 
 " Toggle show whitespace
 map \w :<C-U>setlocal listchars=tab:‣·,trail:␠,eol:⏎ list! list? <CR>
+
+" toggle between number and relativenumber
+nnoremap <leader>n :call NumberToggle()<CR>
+
+" <leader>G recursively searches for the word under the cursor using Ag
+map <leader>G :execute 'Ag ' . expand('<cword>')<CR>
+
+" \n prints number of occurences of last search term
+nnoremap \n :%s///gn<CR>
+
 "}}}
 
 " ----- Commands ----- "{{{
@@ -362,9 +372,6 @@ map <leader>- :Sexplore<CR>
 map <silent> <leader>q :bd<CR>
 "}}}
 
-" toggle between number and relativenumber
-nnoremap \n :call NumberToggle()<CR>
-
 " redraw screen
 map <silent> \l :syntax sync fromstart<CR>:redraw!<CR>
 
@@ -376,8 +383,6 @@ map <silent> \l :syntax sync fromstart<CR>:redraw!<CR>
 nmap <silent> <F7> :setlocal spell! spelllang=en_us<CR>
 imap <silent> <F7> <C-o>:setlocal spell! spelllang=en_us<CR>
 
-" <leader>G recursively searches for the word under the cursor using Ag
-map <leader>G :execute 'Ag ' . expand('<cword>')<CR>
 "}}}
 
 "------------------------------------------------------------------------------
