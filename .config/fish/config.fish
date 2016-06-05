@@ -96,7 +96,7 @@ fundle init
 if type -q fasd
   # hook fasd into fish preexec event
   function __fasd_run -e fish_preexec
-    command fasd --proc (command fasd --sanitize "$argv") > "/dev/null" 2>&1 &
+    command fasd --proc (command fasd --sanitize "$argv") > "/dev/null" 2>&1
   end
 else
   perror "fasd is not installed"
