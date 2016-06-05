@@ -58,9 +58,9 @@ set display=lastline    " show as much of last line as possible, instead of "@"
 
 set formatoptions=cqnlj " settings for formatting (see :help fo-table)
 set textwidth=80        " wrap lines at 100 chars
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
 set smarttab
 " set nosmarttab
 set expandtab           " expand tabs to spaces
@@ -69,7 +69,8 @@ set autoindent
 set nojoinspaces
 
 set pastetoggle=<F2>    " toggle paste mode (while paste is enabled, all formatting is disabled)
-                        " OR :set invpaste<CR>:set paste?<CR>
+                        " OR :set paste!<CR>:set paste?<CR>
+
 set ttyfast             " improves redrawing for fast terminal connection
 " set lazyredraw          " don't redraw the screen for non-typed commands (smoother looking plugins)
 " doesn't print some command line messages I expect
