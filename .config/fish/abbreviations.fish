@@ -20,6 +20,7 @@ abbr_add 'gd=git diff'
 abbr_add 'gdc=git diff --cached'
 abbr_add 'gds=git diff --stat'
 abbr_add 'gmm=git merge master'
+abbr_add 'gba=git branch -a'
 
 abbr_add 'v=vim'
 abbr_add 'ev=vim ~/.vimrc'
