@@ -694,43 +694,29 @@ endif
 
 " make keypad work in vim with iTerm on OS X
 function! MacKeypadFix()
-  map <Esc>Oq 1
-  map <Esc>Or 2
-  map <Esc>Os 3
-  map <Esc>Ot 4
-  map <Esc>Ou 5
-  map <Esc>Ov 6
-  map <Esc>Ow 7
-  map <Esc>Ox 8
-  map <Esc>Oy 9
-  map <Esc>Op 0
-  map <Esc>On .
-  map <Esc>OQ /
-  map <Esc>OR *
-  map <kPlus> +
-  map <Esc>OS -
-  map! <Esc>Oq 1
-  map! <Esc>Or 2
-  map! <Esc>Os 3
-  map! <Esc>Ot 4
-  map! <Esc>Ou 5
-  map! <Esc>Ov 6
-  map! <Esc>Ow 7
-  map! <Esc>Ox 8
-  map! <Esc>Oy 9
-  map! <Esc>Op 0
-  map! <Esc>On .
-  map! <Esc>OQ /
-  map! <Esc>OR *
-  map! <kPlus> +
-  map! <Esc>OS -
+  set <kPlus>=Ok
+  set <kMinus>=Om
+  set <kDivide>=Oo
+  set <kMultiply>=Oj
+  set <kEnter>=OM
+  set <kPoint>=On
+  set <k0>=Op
+  set <k1>=Oq
+  set <k2>=Or
+  set <k3>=Os
+  set <k4>=Ot
+  set <k5>=Ou
+  set <k6>=Ov
+  set <k7>=Ow
+  set <k8>=Ox
+  set <k9>=Oy
+  " '=' key above keypad on Microsoft Ergonomic Keyboard
+  map <Esc>OX =
+  map! <Esc>OX =
 endfunction
 
-if has("unix")
-  let s:uname = system("uname")
-  if s:uname == "Darwin\n"
-    call MacKeypadFix()
-  endif
+if(system("uname") =~ "Darwin")
+  call MacKeypadFix()
 endif
 "}}}
 
