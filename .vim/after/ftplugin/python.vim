@@ -6,7 +6,7 @@ set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 
-let g:syntastic_python_checkers = ['python', 'pylint', 'pep8']
+let g:syntastic_python_checkers = ['python', 'pylint', 'pycodestyle']
 
 " Add site-packages from virtualenv to vim path
 " py << EOF
