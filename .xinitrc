@@ -17,7 +17,11 @@ fi
 
 _locker="i3lock -c 111111 -d -I 10"
 xss-lock -- "$_locker" &
-xautolock -time 8 -corners "00+0" -cornerdelay 3 -cornerredelay 10 -locker "$_locker" &
+xautolock -time 10 -corners "00+0" -cornerdelay 2 -cornerredelay 10 -locker "$_locker" &
+
+export SSH_ASKPASS=/usr/lib/ssh/ssh-askpass
+keychain id_rsa
+[ -f ~/.keychain/$HOSTNAME-sh ] && . ~/.keychain/$HOSTNAME-sh 2>/dev/null
 
 exec i3 -c ~/.config/i3/config
 
