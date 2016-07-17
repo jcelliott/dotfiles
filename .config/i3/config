@@ -164,3 +164,6 @@ bar {
         tray_output primary
         separator_symbol " | "
 }
+
+# Application-specific settings
+for_window [class="Steam"] floating enable
