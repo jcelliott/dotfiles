@@ -58,8 +58,8 @@ if not set -q -U fish_user_paths
   set -U fish_user_paths "$HOME/bin" "$GOPATH/bin" "$HOME/.local/bin"
   if test $_platform = "darwin"
     # path for local python packages (pip install --user)
+    set -U fish_user_paths $fish_user_paths "$HOME/Library/Python/2.7/bin"
     set -U fish_user_paths $fish_user_paths "$HOME/Library/Python/3.5/bin"
-    # set -U fish_user_paths $fish_user_patsh "$HOME/Library/Python/2.7/bin"
     # path for macports
     set -U fish_user_paths $fish_user_paths "/opt/local/bin" "/opt/local/sbin"
   end
