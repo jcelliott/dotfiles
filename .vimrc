@@ -653,7 +653,7 @@ set t_Co=256
 " --- Colorscheme ---
 " let g:base16_shell_path="$HOME/.config/base16-shell"
 let base16colorspace=256
-colorscheme base16-default
+colorscheme base16-default-dark
 
 " --- General Highlights ---
 " :h cterm-colors
