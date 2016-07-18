@@ -577,6 +577,9 @@ Plug 'cespare/vim-toml', { 'for': 'toml' }
 Plug 'mrk21/yaml-vim', { 'for': 'yaml' }  " fixes indentation
 Plug 'tclh123/vim-thrift', { 'for': 'thrift' }
 Plug 'niklasl/vim-rdf'
+Plug 'leafgarland/typescript-vim'
+Plug 'Shougo/vimproc.vim', { 'for': 'typescript' } " dependency for tsuquyomi
+Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 
 " Unused {{{
 " Plug 'benmills/vimux' "{{{
