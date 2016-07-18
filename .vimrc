@@ -369,7 +369,9 @@ nnoremap <leader>y ggyG`` :echo "yanked entire file"<CR>
 map <leader>- :Sexplore<CR>
 
 " close current buffer
-map <silent> <leader>q :bd<CR>
+" map <silent> <leader>q :bd<CR>
+" :Bdelete from moll/vim-bbye plugin
+map <silent> <leader>q :Bdelete<CR>
 "}}}
 
 " redraw screen
@@ -580,6 +582,7 @@ Plug 'niklasl/vim-rdf'
 Plug 'leafgarland/typescript-vim'
 Plug 'Shougo/vimproc.vim', { 'for': 'typescript' } " dependency for tsuquyomi
 Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
+Plug 'moll/vim-bbye'
 
 " Unused {{{
 " Plug 'benmills/vimux' "{{{
