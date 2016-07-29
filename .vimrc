@@ -583,6 +583,7 @@ Plug 'leafgarland/typescript-vim'
 Plug 'Shougo/vimproc.vim', { 'for': 'typescript' } " dependency for tsuquyomi
 Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 Plug 'moll/vim-bbye'
+Plug 'vim-scripts/ReplaceWithRegister'
 
 " Unused {{{
 " Plug 'benmills/vimux' "{{{
