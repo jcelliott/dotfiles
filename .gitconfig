@@ -6,6 +6,9 @@
 	editor = vim
 	excludesfile = ~/.gitignore_global
 
+[diff]
+	algorithm = patience
+
 [color]
 	ui = auto
 
