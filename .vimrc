@@ -507,7 +507,10 @@ Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] } " {{{
 Plug 'jmcantrell/vim-virtualenv' "{{{
   let g:virtualenv_auto_activate = 1
 "}}}
-Plug 'elzr/vim-json', { 'for': 'json' }
+Plug 'elzr/vim-json', { 'for': 'json' } " {{{
+  let g:vim_json_syntax_conceal = 0
+  let g:vim_json_warnings = 0
+"}}}
 Plug 'jayflo/vim-skip' "{{{
   " let g:vimskip_wraptocenter = 1
 "}}}
@@ -551,6 +554,7 @@ Plug 'mustache/vim-mustache-handlebars'
 " Dash / Zeal documentation {{{
 if(system("uname") =~ "Darwin")
     Plug 'rizzatti/dash.vim' "{{{
+      let g:dash_activate = 0
       nmap <silent> <leader>d <Plug>DashSearch
       nmap <leader>D :Dash<space>
     "}}}
@@ -573,6 +577,8 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 Plug 'elixir-lang/vim-elixir'
 Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
+" hack for this issue: https://github.com/slashmili/alchemist.vim/issues/33
+Plug 'larrylv/ycm-elixir', { 'for': 'elixir' }
 Plug 'dzeban/vim-log-syntax'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'cespare/vim-toml', { 'for': 'toml' }
@@ -584,6 +590,7 @@ Plug 'Shougo/vimproc.vim', { 'for': 'typescript' } " dependency for tsuquyomi
 Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 Plug 'moll/vim-bbye'
 Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'lambdatoast/elm.vim'
 
 " Unused {{{
 " Plug 'benmills/vimux' "{{{
