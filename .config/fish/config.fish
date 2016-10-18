@@ -71,6 +71,7 @@ if test $_platform = "darwin"
   # manpath for macports
   set -x MANPATH "/opt/local/share/man" "/usr/share/man" "/usr/local/share/man" $MANPATH
 end
+set -x MANPATH "$HOME/.local/share/man" $MANPATH
 
 # Fish Git prompt
 set __fish_git_prompt_color yellow
