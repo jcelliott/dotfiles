@@ -34,5 +34,18 @@ function fish_user_key_bindings --description "User key bindings for fish"
   bind -M insert \eH beginning-of-line
   bind -M insert \eL end-of-line
 
+  # prompt-edit mode
+  bind -e \ep
+  bind -m prompt-edit \ep force-repaint
+  bind -e -M insert \ep
+  bind -M insert -m prompt-edit \ep force-repaint
+
+  # bind -M prompt-edit g toggle-git
+
+  bind -M prompt-edit -m default \cc force-repaint
+  bind -M prompt-edit -m default \e force-repaint
+  bind -M prompt-edit -m default \n force-repaint
+  bind -M prompt-edit \cd exit
+
 end
 
