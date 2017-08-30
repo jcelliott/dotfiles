@@ -95,7 +95,7 @@ function fish_prompt --description 'Write out the prompt'
 		if not set -q __fish_prompt_status
 			set -g __fish_prompt_status (set_color $fish_color_status)
 		end
-		set prompt_status "$__fish_prompt_status [$last_status]$__fish_prompt_normal"
+		set prompt_status "$__fish_prompt_status""[$last_status]""$__fish_prompt_normal"
 	end
 
   if set -q CMD_DURATION
@@ -109,4 +109,6 @@ function fish_prompt --description 'Write out the prompt'
 	echo -ns "$__fish_prompt_user" "$__fish_prompt_host" ' ' "$__fish_prompt_cwd" (prompt_pwd) (__fish_git_prompt) "$__fish_prompt_normal" "$prompt_status" (fish_vi_prompt_mode) ' '
     # short prompt
 	# echo -ns ' ' "$__fish_prompt_cwd" (prompt_pwd) "$__fish_prompt_normal" "$prompt_status" (fish_vi_prompt_mode) ' '
+    # minimal prompt
+	# echo -ns ' ' "$prompt_status" (fish_vi_prompt_mode) ' '
 end
