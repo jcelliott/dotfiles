@@ -98,6 +98,7 @@ source "$HOME/.local/share/virtualfish/virtual.fish"
 
 fundle plugin 'oh-my-fish/plugin-peco'
 fundle plugin 'tuvistavie/fish-completion-helpers'
+fundle plugin 'edc/bass'
 fundle init
 
 # fasd
