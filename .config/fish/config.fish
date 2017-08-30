@@ -64,6 +64,9 @@ if not set -q -U fish_user_paths
     set -U fish_user_paths $fish_user_paths "/opt/local/bin" "/opt/local/sbin"
   end
   set -U fish_user_paths $fish_user_paths "/usr/local/bin"
+
+  # Rust
+  set -U fish_user_paths $fish_user_paths "$HOME/.cargo/bin"
 end
 
 # Manpath
