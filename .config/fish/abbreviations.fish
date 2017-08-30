@@ -67,4 +67,12 @@ abbr_add 'sudoe=sudo -E'
 
 abbr_add 'rp=rsync -rltp --partial --info=progress2'
 
+abbr_add 'k=kubectl'
+abbr_add 'kg=kubectl get'
+abbr_add 'kd=kubectl describe'
+abbr_add 'ke=kubectl exec'
+abbr_add 'kc=kubectl config'
+abbr_add 'kcu=kubectl config use-context'
+abbr_add 'kcc=kubectl config use-context'
+
 abbr_add 'chmox=chmod +x'
