@@ -1,6 +1,7 @@
 # Set fish user abbreviations
 abbr_add 'g=git'
 abbr_add 'gst=git status'
+abbr_add 'gs=git status'
 abbr_add 'gc=git commit -v'
 # abbr_add 'glg=git log --all --stat --graph --decorate'
 abbr_add 'glg=git log-detail'
@@ -21,6 +22,7 @@ abbr_add 'gdc=git diff --cached'
 abbr_add 'gds=git diff --stat'
 abbr_add 'gmm=git merge master'
 abbr_add 'gba=git branch -a'
+abbr_add 'gr=git remote -v'
 
 abbr_add 'v=vim'
 abbr_add 'ev=vim ~/.vimrc'
@@ -64,3 +66,5 @@ abbr_add 'se=sudo -E'
 abbr_add 'sudoe=sudo -E'
 
 abbr_add 'rp=rsync -rltp --partial --info=progress2'
+
+abbr_add 'chmox=chmod +x'
