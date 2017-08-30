@@ -17,6 +17,8 @@ function fish_right_prompt --description 'Write out the right prompt'
       if status --is-interactive
         if set -q DOCKER_MACHINE_NAME
           set -g __fish_prompt_docker_machine "[$DOCKER_MACHINE_NAME]"
+        else if set -q DOCKER_HOST
+          set -g __fish_prompt_docker_machine "[DOCKER]"
         else
           set -g __fish_prompt_docker_machine
         end
