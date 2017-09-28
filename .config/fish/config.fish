@@ -47,10 +47,12 @@ set -x LESS -RiW
 ### PATH ###
 
 # Go
-set -x GOPATH "$HOME/projects/go"
+set -x GOPATH "$HOME/src/go"
 if test $_platform = "darwin"
   # macports go root directory
-  set -x GOROOT "/opt/local/lib/go"
+  # set -x GOROOT "/opt/local/lib/go"
+  # brew go root directory
+  set -x GOROOT "/usr/local/opt/go/libexec"
 end
 
 # Path
@@ -61,7 +63,7 @@ if not set -q -U fish_user_paths
     set -U fish_user_paths $fish_user_paths "$HOME/Library/Python/2.7/bin"
     set -U fish_user_paths $fish_user_paths "$HOME/Library/Python/3.5/bin"
     # path for macports
-    set -U fish_user_paths $fish_user_paths "/opt/local/bin" "/opt/local/sbin"
+    # set -U fish_user_paths $fish_user_paths "/opt/local/bin" "/opt/local/sbin"
   end
   set -U fish_user_paths $fish_user_paths "/usr/local/bin"
 
