@@ -13,7 +13,7 @@ function fish_vi_prompt_mode --description 'Changes the prompt based on the vi m
     case replace_one
       set_color red
       echo -n "r"
-    case prompt-edit
+    case prompt_edit
       set_color --bold black
       echo -n "(P)"
     case "*"

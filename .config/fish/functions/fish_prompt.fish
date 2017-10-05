@@ -105,8 +105,14 @@ function fish_prompt --description 'Write out the prompt'
     end
   end
 
+    if set -q __display_git_prompt
+        set __git_prompt (__fish_git_prompt)
+    else
+        set __git_prompt " "
+    end
+
     # full prompt
-	echo -ns "$__fish_prompt_user" "$__fish_prompt_host" ' ' "$__fish_prompt_cwd" (prompt_pwd) (__fish_git_prompt) "$__fish_prompt_normal" "$prompt_status" (fish_vi_prompt_mode) ' '
+	echo -ns "$__fish_prompt_user" "$__fish_prompt_host" ' ' "$__fish_prompt_cwd" (prompt_pwd) "$__git_prompt" "$__fish_prompt_normal" "$prompt_status" (fish_vi_prompt_mode) ' '
     # short prompt
 	# echo -ns ' ' "$__fish_prompt_cwd" (prompt_pwd) "$__fish_prompt_normal" "$prompt_status" (fish_vi_prompt_mode) ' '
     # minimal prompt
