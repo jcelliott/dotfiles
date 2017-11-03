@@ -78,5 +78,6 @@ abbr_add 'kcf=kubectl create -f'
 abbr_add 'kaf=kubectl apply -f'
 abbr_add 'kp=kubectl port-forward'
 abbr_add 'kls=kubectl logs -f --since 1s'
+abbr_add 'ks=kubectl_context_switch_peco'
 
 abbr_add 'chmox=chmod +x'
