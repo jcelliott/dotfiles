@@ -23,6 +23,7 @@ abbr_add 'gds=git diff --stat'
 abbr_add 'gmm=git merge master'
 abbr_add 'gba=git branch -a'
 abbr_add 'gr=git remote -v'
+abbr_add 'gb=peco-select-git-branch'
 
 abbr_add 'v=vim'
 abbr_add 'ev=vim ~/.vimrc'
