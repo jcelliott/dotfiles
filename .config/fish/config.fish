@@ -114,5 +114,11 @@ else
   perror "fasd is not installed"
 end
 
+
+if test -d $HOME/.asdf
+  # asdf is installed
+  source $HOME/.asdf/asdf.fish
+end
+
 # Base16 Shell
 # eval sh $HOME/.base16-default.dark.sh
