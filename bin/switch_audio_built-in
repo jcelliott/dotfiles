@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# uses switchaudio-osx (https://github.com/deweller/switchaudio-osx)
+
+/usr/local/bin/SwitchAudioSource -s "Built-in Output"
