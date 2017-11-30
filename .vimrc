@@ -91,10 +91,14 @@ endif
 " Tell vim to remember certain things when we exit
 "  '25  :  marks will be remembered for up to 25 previously edited files
 "  "1000:  will save up to 1000 lines for each register
-"  :100  :  up to 50 lines of command-line history will be remembered
+"  :100 :  up to 100 lines of command-line history will be remembered
 "  %    :  saves and restores the buffer list
 "  n... :  where to save the viminfo files
-set viminfo='25,\"10000,:100,%,n$HOME/.vim/.viminfo
+if has('nvim')
+    set shada='50,\"10000,:100,%,n$HOME/.vim/.nvim.shada
+else
+    set viminfo='50,\"10000,:100,%,n$HOME/.vim/.viminfo
+endif
 
 " Enable syntax highlighting and keep current colors
 syntax enable
@@ -459,7 +463,8 @@ Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-dispatch', { 'on': 'Dispatch' } "{{{
   " map <leader>d :Dispatch<CR>
 "}}}
-Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-abolish' " 'crs' (coerce to snake_case), 'crc' (coerce to camelCase)
+Plug 'tpope/vim-sleuth'
 Plug 'majutsushi/tagbar', { 'on': ['TagbarOpenAutoClose'] } "{{{
   let g:tagbar_autofocus = 1
   let g:tagbar_sort = 0
@@ -476,7 +481,7 @@ Plug 'nelstrom/vim-textobj-rubyblock', { 'for': 'ruby' }
 Plug 'Raimondi/delimitMate'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'digitaltoad/vim-jade', { 'for': 'jade' }
-Plug 'mattn/webapi-vim'
+Plug 'mattn/webapi-vim' " dependency of mattn/gist-vim
 Plug 'mattn/gist-vim', { 'on': 'Gist' } "{{{
   let g:gist_detect_filetype = 1
   let g:gist_open_browser_after_post = 1
@@ -498,12 +503,6 @@ Plug 'SirVer/ultisnips', { 'on': [] } "{{{
   let g:UltiSnipsSnippetDirectories=["UltiSnips", "ultisnips"]
 "}}}
 Plug 'honza/vim-snippets' " snippets collection
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] } " {{{
-  " let g:ycm_complete_in_strings = 0
-  let g:ycm_collect_identifiers_from_tags_files = 1
-  let g:ycm_seed_identifiers_with_syntax = 1
-  let g:ycm_autoclose_preview_window_after_insertion = 1
-"}}}
 Plug 'jmcantrell/vim-virtualenv' "{{{
   let g:virtualenv_auto_activate = 1
 "}}}
@@ -528,9 +527,6 @@ Plug 't9md/vim-quickhl', { 'on': ['<Plug>(quickhl-manual-this)','<Plug>(quickhl-
   nmap \m <Plug>(quickhl-cword-toggle)
   let g:quickhl_cword_hl_command = 'link QuickhlCword Visual'
 "}}}
-Plug 'wellle/targets.vim' "{{{
-  let g:targets_pairs = '()b {}B []r <> ' " disable 'a' for 'angle-brackets'
-"}}}
 Plug 'b4winckler/vim-angry'
 Plug 'christoomey/vim-tmux-navigator' "{{{
   let g:tmux_navigator_no_mappings = 1
@@ -548,13 +544,12 @@ Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' } "{{{
   let g:gundo_preview_height = 20
   let g:gundo_close_on_revert = 1
 "}}}
-Plug 'kylef/apiblueprint.vim', { 'for': 'apiblueprint' }
 Plug 'dbakker/vim-lint'
 Plug 'mustache/vim-mustache-handlebars'
 " Dash / Zeal documentation {{{
 if(system("uname") =~ "Darwin")
     Plug 'rizzatti/dash.vim' "{{{
-      let g:dash_activate = 0
+      " let g:dash_activate = 0
       nmap <silent> <leader>d <Plug>DashSearch
       nmap <leader>D :Dash<space>
     "}}}
@@ -577,8 +572,6 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 Plug 'elixir-lang/vim-elixir'
 Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
-" hack for this issue: https://github.com/slashmili/alchemist.vim/issues/33
-Plug 'larrylv/ycm-elixir', { 'for': 'elixir' }
 Plug 'dzeban/vim-log-syntax'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'cespare/vim-toml', { 'for': 'toml' }
@@ -590,7 +583,45 @@ Plug 'Shougo/vimproc.vim', { 'for': 'typescript' } " dependency for tsuquyomi
 Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 Plug 'moll/vim-bbye'
 Plug 'vim-scripts/ReplaceWithRegister'
-Plug 'lambdatoast/elm.vim'
+Plug 'lambdatoast/elm.vim', { 'for': 'elm' }
+Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+Plug 'mxw/vim-jsx', { 'for': 'jsx' }
+Plug 'rust-lang/rust.vim', { 'for': 'rust' }
+
+" --- Neovim-only plugins --- {{{
+if has('nvim')
+
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins', 'on': [] } "{{{
+    inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+    let g:deoplete#max_list = 20
+    let g:deoplete#auto_complete_delay = 10
+
+    " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+	" function! s:my_cr_function() abort
+	"   return deoplete#close_popup() . "\<CR>"
+	" endfunction
+"}}}
+
+" Broken
+" Plug 'awetzel/elixir.nvim', { 'for': 'elixir', 'do': 'yes \| ./install.sh' }
+
+"}}}
+
+" --- Vim-only plugins --- {{{
+else
+
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] } " {{{
+  " let g:ycm_complete_in_strings = 0
+  let g:ycm_collect_identifiers_from_tags_files = 1
+  let g:ycm_seed_identifiers_with_syntax = 1
+  let g:ycm_autoclose_preview_window_after_insertion = 1
+"}}}
+" hack for this issue: https://github.com/slashmili/alchemist.vim/issues/33
+Plug 'larrylv/ycm-elixir', { 'for': 'elixir' }
+
+endif
+"}}}
+
 
 " Unused {{{
 " Plug 'benmills/vimux' "{{{
@@ -619,21 +650,37 @@ Plug 'lambdatoast/elm.vim'
 "   let g:lua_interpreter_path = 'lua5.1'
 " "}}}
 " Plug 'dahu/VimLint'
+" Plug 'kylef/apiblueprint.vim', { 'for': 'apiblueprint' }
+" Plug 'wellle/targets.vim' "{{{
+"   let g:targets_pairs = '()b {}B []r <> ' " disable 'a' for 'angle-brackets'
+" "}}}
 "}}}
 
 call plug#end()
 
 " Manually loaded plugins {{{
+
 augroup plugins_load_insert_enter
-  autocmd!
-  autocmd InsertEnter * call plug#load('ultisnips', 'YouCompleteMe')
-                     \| call youcompleteme#Enable()
-                     \| autocmd! plugins_load_insert_enter
+autocmd!
+
+if has('nvim')
+    autocmd InsertEnter * call plug#load('deoplete.nvim')
+                       \| call deoplete#enable()
+else
+    autocmd InsertEnter * call plug#load('ultisnips', 'YouCompleteMe')
+                       \| call youcompleteme#Enable()
+                       \| autocmd! plugins_load_insert_enter
+end
+
 augroup END
 "}}}
 
-" built-in macros:
+" built-in plugins:
 runtime macros/matchit.vim
+
+" fixes performance issue with matchparen plugin
+let g:matchparen_timeout = 2
+let g:matchparen_insert_timeout = 2
 
 " Enable file type detection.
 " Also load indent files, to automatically do language-dependent indenting.
@@ -738,6 +785,13 @@ endif
 " UNSORTED / EXPERIMENTAL
 " -----------------------------------------------------------------------------
 "{{{
+
+function! PecoOpen()
+  for filename in split(system("find . -type f | peco"), "\n")
+    execute "e" filename
+  endfor
+endfunction
+nnoremap <Leader>op :call PecoOpen()<CR>
 
 " insert a line above the current line
 function! Add_blank_line_above()
