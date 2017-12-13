@@ -3,6 +3,7 @@ function set_fish_colors -d 'set fish user colors if not set or if --force is sp
     set -U _fish_colors_defined true
     psuccess "Setting fish user colors"
 
+    set -U fish_color_command blue
     set -U fish_color_user blue
     set -U fish_color_host cyan
     set -U fish_color_cwd green
