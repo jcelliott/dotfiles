@@ -72,8 +72,9 @@ set pastetoggle=<F2>    " toggle paste mode (while paste is enabled, all formatt
                         " OR :set paste!<CR>:set paste?<CR>
 
 set ttyfast             " improves redrawing for fast terminal connection
-" set lazyredraw          " don't redraw the screen for non-typed commands (smoother looking plugins)
-" doesn't print some command line messages I expect
+set lazyredraw          " don't redraw the screen for non-typed commands (smoother looking plugins)
+" ^ doesn't print some command line messages I expect
+set synmaxcol=256
 
 set clipboard=unnamed
 
@@ -298,7 +299,7 @@ map \w :<C-U>setlocal listchars=tab:‣·,trail:␠,eol:⏎ list! list? <CR>
 nnoremap <leader>n :call NumberToggle()<CR>
 
 " <leader>G recursively searches for the word under the cursor using Ag
-map <leader>G :execute 'Ag ' . expand('<cword>')<CR>
+" map <leader>G :execute 'Ag ' . expand('<cword>')<CR>
 
 " \n prints number of occurences of last search term
 nnoremap \n :%s///gn<CR>
@@ -435,7 +436,7 @@ Plug 'sjbach/lusty' "{{{
   map <silent> <leader>. :LustyJugglePrevious<CR>
   map <silent> <leader>f :LustyFilesystemExplorerFromHere<CR>
   map <silent> <leader>h :LustyFilesystemExplorer $HOME<CR>
-  map <silent> <leader>g :LustyBufferGrep<CR>
+  " map <silent> <leader>g :LustyBufferGrep<CR>
   map <silent> <leader>b :LustyBufferExplorer<CR>
   " map <silent> <leader>b :LustyBufferExplorer<CR> " use <leader>lb
 "}}}
@@ -464,7 +465,7 @@ Plug 'majutsushi/tagbar', { 'on': ['TagbarOpenAutoClose'] } "{{{
   let g:tagbar_autofocus = 1
   let g:tagbar_sort = 0
   let g:tagbar_autoshowtag = 1
-  nmap <silent> <leader>y :TagbarOpenAutoClose<CR>
+  nmap <silent> <leader>t :TagbarOpenAutoClose<CR>
 "}}}
 Plug 'tomtom/tcomment_vim' "{{{
   " use <leader>c for comments (gcc from tComment)
@@ -482,7 +483,7 @@ Plug 'mattn/gist-vim', { 'on': 'Gist' } "{{{
   let g:gist_open_browser_after_post = 1
 "}}}
 Plug 'nsf/gocode', { 'rtp': 'vim/', 'for': 'go' }
-Plug 'fatih/vim-go', { 'for': 'go' } "{{{
+Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' } "{{{
   let g:go_highlight_functions = 1
   let g:go_highlight_methods = 1
   let g:go_fmt_fail_silently = 1
@@ -516,7 +517,7 @@ Plug 'jayflo/vim-skip' "{{{
 "}}}
 Plug 'dag/vim-fish', { 'for': 'fish' }
 Plug 'mhinz/vim-tmuxify' "{{{
-  let g:tmuxify_map_prefix = '<leader>t'
+  let g:tmuxify_map_prefix = '<leader>T'
 "}}}
 Plug 'chriskempson/base16-vim'
 Plug 'groenewege/vim-less', { 'for': ['less', 'css'] }
@@ -541,7 +542,8 @@ Plug 'christoomey/vim-tmux-navigator' "{{{
   " this doesn't work right now, terminal doesn't see a unique keycap for C-, vs just ,
   " nnoremap <silent> <C-,> :TmuxNavigatePrevious<CR>
 "}}}
-Plug 'honza/dockerfile.vim', { 'for': 'dockerfile' }
+" Plug 'honza/dockerfile.vim', { 'for': 'dockerfile' }
+Plug 'moby/moby' , {'rtp': '/contrib/syntax/vim/', 'for': 'dockerfile'}
 Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' } "{{{
   nnoremap <leader>u :GundoToggle<CR>
   let g:gundo_width = 40
@@ -591,6 +593,21 @@ Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 Plug 'moll/vim-bbye'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'lambdatoast/elm.vim'
+Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] } "{{{
+  if executable('rg')
+    nnoremap <leader>g :Grepper -tool rg<cr>
+  else
+    nnoremap <leader>g :Grepper -tool grep<cr>
+  endif
+  nnoremap <leader>G :Grepper -tool git<cr>
+  nnoremap <leader>* :Grepper -tool grep -cword -noprompt<cr>
+"}}}
+
+Plug 'lambdalisue/gina.vim'
+
+" not working?
+" Plug 'ConradIrwin/vim-bracketed-paste'
+
 
 " Unused {{{
 " Plug 'benmills/vimux' "{{{
