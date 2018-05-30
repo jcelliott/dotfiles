@@ -133,3 +133,5 @@ alias ls=exa
 alias l='exa -l'
 alias la='exa -la'
 
+test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+
