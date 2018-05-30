@@ -125,3 +125,11 @@ end
 
 # Base16 Shell
 # eval sh $HOME/.base16-default.dark.sh
+
+# Aliases
+# https://github.com/sharkdp/bat
+alias cat=bat
+alias ls=exa
+alias l='exa -l'
+alias la='exa -la'
+
