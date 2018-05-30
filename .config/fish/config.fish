@@ -55,6 +55,9 @@ if test $_platform = "darwin"
   set -x GOROOT "/usr/local/opt/go/libexec"
 end
 
+# Elixir/Erlang
+set -x ERL_AFLAGS "-kernel shell_history enabled"
+
 # Path
 if not set -q -U fish_user_paths
   set -U fish_user_paths "$HOME/bin" "$GOPATH/bin" "$HOME/.local/bin"
