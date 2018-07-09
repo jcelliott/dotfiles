@@ -58,9 +58,9 @@ set display=lastline    " show as much of last line as possible, instead of "@"
 
 set formatoptions=cqnlj " settings for formatting (see :help fo-table)
 set textwidth=80        " wrap lines at 100 chars
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
 set smarttab
 " set nosmarttab
 set expandtab           " expand tabs to spaces
