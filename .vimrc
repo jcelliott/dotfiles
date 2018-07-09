@@ -72,7 +72,7 @@ set pastetoggle=<F2>    " toggle paste mode (while paste is enabled, all formatt
                         " OR :set paste!<CR>:set paste?<CR>
 
 set ttyfast             " improves redrawing for fast terminal connection
-set lazyredraw          " don't redraw the screen for non-typed commands (smoother looking plugins)
+" set lazyredraw          " don't redraw the screen for non-typed commands (smoother looking plugins)
 " ^ doesn't print some command line messages I expect
 set synmaxcol=256
 
@@ -84,7 +84,7 @@ if ! has('gui_running')
   set ttimeoutlen=1
   augroup FastEscape
     autocmd!
-    autocmd InsertEnter * set timeoutlen=1
+    autocmd InsertEnter * set timeoutlen=200
     autocmd InsertLeave * set timeoutlen=1000
   augroup END
 endif
@@ -215,7 +215,8 @@ xnoremap . :normal .<CR>
 inoremap <C-U> <C-G>u<C-U>
 
 " use <M-k> for digraphs instead of <C-k>
-inoremap k <C-k>
+" this makes [exit insert mode and go up a line] hard
+" inoremap k <C-k>
 
 "}}}
 
@@ -385,6 +386,10 @@ map <silent> \l :syntax sync fromstart<CR>:redraw!<CR>
 " toggle spell check
 nmap <silent> <F7> :setlocal spell! spelllang=en_us<CR>
 imap <silent> <F7> <C-o>:setlocal spell! spelllang=en_us<CR>
+
+" fix ;w mistakes
+imap ;w <ESC>
+imap ;w<CR> <ESC>
 
 "}}}
 
