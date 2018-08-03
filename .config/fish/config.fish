@@ -79,7 +79,10 @@ if test $_platform = "darwin"
   # manpath for macports
   set -x MANPATH "/opt/local/share/man" "/usr/share/man" "/usr/local/share/man" $MANPATH
 end
-set -x MANPATH "$HOME/.local/share/man" $MANPATH
+if test $_distro = "arch"
+  set -e MANPATH
+  set -x MANPATH (manpath)
+end
 
 # Fish Git prompt
 set __fish_git_prompt_color yellow
@@ -128,10 +131,14 @@ end
 
 # Aliases
 # https://github.com/sharkdp/bat
-alias cat=bat
-alias ls=exa
-alias l='exa -l'
-alias la='exa -la'
+if available bat
+  alias cat=bat
+end
+if available exa
+  alias ls=exa
+  alias l='exa -l'
+  alias la='exa -la'
+end
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
