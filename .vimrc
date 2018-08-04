@@ -470,6 +470,7 @@ Plug 'tpope/vim-dispatch', { 'on': 'Dispatch' } "{{{
   " map <leader>d :Dispatch<CR>
 "}}}
 Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-sleuth'
 Plug 'majutsushi/tagbar', { 'on': ['TagbarOpenAutoClose'] } "{{{
   let g:tagbar_autofocus = 1
   let g:tagbar_sort = 0
@@ -619,7 +620,14 @@ Plug 'mhinz/vim-grepper' "{{{
   nnoremap <leader>* :Grepper -tool grep -cword -noprompt<cr>
 "}}}
 
-Plug 'lambdalisue/gina.vim'
+" Plug 'lambdalisue/gina.vim'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'alvan/vim-closetag' "{{{
+  let g:closetag_filenames = '*.html,*.jsx'
+  let g:closetag_xhtml_filetypes = 'xhtml,jsx'
+  let g:closetag_emptyTags_caseSensitive = 1
+" }}}
 
 " not working?
 " Plug 'ConradIrwin/vim-bracketed-paste'
