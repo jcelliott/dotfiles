@@ -387,6 +387,10 @@ map <silent> \l :syntax sync fromstart<CR>:redraw!<CR>
 nmap <silent> <F7> :setlocal spell! spelllang=en_us<CR>
 imap <silent> <F7> <C-o>:setlocal spell! spelllang=en_us<CR>
 
+" insert timestamp
+nnoremap <silent> <F8> "=strftime("%a %b %d %Y")<CR>P
+inoremap <silent> <F8> <C-R>=strftime("%a %b %d %Y")<CR>
+
 " fix ;w mistakes
 imap ;w <ESC>
 imap ;w<CR> <ESC>
@@ -448,7 +452,7 @@ Plug 'sjbach/lusty' "{{{
 Plug 'tpope/vim-eunuch' "{{{
   map \r :Rename<Space>
   " Remove (no confirmation)
-  map \ddd :Remove<CR>
+  " map \ddd :Remove<CR>
   " Write a privileged file with sudo
   map <leader>w :SudoWrite<CR>
 "}}}
@@ -598,13 +602,20 @@ Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 Plug 'moll/vim-bbye'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'lambdatoast/elm.vim'
-Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] } "{{{
+" Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] } "{{{
+Plug 'mhinz/vim-grepper' "{{{
+  let g:grepper = {}
+  let g:grepper.simple_prompt = 1
+  let g:grepper.dir = 'repo,file'
+  let g:grepper.stop = 100
   if executable('rg')
-    nnoremap <leader>g :Grepper -tool rg<cr>
+    nnoremap <leader>g :Grepper -tool rg -cword<cr>
+    nnoremap <leader>G :Grepper -tool rg -side -cword<cr>
   else
-    nnoremap <leader>g :Grepper -tool grep<cr>
+    nnoremap <leader>g :Grepper -tool grep -cword<cr>
+    nnoremap <leader>G :Grepper -tool grep -side -cword<cr>
   endif
-  nnoremap <leader>G :Grepper -tool git<cr>
+  " nnoremap <leader>G :Grepper -tool git<cr>
   nnoremap <leader>* :Grepper -tool grep -cword -noprompt<cr>
 "}}}
 
