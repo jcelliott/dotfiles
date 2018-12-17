@@ -48,6 +48,12 @@ set -x LESS -RiW
 
 ### PATH ###
 
+if test -d $HOME/.asdf
+  # asdf is installed
+  # add asdf paths before others
+  source $HOME/.asdf/asdf.fish
+end
+
 # Go
 set -x GOPATH "$HOME/src/go"
 if test $_platform = "darwin"
@@ -70,7 +76,7 @@ if not set -q -U fish_user_paths
     # path for macports
     # set -U fish_user_paths $fish_user_paths "/opt/local/bin" "/opt/local/sbin"
   end
-  set -U fish_user_paths $fish_user_paths "/usr/local/bin"
+  # set -U fish_user_paths $fish_user_paths "/usr/local/bin"
 
   # Rust
   set -U fish_user_paths $fish_user_paths "$HOME/.cargo/bin"
@@ -120,12 +126,6 @@ if type -q fasd
   end
 else
   perror "fasd is not installed"
-end
-
-
-if test -d $HOME/.asdf
-  # asdf is installed
-  source $HOME/.asdf/asdf.fish
 end
 
 # Base16 Shell
