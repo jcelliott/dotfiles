@@ -37,6 +37,8 @@ end
 
 # grep
 set -x GREP_OPTIONS "--color=auto"
+# ripgrep
+set -x RIPGREP_CONFIG_PATH "$HOME/.config/ripgrep"
 
 # rsync
 set -x RSYNC_PARTIAL_DIR .rsync-tmp
