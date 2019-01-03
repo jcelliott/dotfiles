@@ -111,6 +111,11 @@ function fish_prompt --description 'Write out the prompt'
         set __git_prompt " "
     end
 
+    # support for Mac touchbar in iTerm2
+    if available it2setkeylabel
+      it2setkeylabel set status $PWD
+    end
+
     # full prompt
 	echo -ns "$__fish_prompt_user" "$__fish_prompt_host" ' ' "$__fish_prompt_cwd" (prompt_pwd) "$__git_prompt" "$__fish_prompt_normal" "$prompt_status" (fish_vi_prompt_mode) ' '
     # short prompt
