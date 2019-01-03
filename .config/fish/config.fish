@@ -141,6 +141,9 @@ if available exa
   alias l='exa -l'
   alias la='exa -la'
 end
+if available mix
+  alias dialyze='env MIX_ENV=test mix dialyzer'
+end
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
