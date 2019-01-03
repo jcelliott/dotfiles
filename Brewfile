@@ -1,6 +1,8 @@
 # Brewfile
 
 brew "bat"
+brew "chruby"
+brew "chruby-fish"
 brew "cloc"
 brew "cmake"
 brew "coreutils"
@@ -18,6 +20,7 @@ brew "peco"
 brew "reattach-to-user-namespace"
 brew "ripgrep"
 brew "rsync"
+brew "ruby-install"
 brew "tig"
 brew "tmux"
 brew "tree"
