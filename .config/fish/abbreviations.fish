@@ -1,94 +1,94 @@
-# Set fish user abbreviations
-abbr_add 'g=git'
-abbr_add 'gst=git status'
-abbr_add 'gs=git status'
-abbr_add 'gc=git commit -v'
-# abbr_add 'glg=git log --all --stat --graph --decorate'
-abbr_add 'glg=git log-detail'
-abbr_add 'glb=git log-branch'
-abbr_add 'glgs=git log-summary'
-abbr_add 'ga=git add'
-abbr_add 'gsa=git submodule add' # gsa <repo> <directory>
-abbr_add 'gsi=git submodule init'
-abbr_add 'gsu=git submodule update'
-abbr_add 'gss=git submodule status'
-abbr_add 'gsd=git submodule deinit'
-abbr_add 'gsuu=git submodule foreach git pull origin master'
-abbr_add 'gcm=git checkout master'
-abbr_add 'gcd=git checkout dev'
-abbr_add 'gch=git checkout'
-abbr_add 'gcb=git checkout -b'
-abbr_add 'gd=git diff'
-abbr_add 'gdc=git diff --cached'
-abbr_add 'gds=git diff --stat'
-abbr_add 'gmm=git merge master'
-abbr_add 'gba=git branch -a'
-abbr_add 'gr=git remote -v'
-abbr_add 'gb=peco-select-git-branch'
+# Set all fish abbreviations
+abbr --add g 'git'
+abbr --add gst 'git status'
+abbr --add gs 'git status'
+abbr --add gc 'git commit -v'
+# abbr --add glg 'git log --all --stat --graph --decorate'
+abbr --add glg 'git log-detail'
+abbr --add glb 'git log-branch'
+abbr --add glgs 'git log-summary'
+abbr --add ga 'git add'
+abbr --add gsa 'git submodule add' # gsa <repo> <directory>
+abbr --add gsi 'git submodule init'
+abbr --add gsu 'git submodule update'
+abbr --add gss 'git submodule status'
+abbr --add gsd 'git submodule deinit'
+abbr --add gsuu 'git submodule foreach git pull origin master'
+abbr --add gcm 'git checkout master'
+abbr --add gcd 'git checkout dev'
+abbr --add gch 'git checkout'
+abbr --add gcb 'git checkout -b'
+abbr --add gd 'git diff'
+abbr --add gdc 'git diff --cached'
+abbr --add gds 'git diff --stat'
+abbr --add gmm 'git merge master'
+abbr --add gba 'git branch -a'
+abbr --add gr 'git remote -v'
+abbr --add gb 'peco-select-git-branch'
 
-abbr_add 'ev=vim ~/.vimrc'
-abbr_add 'et=vim ~/.tmux.conf'
-abbr_add 'efc=vim ~/.config/fish/config.fish'
-abbr_add 'eff=vim ~/.config/fish/functions'
-abbr_add 'ef=vim ~/.config/fish'
-abbr_add 'vs=vim-search'
-abbr_add 'vsa=vim-search --no-ignore'
+abbr --add ev 'vim ~/.vimrc'
+abbr --add et 'vim ~/.tmux.conf'
+abbr --add efc 'vim ~/.config/fish/config.fish'
+abbr --add eff 'vim ~/.config/fish/functions'
+abbr --add ef 'vim ~/.config/fish'
+abbr --add vs 'vim-search'
+abbr --add vsa 'vim-search --no-ignore'
 
-abbr_add 'vup=vagrant up'
-abbr_add 'vsh=vagrant ssh'
+abbr --add vup 'vagrant up'
+abbr --add vsh 'vagrant ssh'
 
-abbr_add 'd=docker'
-abbr_add 'dl=docker ps -lq' # display id of latest created container
-abbr_add 'dim=docker images'
-abbr_add 'dpsa=dps -a'
-abbr_add 'drma=docker rm (docker ps -aq)' # delete all stopped containers
-abbr_add 'drml=docker rm (docker ps -lq)' # delete last container
-abbr_add 'dsa=docker stop (docker ps -aq)' # stop all containers
-abbr_add 'dsl=docker stop (docker ps -lq)' # stop last container
-abbr_add 'drmdi=docker rmi (docker images -qf dangling=true)' # delete dangling images
-abbr_add 'digrep=docker-images' # grep through images
-abbr_add 'dgrep=docker-grep' # grep through containers
-abbr_add 'drmg=docker rm (docker-grep'
-abbr_add 'dpid=docker inspect --format \'{{.State.Pid}}\' (docker ps -lq)'
-abbr_add 'dcl=docker rm (docker ps -aq); docker rmi (docker images -qf dangling=true)' # clean
-abbr_add 'de=docker exec'
+abbr --add d 'docker'
+abbr --add dl 'docker ps -lq' # display id of latest created container
+abbr --add dim 'docker images'
+abbr --add dpsa 'dps -a'
+abbr --add drma 'docker rm (docker ps -aq)' # delete all stopped containers
+abbr --add drml 'docker rm (docker ps -lq)' # delete last container
+abbr --add dsa 'docker stop (docker ps -aq)' # stop all containers
+abbr --add dsl 'docker stop (docker ps -lq)' # stop last container
+abbr --add drmdi 'docker rmi (docker images -qf dangling=true)' # delete dangling images
+abbr --add digrep 'docker-images' # grep through images
+abbr --add dgrep 'docker-grep' # grep through containers
+abbr --add drmg 'docker rm (docker-grep'
+abbr --add dpid 'docker inspect --format \'{{.State.Pid}}\' (docker ps -lq)'
+abbr --add dcl 'docker rm (docker ps -aq); docker rmi (docker images -qf dangling=true)' # clean
+abbr --add de 'docker exec'
 
-abbr_add 'dc=docker-compose'
-abbr_add 'dcu=docker-compose up -d'
-abbr_add 'dcs=docker-compose stop'
+abbr --add dc 'docker-compose'
+abbr --add dcu 'docker-compose up -d'
+abbr --add dcs 'docker-compose stop'
 
-abbr_add 'dm=docker-machine'
+abbr --add dm 'docker-machine'
 
-abbr_add 'c=cat'
+abbr --add c 'cat'
 
-abbr_add 'fc=source ~/.config/fish/config.fish'
-abbr_add 'sf=source ~/.config/fish/config.fish'
+abbr --add fc 'source ~/.config/fish/config.fish'
+abbr --add sf 'source ~/.config/fish/config.fish'
 
-abbr_add 's=sudo'
-abbr_add 'se=sudo -E'
-abbr_add 'sudoe=sudo -E'
+abbr --add s 'sudo'
+abbr --add se 'sudo -E'
+abbr --add sudoe 'sudo -E'
 
-abbr_add 'rp=rsync -rltp --partial --info=progress2'
+abbr --add rp 'rsync -rltp --partial --info=progress2'
 
-abbr_add 'k=kubectl'
-abbr_add 'kg=kubectl get'
-abbr_add 'kd=kubectl describe'
-abbr_add 'ke=kubectl exec'
-abbr_add 'kc=kubectl config'
-abbr_add 'kcu=kubectl config use-context'
-abbr_add 'kcc=kubectl config use-context'
-abbr_add 'kcf=kubectl create -f'
-abbr_add 'kaf=kubectl apply -f'
-abbr_add 'kp=kubectl port-forward'
-abbr_add 'kls=kubectl logs -f --since 1s'
-abbr_add 'ks=kubectl_context_switch_peco'
+abbr --add k 'kubectl'
+abbr --add kg 'kubectl get'
+abbr --add kd 'kubectl describe'
+abbr --add ke 'kubectl exec'
+abbr --add kc 'kubectl config'
+abbr --add kcu 'kubectl config use-context'
+abbr --add kcc 'kubectl config use-context'
+abbr --add kcf 'kubectl create -f'
+abbr --add kaf 'kubectl apply -f'
+abbr --add kp 'kubectl port-forward'
+abbr --add kls 'kubectl logs -f --since 1s'
+abbr --add ks 'kubectl_context_switch_peco'
 
-abbr_add 'chmox=chmod +x'
+abbr --add chmox 'chmod +x'
 
-abbr_add 'm=mix'
-abbr_add 'mdg=mix deps.get'
-abbr_add 'mdc=mix deps.compile'
-abbr_add 'mc=mix compile'
-abbr_add 'iexm=iex -S mix'
+abbr --add m 'mix'
+abbr --add mdg 'mix deps.get'
+abbr --add mdc 'mix deps.compile'
+abbr --add mc 'mix compile'
+abbr --add iexm 'iex -S mix'
 
-abbr_add 'y=yarn'
+abbr --add y 'yarn'

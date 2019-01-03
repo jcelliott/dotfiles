@@ -12,7 +12,7 @@ eval sh $HOME/.config/base16-shell/base16-default.dark.sh
 
 os_detect
 
-if not set -q fish_user_abbreviations
+if not set -q fish_abbreviations_set
   abbr_set
 end
 
