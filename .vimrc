@@ -808,6 +808,19 @@ endif
 " -----------------------------------------------------------------------------
 "{{{
 
+function! FlashCursor()
+  set cursorline
+  redraw
+  sleep 50m
+  set nocursorline
+endfunction
+nnoremap * :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<CR>n
+" nnoremap n n:call FlashCursor()<CR>
+" map <leader>G :execute 'Ag ' . expand('<cword>')<CR>
+" map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<CR><Bar>:%s///gn<CR>
+
+" inoremap <C-g> <C-o>o
+
 " insert a line above the current line
 function! Add_blank_line_above()
   let failed = append(line('.')-1, "")
