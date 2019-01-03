@@ -25,7 +25,7 @@ if &shell =~# 'fish$'
   set shell=bash
 endif
 
-set autochdir           " automatically chdir into directory of current file
+" set autochdir           " automatically chdir into directory of current file
 set bs=indent,eol,start " allow backspacing over everything in insert mode
 set history=100         " keep x lines of command line history
 set incsearch           " do incremental searching
