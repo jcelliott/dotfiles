@@ -405,37 +405,37 @@ imap ;w<CR> <ESC>
 call plug#begin('~/.vim/bundle')
 
 " Plugins
-Plug 'scrooloose/syntastic', { 'on': 'SyntasticToggleMode' } "{{{
-  " show error markers in gutter
-  let g:syntastic_enable_signs=1
-  " Syntastic error list will appear when errors are detected
-  let g:syntastic_auto_loc_list=1
-  " Syntastic error list hight
-  let g:syntastic_loc_list_height=5
-  " Always add errors (:Errors) to location list
-  let g:syntastic_always_populate_loc_list=1
-  " Run all checkers in parallel instead of stopping after the first
-  let g:syntastic_aggregate_errors = 1
-  " Symbols to display in the gutter
-  let g:syntastic_error_symbol = '✗'
-  let g:syntastic_warning_symbol = '⚠'
-  let g:syntastic_style_warning_symbol = 's'
-  let g:syntastic_style_error_symbol = 'S'
-  " Customize syntastic status line message
-  let g:syntastic_stl_format = '[%E{Err: %e}%B{, }%W{Warn: %w}]'
-  " default to passive, so when we toggle (for lazy load) it starts in active mode
-  let g:syntastic_mode_map = { 'mode': 'passive' }
-
-  " Move to the next and previous location in the location list
-  " (used to move between syntastic error locations)
-  " map <silent> <leader>g :lfirst<CR>
-  map <silent> <leader>j :lnext<CR>
-  map <silent> <leader>k :lprev<CR>
-  " Toggle Syntastic mode [active|passive]
-  map <leader>z :SyntasticToggleMode<CR>
-  " Manually start a syntax check (syntastic)
-  " map <leader>a :SyntasticCheck<CR>
-  map <silent> <leader>a :SyntasticReset<CR>
+" Plug 'scrooloose/syntastic', { 'on': 'SyntasticToggleMode' } "{{{
+"   " show error markers in gutter
+"   let g:syntastic_enable_signs=1
+"   " Syntastic error list will appear when errors are detected
+"   let g:syntastic_auto_loc_list=1
+"   " Syntastic error list hight
+"   let g:syntastic_loc_list_height=5
+"   " Always add errors (:Errors) to location list
+"   let g:syntastic_always_populate_loc_list=1
+"   " Run all checkers in parallel instead of stopping after the first
+"   let g:syntastic_aggregate_errors = 1
+"   " Symbols to display in the gutter
+"   let g:syntastic_error_symbol = '✗'
+"   let g:syntastic_warning_symbol = '⚠'
+"   let g:syntastic_style_warning_symbol = 's'
+"   let g:syntastic_style_error_symbol = 'S'
+"   " Customize syntastic status line message
+"   let g:syntastic_stl_format = '[%E{Err: %e}%B{, }%W{Warn: %w}]'
+"   " default to passive, so when we toggle (for lazy load) it starts in active mode
+"   let g:syntastic_mode_map = { 'mode': 'passive' }
+"
+"   " Move to the next and previous location in the location list
+"   " (used to move between syntastic error locations)
+"   " map <silent> <leader>g :lfirst<CR>
+"   map <silent> <leader>j :lnext<CR>
+"   map <silent> <leader>k :lprev<CR>
+"   " Toggle Syntastic mode [active|passive]
+"   map <leader>z :SyntasticToggleMode<CR>
+"   " Manually start a syntax check (syntastic)
+"   " map <leader>a :SyntasticCheck<CR>
+"   map <silent> <leader>a :SyntasticReset<CR>
 "}}}
 Plug 'sjbach/lusty' "{{{
   let g:LustyExplorerSuppressRubyWarning = 1
@@ -628,6 +628,19 @@ Plug 'alvan/vim-closetag' "{{{
   let g:closetag_xhtml_filetypes = 'xhtml,jsx'
   let g:closetag_emptyTags_caseSensitive = 1
 " }}}
+Plug 'w0rp/ale' "{{{
+  let g:ale_lint_on_text_changed = 'never'
+  let g:ale_lint_on_enter = 0
+  let g:ale_lint_on_insert_leave = 1
+  let g:ale_echo_delay = 100
+  let g:ale_echo_msg_format = '%linter%: %code: %%s'
+  let g:ale_fix_on_save = 1
+  let g:ale_fixers = {
+  \  'javascript': ['eslint', 'prettier-eslint'],
+  \  'elixir': ['mix_format']
+  \}
+  nnoremap <leader>a <Plug>(ale_detail)
+"}}}
 
 " not working?
 " Plug 'ConradIrwin/vim-bracketed-paste'
