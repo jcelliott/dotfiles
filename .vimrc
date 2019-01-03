@@ -646,10 +646,19 @@ Plug 'w0rp/ale' "{{{
   \}
   nnoremap <leader>a <Plug>(ale_detail)
 "}}}
+" Plug 'timakro/vim-searchant' "{{{
+"   let g:searchant_all = 0
+"   let g:searchant_map_stop = 0
+"   highlight SearchCurrent ctermbg=DarkYellow
+" "}}}
 
 " not working?
 " Plug 'ConradIrwin/vim-bracketed-paste'
 
+Plug 'dbeniamine/cheat.sh-vim' "{{{
+  let g:CheatSheetDoNotMap=1
+  let g:CheatDoNotReplaceKeywordPrg=1
+"}}}
 
 " Unused {{{
 " Plug 'benmills/vimux' "{{{
