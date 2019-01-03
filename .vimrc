@@ -449,6 +449,12 @@ Plug 'sjbach/lusty' "{{{
   map <silent> <leader>b :LustyBufferExplorer<CR>
   " map <silent> <leader>b :LustyBufferExplorer<CR> " use <leader>lb
 "}}}
+
+Plug 'Raimondi/delimitMate'
+" (^) Looks like this might just need some configuration to work better, but
+" trying this one (v) instead
+" Plug 'jiangmiao/auto-pairs' " works better with newlines
+
 Plug 'tpope/vim-eunuch' "{{{
   map \r :Rename<Space>
   " Remove (no confirmation)
@@ -484,7 +490,6 @@ Plug 'tomtom/tcomment_vim' "{{{
 "}}}
 Plug 'kana/vim-textobj-user', { 'for': 'ruby' } " only used for vim-textobj-rubyblock
 Plug 'nelstrom/vim-textobj-rubyblock', { 'for': 'ruby' }
-Plug 'Raimondi/delimitMate'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'digitaltoad/vim-jade', { 'for': 'jade' }
 Plug 'mattn/webapi-vim'
@@ -566,7 +571,7 @@ Plug 'mustache/vim-mustache-handlebars'
 " Dash / Zeal documentation {{{
 if(system("uname") =~ "Darwin")
     Plug 'rizzatti/dash.vim' "{{{
-      let g:dash_activate = 0
+      " let g:dash_activate = 0
       nmap <silent> <leader>d <Plug>DashSearch
       nmap <leader>D :Dash<space>
     "}}}
@@ -603,7 +608,7 @@ Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 Plug 'moll/vim-bbye'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'lambdatoast/elm.vim'
-" Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] } "{{{
+" Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
 Plug 'mhinz/vim-grepper' "{{{
   let g:grepper = {}
   let g:grepper.simple_prompt = 1
