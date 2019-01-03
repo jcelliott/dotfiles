@@ -720,7 +720,8 @@ set titlestring=vim\ %f%(\ [%M%R%H]%)
 
 " --- Settings ---
 set background=dark
-set cursorline
+" set cursorline
+set nocursorline
 set laststatus=2 " always show the status line
 " set t_Co=16
 set t_Co=256
