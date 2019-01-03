@@ -1,12 +1,15 @@
 # Brewfile
 
+brew "bat"
 brew "cloc"
 brew "cmake"
 brew "coreutils"
 brew "ctags"
+brew "exa"
 brew "fd"
 brew "fish"
 brew "git"
+brew "go"
 brew "grc"
 brew "htop"
 brew "httpie"
