@@ -349,8 +349,8 @@ map gs :sh<CR>
 " map <silent> \c :.s/-/✓/e<CR>:let @/ = ""<CR>:noh<Bar>:echo<CR>
 " map <silent> \x :.s/✓/-/e<CR>:let @/ = ""<CR>:noh<Bar>:echo<CR>
 " Changes [ ] to [x] and vice-versa. '/e' flag ignores errors
-map <silent> \c :let _s=@/<Bar>:.s/^\[x\]/\[ \]/e<Bar>:let @/=_s<Bar>:noh<Bar>:echo<CR>
-map <silent> \x :let _s=@/<Bar>:.s/^\[ \]/\[x\]/e<Bar>:let @/=_s<Bar>:noh<Bar>:echo<CR>
+map <silent> \c :let _s=@/<Bar>:.s/\[x\]/\[ \]/e<Bar>:let @/=_s<Bar>:noh<Bar>:echo<CR>
+map <silent> \x :let _s=@/<Bar>:.s/\[ \]/\[x\]/e<Bar>:let @/=_s<Bar>:noh<Bar>:echo<CR>
 " add and remove check boxes ([ ]) at the beginning of the line
 map <silent> \z ^i[ ] <Esc>$
 map <silent> \v :let _s=@/<Bar>:.s/^\[[x ]\][ ]\?//e<Bar>:let @/=_s<Bar>:noh<Bar>:echo<CR>
