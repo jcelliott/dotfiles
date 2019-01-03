@@ -150,3 +150,8 @@ test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shel
 # Android development
 set -x ANDROID_HOME "$HOME/Library/Android/sdk"
 set -x ANDROID_SDK_ROOT "/usr/local/share/android-sdk"
+
+# Ruby
+if test -e /usr/local/share/chruby/chruby.fish
+  source /usr/local/share/chruby/chruby.fish
+end
