@@ -1,0 +1,21 @@
+{
+    "window.zoomLevel": 1,
+    "workbench.colorTheme": "Base16 Default Dark",
+    "editor.minimap.renderCharacters": false,
+    "vim.statusBarColorControl": true,
+    "editor.formatOnSave": true,
+    "workbench.activityBar.visible": false,
+    "breadcrumbs.enabled": true,
+    "editor.minimap.enabled": false,
+    "editor.renderWhitespace": "none",
+    "editor.renderControlCharacters": false,
+    "workbench.colorCustomizations": {
+        "statusBar.background": "#005f5f",
+        "statusBar.noFolderBackground": "#005f5f",
+        "statusBar.debuggingBackground": "#005f5f",
+        "editorIndentGuide.background": "#1f1f1f",
+        "editorIndentGuide.activeBackground": "#393939"
+    },
+    "editor.fontFamily": "'Source Code Pro', Menlo, Monaco, 'Courier New', monospace",
+    "editor.fontSize": 14
+}
