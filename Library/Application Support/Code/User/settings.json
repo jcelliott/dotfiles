@@ -1,6 +1,5 @@
 {
-    "window.zoomLevel": 1,
-    "workbench.colorTheme": "Base16 Default Dark",
+    "window.zoomLevel": 0,
     "editor.minimap.renderCharacters": false,
     "vim.statusBarColorControl": true,
     "editor.formatOnSave": true,
@@ -17,5 +16,43 @@
         "editorIndentGuide.activeBackground": "#393939"
     },
     "editor.fontFamily": "'Source Code Pro', Menlo, Monaco, 'Courier New', monospace",
-    "editor.fontSize": 14
+    "editor.fontSize": 14,
+    "vim.easymotion": true,
+    "vim.leader": ",",
+    "vim.useSystemClipboard": true,
+    "vim.hlsearch": true,
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                ":"
+            ],
+            "commands": [
+                "workbench.action.showCommands"
+            ]
+        },
+        {
+            "before": [
+                "space"
+            ],
+            "commands": [
+                ":nohl"
+            ]
+        },
+        {
+            "before": [
+                ";"
+            ],
+            "after": [
+                ":"
+            ]
+        }
+    ],
+    "window.restoreFullscreen": true,
+    "window.restoreWindows": "all",
+    "zenMode.restore": true,
+    "javascript.validate.enable": false,
+    "gitlens.keymap": "alternate",
+    "gitlens.currentLine.enabled": false,
+    "gitlens.hovers.currentLine.over": "line",
+    "gitlens.views.repositories.location": "scm"
 }
