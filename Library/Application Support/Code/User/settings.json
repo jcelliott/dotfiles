@@ -1,5 +1,5 @@
 {
-    "window.zoomLevel": 0,
+    "window.zoomLevel": 1,
     "editor.minimap.renderCharacters": false,
     "vim.statusBarColorControl": true,
     "editor.formatOnSave": true,
@@ -54,5 +54,6 @@
     "gitlens.keymap": "alternate",
     "gitlens.currentLine.enabled": false,
     "gitlens.hovers.currentLine.over": "line",
-    "gitlens.views.repositories.location": "scm"
+    "gitlens.views.repositories.location": "scm",
+    "workbench.editor.enablePreviewFromQuickOpen": false
 }
