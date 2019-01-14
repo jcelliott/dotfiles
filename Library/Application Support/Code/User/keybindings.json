@@ -1,0 +1,12 @@
+// Place your key bindings in this file to override the defaultsauto[]
+[
+  // {
+  //   "key": "space",
+  //   "command": "search.action.clearSearchResults",
+  //   "when": "editorTextFocus && vim.active, && vim.mode == 'normal'"
+  // },
+  {
+    "key": "ctrl+shift+`",
+    "command": "workbench.action.toggleMaximizedPanel"
+  }
+]
