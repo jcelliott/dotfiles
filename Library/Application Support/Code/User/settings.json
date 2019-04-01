@@ -1,59 +1,68 @@
 {
-    "window.zoomLevel": 1,
-    "editor.minimap.renderCharacters": false,
-    "vim.statusBarColorControl": true,
-    "editor.formatOnSave": true,
-    "workbench.activityBar.visible": false,
-    "breadcrumbs.enabled": true,
-    "editor.minimap.enabled": false,
-    "editor.renderWhitespace": "none",
-    "editor.renderControlCharacters": false,
-    "workbench.colorCustomizations": {
-        "statusBar.background": "#005f5f",
-        "statusBar.noFolderBackground": "#005f5f",
-        "statusBar.debuggingBackground": "#005f5f",
-        "editorIndentGuide.background": "#1f1f1f",
-        "editorIndentGuide.activeBackground": "#393939"
+  "window.zoomLevel": 0,
+  "editor.minimap.renderCharacters": false,
+  "vim.statusBarColorControl": true,
+  "editor.formatOnSave": true,
+  "workbench.activityBar.visible": false,
+  "breadcrumbs.enabled": true,
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "none",
+  "editor.renderControlCharacters": false,
+  "workbench.colorCustomizations": {
+    "editorIndentGuide.background": "#1f1f1f",
+    "editorIndentGuide.activeBackground": "#393939",
+    "statusBar.background": "#005f5f",
+    "statusBar.noFolderBackground": "#005f5f",
+    "statusBar.debuggingBackground": "#005f5f"
+  },
+  "editor.fontFamily": "Hasklig, 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontSize": 14,
+  "vim.easymotion": true,
+  "vim.leader": ",",
+  "vim.useSystemClipboard": true,
+  "vim.hlsearch": true,
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": [":"],
+      "commands": ["workbench.action.showCommands"]
     },
-    "editor.fontFamily": "'Source Code Pro', Menlo, Monaco, 'Courier New', monospace",
-    "editor.fontSize": 14,
-    "vim.easymotion": true,
-    "vim.leader": ",",
-    "vim.useSystemClipboard": true,
-    "vim.hlsearch": true,
-    "vim.normalModeKeyBindingsNonRecursive": [
-        {
-            "before": [
-                ":"
-            ],
-            "commands": [
-                "workbench.action.showCommands"
-            ]
-        },
-        {
-            "before": [
-                "space"
-            ],
-            "commands": [
-                ":nohl"
-            ]
-        },
-        {
-            "before": [
-                ";"
-            ],
-            "after": [
-                ":"
-            ]
-        }
-    ],
-    "window.restoreFullscreen": true,
-    "window.restoreWindows": "all",
-    "zenMode.restore": true,
-    "javascript.validate.enable": false,
-    "gitlens.keymap": "alternate",
-    "gitlens.currentLine.enabled": false,
-    "gitlens.hovers.currentLine.over": "line",
-    "gitlens.views.repositories.location": "scm",
-    "workbench.editor.enablePreviewFromQuickOpen": false
+    {
+      "before": ["space"],
+      "commands": [":nohl"]
+    },
+    {
+      "before": [";"],
+      "after": [":"]
+    },
+    {
+      "before": ["<leader>", "q"],
+      "commands": [":quit"]
+    }
+  ],
+  "window.restoreFullscreen": true,
+  "window.restoreWindows": "all",
+  "zenMode.restore": true,
+  "javascript.validate.enable": false,
+  "gitlens.keymap": "alternate",
+  "gitlens.currentLine.enabled": false,
+  "gitlens.hovers.currentLine.over": "line",
+  "gitlens.views.repositories.location": "scm",
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+  "gitlens.views.fileHistory.location": "scm",
+  "gitlens.views.lineHistory.location": "scm",
+  "gitlens.views.search.location": "scm",
+  "gitlens.views.compare.location": "scm",
+  "git.autofetch": true,
+  "scrolloff.scrolloff": 10,
+  "elixirLS.mixEnv": "dev",
+  "prettier.eslintIntegration": true,
+  "flow.useNPMPackagedFlow": true,
+  "eslint.packageManager": "yarn",
+  "eslint.provideLintTask": true,
+  "terminal.integrated.rendererType": "canvas",
+  "eslint.alwaysShowStatus": true,
+  "eslint.autoFixOnSave": true,
+  "editor.fontLigatures": true,
+  "editor.formatOnSaveTimeout": 1000,
+  "terminal.integrated.fontSize": 13
 }
