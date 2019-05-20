@@ -64,5 +64,8 @@
   "eslint.autoFixOnSave": true,
   "editor.fontLigatures": true,
   "editor.formatOnSaveTimeout": 1000,
-  "terminal.integrated.fontSize": 13
+  "terminal.integrated.fontSize": 13,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
