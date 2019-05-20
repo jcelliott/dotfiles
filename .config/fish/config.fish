@@ -151,7 +151,7 @@ end
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
 # Android development
-set -x ANDROID_HOME "$HOME/Library/Android/sdk"
+set -x ANDROID_HOME "/usr/local/share/android-sdk"
 set -x ANDROID_SDK_ROOT "/usr/local/share/android-sdk"
 
 # Ruby
