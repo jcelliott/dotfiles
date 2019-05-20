@@ -73,10 +73,13 @@ if not set -q -U fish_user_paths
     # path for local python packages (pip install --user)
     set -U fish_user_paths $fish_user_paths "$HOME/Library/Python/2.7/bin"
     set -U fish_user_paths $fish_user_paths "$HOME/Library/Python/3.5/bin"
-    # path for macports
-    # set -U fish_user_paths $fish_user_paths "/opt/local/bin" "/opt/local/sbin"
+
+    # asdf paths
+    set -U fish_user_paths $fish_user_paths "$HOME/.asdf/shims" "$HOME/.asdf/bin"
+
+    # path for Homebrew
+    set -U fish_user_paths $fish_user_paths "/usr/local/bin"
   end
-  # set -U fish_user_paths $fish_user_paths "/usr/local/bin"
 
   # Rust
   set -U fish_user_paths $fish_user_paths "$HOME/.cargo/bin"
