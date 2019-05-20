@@ -59,7 +59,7 @@ abbr --add dcs 'docker-compose stop'
 
 abbr --add dm 'docker-machine'
 
-abbr --add c 'cat'
+abbr --add c 'code'
 
 abbr --add fc 'source ~/.config/fish/config.fish'
 abbr --add sf 'source ~/.config/fish/config.fish'
