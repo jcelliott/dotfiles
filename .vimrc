@@ -466,6 +466,7 @@ Plug 'tpope/vim-surround' "{{{
   map <leader>s ysiw
 "}}}
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-markdown', { 'for': 'markdown' } "{{{
   let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'go']
 "}}}
