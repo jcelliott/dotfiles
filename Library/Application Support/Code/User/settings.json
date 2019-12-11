@@ -1,42 +1,117 @@
 {
-  "window.zoomLevel": 0,
+  "window.zoomLevel": -1,
   "editor.minimap.renderCharacters": false,
-  "vim.statusBarColorControl": true,
   "editor.formatOnSave": true,
   "workbench.activityBar.visible": false,
-  "breadcrumbs.enabled": true,
-  "editor.minimap.enabled": false,
-  "editor.renderWhitespace": "none",
-  "editor.renderControlCharacters": false,
   "workbench.colorCustomizations": {
     "editorIndentGuide.background": "#1f1f1f",
     "editorIndentGuide.activeBackground": "#393939",
     "statusBar.background": "#005f5f",
     "statusBar.noFolderBackground": "#005f5f",
-    "statusBar.debuggingBackground": "#005f5f"
+    "statusBar.debuggingBackground": "#5f1b00",
+    // base16 (default dark) color customizations for integrated terminal
+    // https://glitchbone.github.io/vscode-base16-term/#/default-dark
+    "terminal.background": "#181818",
+    "terminal.foreground": "#D8D8D8",
+    "terminalCursor.background": "#D8D8D8",
+    "terminalCursor.foreground": "#D8D8D8",
+    "terminal.ansiBlack": "#181818",
+    "terminal.ansiBlue": "#7CAFC2",
+    "terminal.ansiBrightBlack": "#585858",
+    "terminal.ansiBrightBlue": "#7CAFC2",
+    "terminal.ansiBrightCyan": "#86C1B9",
+    "terminal.ansiBrightGreen": "#A1B56C",
+    "terminal.ansiBrightMagenta": "#BA8BAF",
+    "terminal.ansiBrightRed": "#AB4642",
+    "terminal.ansiBrightWhite": "#F8F8F8",
+    "terminal.ansiBrightYellow": "#F7CA88",
+    "terminal.ansiCyan": "#86C1B9",
+    "terminal.ansiGreen": "#A1B56C",
+    "terminal.ansiMagenta": "#BA8BAF",
+    "terminal.ansiRed": "#AB4642",
+    "terminal.ansiWhite": "#D8D8D8",
+    "terminal.ansiYellow": "#F7CA88"
   },
-  "editor.fontFamily": "Hasklig, 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace",
-  "editor.fontSize": 14,
+  "breadcrumbs.enabled": true,
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "none",
+  "editor.renderControlCharacters": false,
+  "editor.fontFamily": "'Cascadia Code', Hasklig, 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontSize": 15,
   "vim.easymotion": true,
   "vim.leader": ",",
   "vim.useSystemClipboard": true,
   "vim.hlsearch": true,
   "vim.normalModeKeyBindingsNonRecursive": [
     {
-      "before": [":"],
-      "commands": ["workbench.action.showCommands"]
+      "before": [
+        ":"
+      ],
+      "commands": [
+        "workbench.action.showCommands"
+      ]
     },
     {
-      "before": ["space"],
-      "commands": [":nohl"]
+      "before": [
+        "space"
+      ],
+      "commands": [
+        ":nohl"
+      ]
     },
     {
-      "before": [";"],
-      "after": [":"]
+      "before": [
+        ";"
+      ],
+      "after": [
+        ":"
+      ]
     },
     {
-      "before": ["<leader>", "q"],
-      "commands": [":quit"]
+      "before": [
+        "<leader>",
+        "q"
+      ],
+      "commands": [
+        ":quit"
+      ]
+    },
+    {
+      "before": [
+        "L"
+      ],
+      "after": [
+        "$"
+      ]
+    },
+    {
+      "before": [
+        "H"
+      ],
+      "after": [
+        "^"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "s"
+      ],
+      "after": [
+        "y",
+        "s",
+        "i",
+        "w"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "d"
+      ],
+      "commands": [
+        "extension.dash.specific"
+      ]
     }
   ],
   "window.restoreFullscreen": true,
@@ -62,10 +137,326 @@
   "terminal.integrated.rendererType": "canvas",
   "eslint.alwaysShowStatus": true,
   "eslint.autoFixOnSave": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    {
+      "language": "typescript",
+      "autoFix": true
+    },
+    {
+      "language": "typescriptreact",
+      "autoFix": true
+    }
+  ],
   "editor.fontLigatures": true,
   "editor.formatOnSaveTimeout": 1000,
-  "terminal.integrated.fontSize": 13,
+  "terminal.integrated.fontSize": 14,
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "workbench.colorTheme": "Base16 Dark Default",
+  "explorer.confirmDelete": false,
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "gitlens.statusBar.enabled": false,
+  "[typescript]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "sync.gist": "ced732dd9fe9a1b8c5a6929424302fc0",
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "profileSwitcher.profiles": [
+    "default"
+  ],
+  "profileSwitcher.storage": {
+    "default": {
+      "window.zoomLevel": -1,
+      "editor.minimap.renderCharacters": false,
+      "editor.formatOnSave": true,
+      "workbench.activityBar.visible": false,
+      "breadcrumbs.enabled": true,
+      "editor.minimap.enabled": false,
+      "editor.renderWhitespace": "none",
+      "editor.renderControlCharacters": false,
+      "editor.fontFamily": "Hasklig, 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace",
+      "editor.fontSize": 14,
+      "vim.easymotion": true,
+      "vim.leader": ",",
+      "vim.useSystemClipboard": true,
+      "vim.hlsearch": true,
+      "vim.normalModeKeyBindingsNonRecursive": [
+        {
+          "before": [
+            ":"
+          ],
+          "commands": [
+            "workbench.action.showCommands"
+          ]
+        },
+        {
+          "before": [
+            "space"
+          ],
+          "commands": [
+            ":nohl"
+          ]
+        },
+        {
+          "before": [
+            ";"
+          ],
+          "after": [
+            ":"
+          ]
+        },
+        {
+          "before": [
+            "<leader>",
+            "q"
+          ],
+          "commands": [
+            ":quit"
+          ]
+        },
+        {
+          "before": [
+            "L"
+          ],
+          "after": [
+            "$"
+          ]
+        },
+        {
+          "before": [
+            "H"
+          ],
+          "after": [
+            "^"
+          ]
+        },
+        {
+          "before": [
+            "<leader>",
+            "s"
+          ],
+          "after": [
+            "y",
+            "s",
+            "i",
+            "w"
+          ]
+        },
+        {
+          "before": [
+            "<leader>",
+            "d"
+          ],
+          "commands": [
+            "extension.dash.specific"
+          ]
+        }
+      ],
+      "window.restoreFullscreen": true,
+      "window.restoreWindows": "all",
+      "zenMode.restore": true,
+      "javascript.validate.enable": false,
+      "gitlens.keymap": "alternate",
+      "gitlens.currentLine.enabled": false,
+      "gitlens.hovers.currentLine.over": "line",
+      "gitlens.views.repositories.location": "scm",
+      "workbench.editor.enablePreviewFromQuickOpen": false,
+      "gitlens.views.fileHistory.location": "scm",
+      "gitlens.views.lineHistory.location": "scm",
+      "gitlens.views.search.location": "scm",
+      "gitlens.views.compare.location": "scm",
+      "git.autofetch": true,
+      "scrolloff.scrolloff": 10,
+      "elixirLS.mixEnv": "dev",
+      "prettier.eslintIntegration": true,
+      "flow.useNPMPackagedFlow": true,
+      "eslint.packageManager": "yarn",
+      "eslint.provideLintTask": true,
+      "terminal.integrated.rendererType": "canvas",
+      "eslint.alwaysShowStatus": true,
+      "eslint.autoFixOnSave": true,
+      "editor.fontLigatures": true,
+      "editor.formatOnSaveTimeout": 1000,
+      "terminal.integrated.fontSize": 13,
+      "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+      },
+      "workbench.colorTheme": "Base16 Dark Default",
+      "search.exclude": {
+        "**/deps": true
+      },
+      "explorer.confirmDelete": false,
+      "[typescriptreact]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+      },
+      "gitlens.statusBar.enabled": false,
+      "[typescript]": {
+        "editor.tabSize": 2,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+      },
+      "sync.gist": "ced732dd9fe9a1b8c5a6929424302fc0",
+      "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+      }
+    }
+  },
+  "profileSwitcher.extensions": {
+    "default": [
+      {
+        "id": "5b70d193-8451-4993-b4d4-eabcc15b7fe1",
+        "publisherId": "AndrsDC.base16-themes",
+        "publisherName": "AndrsDC",
+        "version": "1.4.5",
+        "name": "base16-themes"
+      },
+      {
+        "id": "cf792a4b-7937-43c7-96f2-2b5f9e0c9de8",
+        "publisherId": "benvp.vscode-hex-pm-intellisense",
+        "publisherName": "benvp",
+        "version": "0.2.1",
+        "name": "vscode-hex-pm-intellisense"
+      },
+      {
+        "id": "ad69099f-cde3-4d9c-b019-cdd987e6f71a",
+        "publisherId": "blairleduc.touch-bar-display",
+        "publisherName": "blairleduc",
+        "version": "1.2.1",
+        "name": "touch-bar-display"
+      },
+      {
+        "id": "583b2b34-2c1e-4634-8c0b-0b82e283ea3a",
+        "publisherId": "dbaeumer.vscode-eslint",
+        "publisherName": "dbaeumer",
+        "version": "1.9.0",
+        "name": "vscode-eslint"
+      },
+      {
+        "id": "cba79045-6f59-4f86-8c80-af78d566d8cf",
+        "publisherId": "deerawan.vscode-dash",
+        "publisherName": "deerawan",
+        "version": "2.2.0",
+        "name": "vscode-dash"
+      },
+      {
+        "id": "4de763bd-505d-4978-9575-2b7696ecf94e",
+        "publisherId": "eamodio.gitlens",
+        "publisherName": "eamodio",
+        "version": "9.9.3",
+        "name": "gitlens"
+      },
+      {
+        "id": "96fa4707-6983-4489-b7c5-d5ffdfdcce90",
+        "publisherId": "esbenp.prettier-vscode",
+        "publisherName": "esbenp",
+        "version": "1.9.0",
+        "name": "prettier-vscode"
+      },
+      {
+        "id": "b3917e4f-5086-4def-a82b-2ae6b708db16",
+        "publisherId": "flowtype.flow-for-vscode",
+        "publisherName": "flowtype",
+        "version": "1.3.0",
+        "name": "flow-for-vscode"
+      },
+      {
+        "id": "69ddd764-339a-4ecc-97c1-9c4ece58e36d",
+        "publisherId": "GitHub.vscode-pull-request-github",
+        "publisherName": "GitHub",
+        "version": "0.9.2",
+        "name": "vscode-pull-request-github"
+      },
+      {
+        "id": "bc64531a-9b98-46f5-8ef9-88334d02cd60",
+        "publisherId": "JakeBecker.elixir-ls",
+        "publisherName": "JakeBecker",
+        "version": "0.2.25",
+        "name": "elixir-ls"
+      },
+      {
+        "id": "e3f26909-4865-4350-a891-1dfd2a411fc1",
+        "publisherId": "jakelucas.code-file-nav",
+        "publisherName": "jakelucas",
+        "version": "0.7.2",
+        "name": "code-file-nav"
+      },
+      {
+        "id": "9e919931-6833-483d-a7b9-966f8f974227",
+        "publisherId": "joaompinto.asciidoctor-vscode",
+        "publisherName": "joaompinto",
+        "version": "2.7.6",
+        "name": "asciidoctor-vscode"
+      },
+      {
+        "id": "ca87c7aa-ed97-43f6-82b5-1c632977caf3",
+        "publisherId": "joshjg.vscode-credo",
+        "publisherName": "joshjg",
+        "version": "0.2.0",
+        "name": "vscode-credo"
+      },
+      {
+        "id": "532533c9-a894-4a58-9eee-bbfbe7c06f71",
+        "publisherId": "mikestead.dotenv",
+        "publisherName": "mikestead",
+        "version": "1.0.1",
+        "name": "dotenv"
+      },
+      {
+        "id": "0479fc1c-3d67-49f9-b087-fb9069afe48f",
+        "publisherId": "ms-azuretools.vscode-docker",
+        "publisherName": "ms-azuretools",
+        "version": "0.7.0",
+        "name": "vscode-docker"
+      },
+      {
+        "id": "55ef6448-487b-49a0-a66e-4d2d9bb82229",
+        "publisherId": "Prisma.vscode-graphql",
+        "publisherName": "Prisma",
+        "version": "0.2.1",
+        "name": "vscode-graphql"
+      },
+      {
+        "id": "2061917f-f76a-458a-8da9-f162de22b97e",
+        "publisherId": "redhat.vscode-yaml",
+        "publisherName": "redhat",
+        "version": "0.4.1",
+        "name": "vscode-yaml"
+      },
+      {
+        "id": "b78d2f2b-8801-40a5-ae88-27d420197d49",
+        "publisherId": "skyapps.fish-vscode",
+        "publisherName": "skyapps",
+        "version": "0.2.1",
+        "name": "fish-vscode"
+      },
+      {
+        "id": "e57e286b-79b0-4b5c-8449-57d28a5df247",
+        "publisherId": "tickleforce.scrolloff",
+        "publisherName": "tickleforce",
+        "version": "0.0.3",
+        "name": "scrolloff"
+      },
+      {
+        "id": "d96e79c6-8b25-4be3-8545-0e0ecefcae03",
+        "publisherId": "vscodevim.vim",
+        "publisherName": "vscodevim",
+        "version": "1.9.0",
+        "name": "vim"
+      }
+    ]
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "languageServerCredo.flags": "--min-priority normal",
+  "elixirLS.fetchDeps": false,
+  "editor.cursorSurroundingLines": 5,
+  "terminal.integrated.fontFamily": "Monaco, monospace"
 }
