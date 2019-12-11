@@ -8,7 +8,7 @@ if not status --is-interactive
 end
 
 # set base16 colors
-eval sh $HOME/.config/base16-shell/base16-default.dark.sh
+source $HOME/.config/base16-shell/profile_helper.fish
 
 os_detect
 
@@ -48,10 +48,12 @@ set -x LESS -RiW
 
 ### PATH ###
 
-if test -d $HOME/.asdf
+if test -f $HOME/.asdf/asdf.fish
   # asdf is installed
   # add asdf paths before others
   source $HOME/.asdf/asdf.fish
+else if test -f /usr/local/opt/asdf/asdf.fish
+  source /usr/local/opt/asdf/asdf.fish
 end
 
 # Go
