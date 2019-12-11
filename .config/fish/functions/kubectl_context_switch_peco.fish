@@ -1,4 +1,8 @@
 function kubectl_context_switch_peco
+  if not available kubectl
+    echo "kubectl not installed"
+    exit 1
+  end
 
   set peco_flags "--layout=bottom-up" "--initial-filter=Fuzzy"
   if [ (count $argv) != 0 ]

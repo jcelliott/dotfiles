@@ -82,6 +82,8 @@ abbr --add kaf 'kubectl apply -f'
 abbr --add kp 'kubectl port-forward'
 abbr --add kls 'kubectl logs -f --since 1s'
 abbr --add ks 'kubectl_context_switch_peco'
+abbr --add ka 'kubectl_attach_pod'
+abbr --add kn 'kubectl -n kube-system'
 
 abbr --add chmox 'chmod +x'
 
@@ -92,3 +94,5 @@ abbr --add mc 'mix compile'
 abbr --add iexm 'iex -S mix'
 
 abbr --add y 'yarn'
+
+abbr --add e 'dotenv'
