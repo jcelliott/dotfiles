@@ -94,5 +94,5 @@ abbr --add mc 'mix compile'
 abbr --add iexm 'iex -S mix'
 
 abbr --add y 'yarn'
-
 abbr --add e 'dotenv'
+abbr --add hm 'history --merge'
