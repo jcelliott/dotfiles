@@ -188,6 +188,23 @@ function! PreserveCursor(command)
   execute a:command
   call setpos('.', l:save_cursor)
 endfunction
+
+" highlight non-ascii characters
+" idea from here: https://stackoverflow.com/a/27690622/1249189
+function HighlightNonAsciiToggle()
+  if exists('g:highlight_non_ascii') && g:highlight_non_ascii == 1
+    echo "Setting non-ascii highlight OFF"
+    syntax clear nonascii
+    let g:highlight_non_ascii=0
+  else
+    echo "Setting non-ascii highlight ON"
+    syntax match nonascii "[^\x00-\x7F]" containedin=ALL
+    highlight nonascii ctermbg=red
+    let g:highlight_non_ascii=1
+  endif
+endfunction
+command HighlightNonAsciiToggle call HighlightNonAsciiToggle()
+
 "}}}
 
 "------------------------------------------------------------------------------
