@@ -45,6 +45,25 @@
   "vim.normalModeKeyBindingsNonRecursive": [
     {
       "before": [
+        ",",
+        "."
+      ],
+      "commands": [
+        "workbench.action.openNextRecentlyUsedEditorInGroup"
+        //"workbench.action.quickOpenNavigateNextInEditorPicker"
+      ]
+    },
+    {
+      "before": [
+        ",",
+        ","
+      ],
+      "commands": [
+        "workbench.files.action.showActiveFileInExplorer"
+      ]
+    },
+    {
+      "before": [
         ":"
       ],
       "commands": [
@@ -130,7 +149,6 @@
   "git.autofetch": true,
   "scrolloff.scrolloff": 10,
   "elixirLS.mixEnv": "dev",
-  "prettier.eslintIntegration": true,
   "flow.useNPMPackagedFlow": true,
   "eslint.packageManager": "yarn",
   "eslint.provideLintTask": true,
@@ -456,7 +474,15 @@
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
   "languageServerCredo.flags": "--min-priority normal",
-  "elixirLS.fetchDeps": false,
   "editor.cursorSurroundingLines": 5,
-  "terminal.integrated.fontFamily": "Monaco, monospace"
+  "terminal.integrated.fontFamily": "Monaco, monospace",
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": false
+  },
+  "[elixir]": {
+    "editor.quickSuggestions": true
+  },
+  "elixirLS.fetchDeps": false
 }
