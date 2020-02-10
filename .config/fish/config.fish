@@ -73,9 +73,13 @@ set -x ERL_AFLAGS "-kernel shell_history enabled"
 if not set -q -U fish_user_paths
   set -U fish_user_paths "$HOME/bin" "$GOPATH/bin" "$HOME/.local/bin"
   if test $_platform = "darwin"
+    if test -d "/usr/local/opt/python/libexec/bin"
+      set -U fish_user_paths $fish_user_paths "/usr/local/opt/python/libexec/bin"
+    end
+
     # path for local python packages (pip install --user)
-    set -U fish_user_paths $fish_user_paths "$HOME/Library/Python/2.7/bin"
     set -U fish_user_paths $fish_user_paths "$HOME/Library/Python/3.5/bin"
+    set -U fish_user_paths $fish_user_paths "$HOME/Library/Python/2.7/bin"
 
     # asdf paths
     set -U fish_user_paths $fish_user_paths "$HOME/.asdf/shims" "$HOME/.asdf/bin"
@@ -118,6 +122,9 @@ end
 # Virtualfish (Python virtualenv)
 set -g VIRTUALFISH_COMPAT_ALIASES
 source "$HOME/.local/share/virtualfish/virtual.fish"
+# Don't overwrite prompt in virtualenv (I'm already handling this in
+# fish_right_prompt)
+set -x VIRTUAL_ENV_DISABLE_PROMPT true
 
 fundle plugin 'oh-my-fish/plugin-peco'
 fundle plugin 'tuvistavie/fish-completion-helpers'
