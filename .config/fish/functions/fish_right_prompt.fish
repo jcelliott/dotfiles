@@ -6,9 +6,20 @@ function fish_right_prompt --description 'Write out the right prompt'
     function __fish_set_virtualenv_prompt --on-variable VIRTUAL_ENV --description "Event handler; change virtualenv prompt when VIRTUAL_ENV changes"
       if status --is-interactive
         if set -q VIRTUAL_ENV
-          set -g __fish_prompt_virtualenv "["(basename "$VIRTUAL_ENV")"]"
+          # set -g __fish_prompt_virtualenv "["(basename "$VIRTUAL_ENV")"]"
+          set -g __fish_prompt_virtualenv "["$VIRTUAL_ENV"]"
         else
           set -g __fish_prompt_virtualenv
+        end
+      end
+    end
+
+    function __fish_set_conda_env_prompt --on-variable CONDA_DEFAULT_ENV --description "Event handler; change conda env prompt"
+      if status --is-interactive
+        if set -q CONDA_DEFAULT_ENV
+          set -g __fish_prompt_conda_env "["$CONDA_DEFAULT_ENV"]"
+        else
+          set -g __fish_prompt_conda_env
         end
       end
     end
@@ -25,5 +36,5 @@ function fish_right_prompt --description 'Write out the right prompt'
       end
     end
 
-    echo -ns "$__fish_rprompt_color" "$__fish_prompt_docker_machine" "$__fish_prompt_virtualenv"
+    echo -ns "$__fish_rprompt_color" "$__fish_prompt_docker_machine" "$__fish_prompt_virtualenv" "$__fish_prompt_conda_env"
 end
