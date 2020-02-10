@@ -8,6 +8,7 @@ if not status --is-interactive
 end
 
 # set base16 colors
+set BASE16_SHELL "$HOME/.config/base16-shell"
 source $HOME/.config/base16-shell/profile_helper.fish
 
 os_detect
