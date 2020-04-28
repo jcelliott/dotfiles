@@ -42,6 +42,24 @@
   "vim.leader": ",",
   "vim.useSystemClipboard": true,
   "vim.hlsearch": true,
+  "vim.visualModeKeyBindingsNonRecursive": [
+    {
+      "before": [
+        "L"
+      ],
+      "after": [
+        "$"
+      ]
+    },
+    {
+      "before": [
+        "H"
+      ],
+      "after": [
+        "^"
+      ]
+    }
+  ],
   "vim.normalModeKeyBindingsNonRecursive": [
     {
       "before": [
@@ -484,5 +502,12 @@
   "[elixir]": {
     "editor.quickSuggestions": true
   },
-  "elixirLS.fetchDeps": false
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "elixirLS.fetchDeps": false,
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "githubPullRequests.showInSCM": true
 }
