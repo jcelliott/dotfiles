@@ -129,6 +129,7 @@ set -x VIRTUAL_ENV_DISABLE_PROMPT true
 fundle plugin 'oh-my-fish/plugin-peco'
 fundle plugin 'tuvistavie/fish-completion-helpers'
 fundle plugin 'edc/bass'
+fundle plugin 'laughedelic/pisces'
 fundle init
 
 # fasd
@@ -168,3 +169,4 @@ set -x ANDROID_SDK_ROOT "/usr/local/share/android-sdk"
 if test -e /usr/local/share/chruby/chruby.fish
   source /usr/local/share/chruby/chruby.fish
 end
+
