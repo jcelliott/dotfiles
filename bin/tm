@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# attach to main tmux session
+
+tmux new-session -t main -A -s $1
