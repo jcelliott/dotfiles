@@ -76,6 +76,9 @@ if not set -q -U fish_user_paths
     if test -d "/usr/local/opt/python/libexec/bin"
       set -U fish_user_paths $fish_user_paths "/usr/local/opt/python/libexec/bin"
     end
+    if test -d "/Applications/Postgres.app"
+      set -U fish_user_paths $fish_user_paths "/Applications/Postgres.app/Contents/Versions/latest/bin"
+    end
 
     # path for local python packages (pip install --user)
     set -U fish_user_paths $fish_user_paths "$HOME/Library/Python/3.5/bin"
