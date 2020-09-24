@@ -101,12 +101,44 @@
   },
   {
     "key": "cmd+f",
-    "command": "workbench.view.search",
-    "when": "!searchViewletVisible"
+    "command": "workbench.view.search"
   },
   {
     "key": "shift+cmd+f",
     "command": "-workbench.view.search",
     "when": "!searchViewletVisible"
+  },
+  {
+    "key": "cmd+d",
+    "command": "-editor.action.addSelectionToNextFindMatch",
+    "when": "editorFocus"
+  },
+  {
+    "key": "cmd+d",
+    "command": "-extension.vim_cmd+d",
+    "when": "editorTextFocus && vim.active && vim.use<D-d> && !inDebugRepl"
+  },
+  {
+    "key": "cmd+d",
+    "command": "workbench.view.debug"
+  },
+  {
+    "key": "shift+cmd+d",
+    "command": "-workbench.view.debug"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "search.focus.nextInputBox",
+    "when": "inputBoxFocus && searchViewletVisible"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "search.focus.previousInputBox",
+    "when": "fileMatchOrMatchFocus && searchViewletVisible"
+  },
+  {
+    "key": "enter",
+    "command": "search.focus.nextInputBox",
+    "when": "inputBoxFocus && searchViewletVisible"
   }
 ]
