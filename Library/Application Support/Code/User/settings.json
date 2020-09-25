@@ -1,8 +1,8 @@
 {
-  "window.zoomLevel": -1,
+  "window.zoomLevel": 0,
   "editor.minimap.renderCharacters": false,
   "editor.formatOnSave": true,
-  "workbench.activityBar.visible": false,
+  "workbench.activityBar.visible": true,
   "workbench.colorCustomizations": {
     "editorIndentGuide.background": "#1f1f1f",
     "editorIndentGuide.activeBackground": "#393939",
@@ -67,8 +67,16 @@
         "."
       ],
       "commands": [
+        "workbench.action.openPreviousRecentlyUsedEditorInGroup"
+      ]
+    },
+    {
+      "before": [
+        ",",
+        "m"
+      ],
+      "commands": [
         "workbench.action.openNextRecentlyUsedEditorInGroup"
-        //"workbench.action.quickOpenNavigateNextInEditorPicker"
       ]
     },
     {
@@ -77,7 +85,19 @@
         ","
       ],
       "commands": [
-        "workbench.files.action.showActiveFileInExplorer"
+        // "workbench.files.action.showActiveFileInExplorer"
+        // "workbench.action.showEditorsInActiveGroup"
+        "workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup"
+        // "workbench.action.showAllEditorsByMostRecentlyUsed"
+      ]
+    },
+    {
+      "before": [
+        ",",
+        "b"
+      ],
+      "commands": [
+        "workbench.action.showAllEditorsByMostRecentlyUsed"
       ]
     },
     {

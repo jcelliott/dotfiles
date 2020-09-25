@@ -140,5 +140,23 @@
     "key": "enter",
     "command": "search.focus.nextInputBox",
     "when": "inputBoxFocus && searchViewletVisible"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "workbench.action.quickOpenNavigateNext",
+    "when": "inEditorsPicker || inQuickOpen"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "workbench.action.quickOpenNavigatePrevious",
+    "when": "inEditorsPicker || inQuickOpen"
+  },
+  {
+    "key": "cmd+ctrl+l",
+    "command": "workbench.action.moveEditorToRightGroup"
+  },
+  {
+    "key": "cmd+ctrl+h",
+    "command": "workbench.action.moveEditorToLeftGroup"
   }
 ]
