@@ -2,7 +2,7 @@
   "window.zoomLevel": 0,
   "editor.minimap.renderCharacters": false,
   "editor.formatOnSave": true,
-  "workbench.activityBar.visible": true,
+  "workbench.activityBar.visible": false,
   "workbench.colorCustomizations": {
     "editorIndentGuide.background": "#1f1f1f",
     "editorIndentGuide.activeBackground": "#393939",
@@ -529,5 +529,6 @@
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
-  "githubPullRequests.showInSCM": true
+  "githubPullRequests.showInSCM": true,
+  "editor.formatOnSave": true
 }
