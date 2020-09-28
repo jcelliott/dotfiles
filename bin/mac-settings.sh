@@ -28,75 +28,75 @@ function set_keyboard_settings() {
   # Disable press-and-hold for keys in favor of key repeat
   defaults write -g ApplePressAndHoldEnabled -bool false
 
-	# Set a fast keyboard repeat rate
-	defaults write -g KeyRepeat -int 2
-	defaults write -g InitialKeyRepeat -int 20
+  # Set a fast keyboard repeat rate
+  defaults write -g KeyRepeat -int 2
+  defaults write -g InitialKeyRepeat -int 20
 
-	# Stop iTunes from responding to the keyboard media keys
-	launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2> /dev/null
+  # Stop iTunes from responding to the keyboard media keys
+  launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2> /dev/null
 }
 
 function set_finder_settings() {
   cinfo "Update finder settings"
-	# Show icons for hard drives, servers, and removable media on the desktop
-	defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
-	defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
-	defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
-	defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+  # Show icons for hard drives, servers, and removable media on the desktop
+  defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+  defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
+  defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
+  defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 
-	# Finder: show status bar
-	defaults write com.apple.finder ShowStatusBar -bool true
+  # Finder: show status bar
+  defaults write com.apple.finder ShowStatusBar -bool true
 
-	# Finder: show path bar
-	defaults write com.apple.finder ShowPathbar -bool true
+  # Finder: show path bar
+  defaults write com.apple.finder ShowPathbar -bool true
 
-	# Display full POSIX path as Finder window title
-	defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+  # Display full POSIX path as Finder window title
+  defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 
-	# Keep folders on top when sorting by name
-	defaults write com.apple.finder _FXSortFoldersFirst -bool true
+  # Keep folders on top when sorting by name
+  defaults write com.apple.finder _FXSortFoldersFirst -bool true
 
-	# Avoid creating .DS_Store files on network or USB volumes
-	defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
-	defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+  # Avoid creating .DS_Store files on network or USB volumes
+  defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+  defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 
   # Show the ~/Library folder
-	chflags nohidden ~/Library
-	# Show the /Volumes folder
-	sudo chflags nohidden /Volumes
+  chflags nohidden ~/Library
+  # Show the /Volumes folder
+  sudo chflags nohidden /Volumes
 }
 
 function set_dock_dashboard_settings() {
   cinfo "Update dock and dashboard settings"
-	# Change minimize/maximize window effect
-	defaults write com.apple.dock mineffect -string "scale"
+  # Change minimize/maximize window effect
+  defaults write com.apple.dock mineffect -string "scale"
 
-	# Move the dock to the right
-	defaults write com.apple.dock 'orientation' -string 'right'
+  # Move the dock to the right
+  defaults write com.apple.dock 'orientation' -string 'right'
 
-	# Wipe all (default) app icons from the Dock
-	defaults write com.apple.dock persistent-apps -array
+  # Wipe all (default) app icons from the Dock
+  defaults write com.apple.dock persistent-apps -array
 
-	# Disable Dashboard
-	defaults write com.apple.dashboard mcx-disabled -bool true
+  # Disable Dashboard
+  defaults write com.apple.dashboard mcx-disabled -bool true
 
-	# Don’t automatically rearrange Spaces based on most recent use
-	defaults write com.apple.dock mru-spaces -bool false
+  # Don’t automatically rearrange Spaces based on most recent use
+  defaults write com.apple.dock mru-spaces -bool false
 }
 
 function set_general_settings() {
   cinfo "Update general settings"
-	# Use plain text mode for new TextEdit documents
-	defaults write com.apple.TextEdit RichText -int 0
-	# Open and save files as UTF-8 in TextEdit
-	defaults write com.apple.TextEdit PlainTextEncoding -int 4
-	defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
+  # Use plain text mode for new TextEdit documents
+  defaults write com.apple.TextEdit RichText -int 0
+  # Open and save files as UTF-8 in TextEdit
+  defaults write com.apple.TextEdit PlainTextEncoding -int 4
+  defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
 
-	# Prevent Time Machine from prompting to use new hard drives as backup volume
-	defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+  # Prevent Time Machine from prompting to use new hard drives as backup volume
+  defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
-	# Prevent Photos from opening automatically when devices are plugged in
-	defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
+  # Prevent Photos from opening automatically when devices are plugged in
+  defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
 }
 
 # Close any open System Preferences panes, to prevent them from overriding
