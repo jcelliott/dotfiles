@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
 # attach to main tmux session
+# usage: tm <new_session> [target_session]
 
-tmux new-session -t main -A -s $1
+session=${2:-main}
+
+tmux new-session -t "$session" -A -s $1
