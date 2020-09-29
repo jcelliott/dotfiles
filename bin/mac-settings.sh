@@ -70,12 +70,16 @@ function set_dock_dashboard_settings() {
   cinfo "Update dock and dashboard settings"
   # Change minimize/maximize window effect
   defaults write com.apple.dock mineffect -string "scale"
-
   # Move the dock to the right
   defaults write com.apple.dock 'orientation' -string 'right'
-
   # Wipe all (default) app icons from the Dock
   defaults write com.apple.dock persistent-apps -array
+  # Enable dock autohide
+  defaults write com.apple.dock autohide -int 1
+  # Set dock icon size
+  defaults write com.apple.dock largesize -float 58
+  # Set dock magnification
+  defaults write com.apple.dock magnification -int 1
 
   # Disable Dashboard
   defaults write com.apple.dashboard mcx-disabled -bool true
