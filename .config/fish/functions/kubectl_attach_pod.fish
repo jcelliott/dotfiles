@@ -13,7 +13,7 @@ function kubectl_attach_pod --description 'Attach to a fuzzy-matched kubernetes 
   kubectl get pods -o name | cut -d/ -f2 | peco $peco_flags | read pod
 
   if [ $pod ]
-    kubectl exec -it $pod bash
+    kubectl exec -it $pod -- bash
   else
     echo "no pod selected"
     exit 1
