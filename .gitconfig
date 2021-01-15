@@ -6,6 +6,7 @@
 	editor = vim
 	excludesfile = ~/.gitignore_global
 	ignorecase = false
+	attributesfile = ~/.gitattributes
 
 [diff]
 	algorithm = patience
