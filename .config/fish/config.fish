@@ -8,6 +8,7 @@ if not status --is-interactive
 end
 
 # set base16 colors
+set BASE16_THEME "default-dark"
 set BASE16_SHELL "$HOME/.config/base16-shell"
 source $HOME/.config/base16-shell/profile_helper.fish
 
@@ -172,4 +173,3 @@ set -x ANDROID_SDK_ROOT "/usr/local/share/android-sdk"
 if test -e /usr/local/share/chruby/chruby.fish
   source /usr/local/share/chruby/chruby.fish
 end
-
