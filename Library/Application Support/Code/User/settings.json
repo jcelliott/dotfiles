@@ -169,6 +169,15 @@
       "commands": [
         "extension.dash.specific"
       ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "r"
+      ],
+      "commands": [
+        "editor.action.refactor"
+      ]
     }
   ],
   "window.restoreFullscreen": true,
