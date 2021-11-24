@@ -1,5 +1,5 @@
 {
-  "window.zoomLevel": 0,
+  "window.zoomLevel": -1,
   "editor.minimap.renderCharacters": false,
   "editor.formatOnSave": true,
   "workbench.activityBar.visible": false,
@@ -539,5 +539,42 @@
     "editor.defaultFormatter": "vscode.json-language-features"
   },
   "githubPullRequests.showInSCM": true,
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "terminal.integrated.profiles.osx": {
+    "bash": {
+      "path": "bash",
+      "args": [
+        "-l"
+      ],
+      "icon": "terminal-bash"
+    },
+    "zsh": {
+      "path": "zsh",
+      "args": [
+        "-l"
+      ]
+    },
+    "fish": {
+      "path": "fish",
+      "args": [
+        "-l"
+      ]
+    },
+    "tmux": {
+      "path": "tmux",
+      "icon": "terminal-tmux"
+    },
+    "pwsh": {
+      "path": "pwsh",
+      "icon": "terminal-powershell"
+    }
+  },
+  "redhat.telemetry.enabled": false,
+  "workbench.editorAssociations": {
+    "*.ipynb": "jupyter.notebook.ipynb"
+  },
+  "terminal.integrated.defaultProfile.osx": "fish"
 }
