@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # Set basic mac settings
+# Resources:
+# - https://github.com/herrbischoff/awesome-macos-command-line
 
 set -euo pipefail
 
