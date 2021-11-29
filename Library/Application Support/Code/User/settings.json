@@ -573,8 +573,15 @@
     }
   },
   "redhat.telemetry.enabled": false,
+  "dart.debugExternalLibraries": false,
+  "dart.debugSdkLibraries": false,
+  "dart.lineLength": 100,
+  "dart.flutterHotRestartOnSave": false,
+  "dart.triggerSignatureHelpAutomatically": true,
+  "dart.previewLsp": true,
+  "terminal.integrated.defaultProfile.osx": "fish"
+  "workbench.productIconTheme": "icons-carbon",
   "workbench.editorAssociations": {
     "*.ipynb": "jupyter.notebook.ipynb"
-  },
-  "terminal.integrated.defaultProfile.osx": "fish"
+  }
 }
