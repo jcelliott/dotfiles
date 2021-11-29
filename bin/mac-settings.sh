@@ -20,8 +20,8 @@ function set_keyboard_settings() {
   # Disable smart quotes
   defaults write -g NSAutomaticQuoteSubstitutionEnabled -bool false
 
-  # Disable “natural” (Lion-style) scrolling
-  defaults write com.apple.swipescrolldirection -bool true
+  # Disable “natural” scrolling
+  defaults write -g com.apple.swipescrolldirection '0'
 
   # Enable full keyboard access for all controls
   # (e.g. enable Tab in modal dialogs)
