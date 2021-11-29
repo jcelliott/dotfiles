@@ -134,6 +134,7 @@ fundle plugin 'oh-my-fish/plugin-peco'
 fundle plugin 'tuvistavie/fish-completion-helpers'
 fundle plugin 'edc/bass'
 fundle plugin 'laughedelic/pisces'
+fundle plugin 'franciscolourenco/done'
 fundle init
 
 # fasd
