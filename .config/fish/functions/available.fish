@@ -7,5 +7,5 @@
 # From oh-my-fish/lib
 
 function available -a name -d "Check if a function or program is available."
-  type "$name" ^/dev/null >&2
+  type "$name" 2>/dev/null >&2
 end

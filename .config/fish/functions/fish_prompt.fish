@@ -33,33 +33,33 @@ function fish_prompt --description 'Write out the prompt'
 		function __fish_repaint_user -v fish_color_user -d "repaint when fish_color_user changes"
 			if status --is-interactive
 				set -e __fish_prompt_user
-				commandline -f repaint ^/dev/null
+				commandline -f repaint 2>/dev/null
 			end
 		end
 		function __fish_repaint_user -v fish_prompt_show_user -d "repaint when fish_prompt_show_user changes"
 			if status --is-interactive
 				set -e __fish_prompt_user
-				commandline -f repaint ^/dev/null
+				commandline -f repaint 2>/dev/null
 			end
 		end
 
 		function __fish_repaint_host -v fish_color_host -d "repaint when fish_color_host changes"
 			if status --is-interactive
 				set -e __fish_prompt_host
-				commandline -f repaint ^/dev/null
+				commandline -f repaint 2>/dev/null
 			end
 		end
 		function __fish_repaint_host -v fish_prompt_show_host -d "repaint when fish_prompt_show_host changes"
 			if status --is-interactive
 				set -e __fish_prompt_host
-				commandline -f repaint ^/dev/null
+				commandline -f repaint 2>/dev/null
 			end
 		end
 
 		function __fish_repaint_status --on-variable fish_color_status -d "Event handler; repaint when fish_color_status changes"
 			if status --is-interactive
 				set -e __fish_prompt_status
-				commandline -f repaint ^/dev/null
+				commandline -f repaint 2>/dev/null
 			end
 		end
 
@@ -112,9 +112,9 @@ function fish_prompt --description 'Write out the prompt'
     end
 
     # support for Mac touchbar in iTerm2
-    if available it2setkeylabel
-      it2setkeylabel set status $PWD
-    end
+    # if available it2setkeylabel
+    #   it2setkeylabel set status $PWD
+    # end
 
     # full prompt
 	echo -ns "$__fish_prompt_user" "$__fish_prompt_host" ' ' "$__fish_prompt_cwd" (prompt_pwd) "$__git_prompt" "$__fish_prompt_normal" "$prompt_status" (fish_vi_prompt_mode) ' '

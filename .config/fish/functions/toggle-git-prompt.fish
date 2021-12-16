@@ -4,6 +4,6 @@ function toggle-git-prompt --description "toggle git information in the prompt"
 	else
 		set -eg __display_git_prompt
 	end
-	commandline -f repaint ^/dev/null
+	commandline -f repaint 2>/dev/null
 end
 
