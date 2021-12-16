@@ -6,8 +6,8 @@ function fish_right_prompt --description 'Write out the right prompt'
     function __fish_set_virtualenv_prompt --on-variable VIRTUAL_ENV --description "Event handler; change virtualenv prompt when VIRTUAL_ENV changes"
       if status --is-interactive
         if set -q VIRTUAL_ENV
-          # set -g __fish_prompt_virtualenv "["(basename "$VIRTUAL_ENV")"]"
-          set -g __fish_prompt_virtualenv "["$VIRTUAL_ENV"]"
+          set -g __fish_prompt_virtualenv "["(basename "$VIRTUAL_ENV")"]"
+          # set -g __fish_prompt_virtualenv "["$VIRTUAL_ENV"]"
         else
           set -g __fish_prompt_virtualenv
         end
