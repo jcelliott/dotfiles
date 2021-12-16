@@ -147,6 +147,9 @@ else
   perror "fasd is not installed"
 end
 
+# franciscolourenco/done
+set -U __done_exclude 'vim|less'
+
 # Base16 Shell
 # eval sh $HOME/.base16-default.dark.sh
 
