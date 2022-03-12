@@ -50,12 +50,11 @@ set -x LESS -RiW
 
 ### PATH ###
 
-if test -f $HOME/.asdf/asdf.fish
-  # asdf is installed
-  # add asdf paths before others
-  source $HOME/.asdf/asdf.fish
-else if test -f /usr/local/opt/asdf/asdf.fish
+# asdf is installed; add asdf paths before others
+if test -f /usr/local/opt/asdf/asdf.fish
   source /usr/local/opt/asdf/asdf.fish
+else if test -f $HOME/.asdf/asdf.fish
+  source $HOME/.asdf/asdf.fish
 end
 
 # Go
@@ -67,34 +66,17 @@ if test $_platform = "darwin"
   set -x GOROOT "/usr/local/opt/go/libexec"
 end
 
-# Elixir/Erlang
-set -x ERL_AFLAGS "-kernel shell_history enabled"
-
 # Path
-if not set -q -U fish_user_paths
-  set -U fish_user_paths "$HOME/bin" "$GOPATH/bin" "$HOME/.local/bin"
-  if test $_platform = "darwin"
-    if test -d "/usr/local/opt/python/libexec/bin"
-      set -U fish_user_paths $fish_user_paths "/usr/local/opt/python/libexec/bin"
-    end
-    if test -d "/Applications/Postgres.app"
-      set -U fish_user_paths $fish_user_paths "/Applications/Postgres.app/Contents/Versions/latest/bin"
-    end
-
-    # path for local python packages (pip install --user)
-    set -U fish_user_paths $fish_user_paths "$HOME/Library/Python/3.5/bin"
-    set -U fish_user_paths $fish_user_paths "$HOME/Library/Python/2.7/bin"
-
-    # asdf paths
-    set -U fish_user_paths $fish_user_paths "$HOME/.asdf/shims" "$HOME/.asdf/bin"
-
-    # path for Homebrew
-    set -U fish_user_paths $fish_user_paths "/usr/local/bin"
-  end
-
-  # Rust
-  set -U fish_user_paths $fish_user_paths "$HOME/.cargo/bin"
+if test $_platform = "darwin"
+  # path for Homebrew (add first, so other tools can override)
+  fish_add_path "/usr/local/bin"
+  fish_add_path "/usr/local/opt/python/libexec/bin"
+  fish_add_path "/Applications/Postgres.app/Contents/Versions/latest/bin"
+  fish_add_path "$HOME/.asdf/shims" "$HOME/.asdf/bin"
 end
+
+fish_add_path "$HOME/bin" "$GOPATH/bin" "$HOME/.local/bin"
+fish_add_path "$HOME/.cargo/bin"  # Rust
 
 # Manpath
 if test $_platform = "darwin"
@@ -136,6 +118,9 @@ fundle plugin 'edc/bass'
 fundle plugin 'laughedelic/pisces'
 fundle plugin 'franciscolourenco/done'
 fundle init
+
+# Elixir/Erlang
+set -x ERL_AFLAGS "-kernel shell_history enabled"
 
 # fasd
 if type -q fasd
