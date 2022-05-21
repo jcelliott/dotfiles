@@ -48,6 +48,9 @@ set -x RSYNC_PARTIAL_DIR .rsync-tmp
 # less
 set -x LESS -RiW
 
+# ssh - use '--apple-use-keychain'
+set -x APPLE_SSH_ADD_BEHAVIOR "macos"
+
 ### PATH ###
 
 # asdf is installed; add asdf paths before others
