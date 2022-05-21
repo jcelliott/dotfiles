@@ -81,7 +81,7 @@ endfunction
 
 function! statusline#git_status()
   if exists('g:loaded_fugitive')
-    let git_stat = fugitive#head()
+    let git_stat = FugitiveHead()
     if (git_stat != '')
       return '[⎇  '.git_stat.']'
     endif
