@@ -256,8 +256,8 @@ noremap gi O<Esc>j
 noremap <Down> <C-e>j
 noremap <Up> <C-y>k
 " mouse scroll wheel does the same
-map <ScrollWheelDown> 5<C-e>5j
-map <ScrollWheelUp> 5<C-y>5k
+map <ScrollWheelDown> <C-e>j
+map <ScrollWheelUp> <C-y>k
 
 " H and L go to beginning and end of visual line
 " noremap H ^
