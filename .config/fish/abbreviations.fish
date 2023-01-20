@@ -1,5 +1,6 @@
 # Set all fish abbreviations
 abbr --add g 'git'
+abbr --add gu 'gitui'
 abbr --add gst 'git status'
 abbr --add gs 'git status'
 abbr --add gc 'git commit -v'
@@ -101,3 +102,9 @@ abbr --add y 'yarn'
 abbr --add e 'dotenv'
 abbr --add hm 'history --merge'
 abbr --add bs 'bass source'
+
+abbr --add o 'oxen'
+abbr --add ost 'oxen status'
+abbr --add oc 'oxen commit'
+
+abbr --add cb 'cargo build'
