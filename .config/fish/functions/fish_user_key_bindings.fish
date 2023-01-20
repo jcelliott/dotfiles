@@ -1,10 +1,8 @@
 function fish_user_key_bindings --description "User key bindings for fish"
   fish_vi_key_bindings
 
-  # reverse search (https://github.com/jbonjean/re-search)
-  # bind \cr re_search
+  # fuzzy history search with Peco
   bind \cr 'peco_select_history (commandline -b)'
-  # bind -M insert \cr re_search
   bind -M insert \cr 'peco_select_history (commandline -b)'
 
   # normal mode

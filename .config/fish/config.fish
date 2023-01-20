@@ -14,6 +14,15 @@ base16-default-dark
 
 os_detect
 
+# Emulates vim's cursor shape behavior
+# Set the normal and visual mode cursors to a block
+set -x fish_cursor_default block blink
+# Set the insert mode cursor to a line
+set -x fish_cursor_insert line
+# Set the replace mode cursor to an underscore
+set -x fish_cursor_replace_one underscore
+# set -x fish_vi_force_cursor true
+
 if not set -q fish_abbreviations_set
   abbr_set
 end
@@ -119,6 +128,7 @@ fundle plugin 'oh-my-fish/plugin-peco'
 fundle plugin 'tuvistavie/fish-completion-helpers'
 fundle plugin 'edc/bass'
 fundle plugin 'laughedelic/pisces'
+  set -U pisces_only_insert_at_eol 1
 fundle plugin 'franciscolourenco/done'
 fundle init
 
