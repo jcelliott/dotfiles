@@ -56,6 +56,11 @@ set -x LESS -RiW
 # ssh - use '--apple-use-keychain'
 set -x APPLE_SSH_ADD_BEHAVIOR "macos"
 
+# Java
+if test $_platform = "darwin"
+  set -x JAVA_HOME "/Library/Java/JavaVirtualMachines/openjdk.jdk/Contents/Home"
+end
+
 ### PATH ###
 
 # asdf is installed; add asdf paths before others
