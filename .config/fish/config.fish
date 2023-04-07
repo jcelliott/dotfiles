@@ -33,10 +33,6 @@ set_fish_colors
 # Editor
 set -x EDITOR vim
 
-if available vimpager
-  set -x MANPAGER vimpager
-end
-
 ### Program-specific settings ###
 
 # ls
