@@ -16,7 +16,7 @@ os_detect
 
 # Emulates vim's cursor shape behavior
 # Set the normal and visual mode cursors to a block
-set -x fish_cursor_default block blink
+set -x fish_cursor_default block
 # Set the insert mode cursor to a line
 set -x fish_cursor_insert line
 # Set the replace mode cursor to an underscore
@@ -164,6 +164,9 @@ end
 if available mix
   alias dialyze='env MIX_ENV=test mix dialyzer'
 end
+
+alias dark='base16-default-dark'
+alias light='base16-default-light'
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
