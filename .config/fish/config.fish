@@ -23,9 +23,7 @@ set -x fish_cursor_insert line
 set -x fish_cursor_replace_one underscore
 # set -x fish_vi_force_cursor true
 
-if not set -q fish_abbreviations_set
-  abbr_set
-end
+source "$HOME/.config/fish/abbreviations.fish"
 
 # this only sets the variables if they aren't defined
 set_fish_colors
