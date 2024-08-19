@@ -79,8 +79,8 @@ brew bundle --global --verbose
 # Install other utilities
 mkdir -p "$HOME/src"
 export GOPATH=$HOME/src/go
-go get github.com/jcelliott/utils/duration-fmt
-go get github.com/jcelliott/utils/sysinfo
+go install github.com/jcelliott/utils/duration-fmt@latest
+go install github.com/jcelliott/utils/sysinfo@latest
 
 # Set shell
 if grep "fish" /etc/shells; then
