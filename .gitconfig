@@ -4,12 +4,17 @@
 
 [core]
 	editor = vim
+	# pager = delta
 	excludesfile = ~/.gitignore_global
 	ignorecase = false
 	attributesfile = ~/.gitattributes
 
 [diff]
 	algorithm = patience
+	colorMoved = default
+
+[interactive]
+	diffFilter = delta --color-only
 
 [color]
 	ui = auto
@@ -19,9 +24,16 @@
 
 [merge]
 	tool = vimdiff
+	conflictstyle = diff3
 
 [mergetool "vimdiff"]
 	trustExitCode = false
+
+[delta]
+	navigate = true    # use n and N to move between diff sections
+	light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+	syntax-theme = base16
+	true-color = never # this is needed for VSCode's integrated terminal to render correctly
 
 [github]
 	user = jcelliott
@@ -37,3 +49,4 @@
   revision = rev-parse HEAD
   rev = rev-parse --short HEAD
   untracked = ls-files --others
+
