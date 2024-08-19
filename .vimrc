@@ -532,12 +532,13 @@ Plug 'SirVer/ultisnips', { 'on': [] } "{{{
   let g:UltiSnipsSnippetDirectories=["UltiSnips", "ultisnips"]
 "}}}
 Plug 'honza/vim-snippets' " snippets collection
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] } " {{{
-  " let g:ycm_complete_in_strings = 0
-  let g:ycm_collect_identifiers_from_tags_files = 1
-  let g:ycm_seed_identifiers_with_syntax = 1
-  let g:ycm_autoclose_preview_window_after_insertion = 1
-"}}}
+" TODO: not using YCM
+" Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] } " {{{
+"   " let g:ycm_complete_in_strings = 0
+"   let g:ycm_collect_identifiers_from_tags_files = 1
+"   let g:ycm_seed_identifiers_with_syntax = 1
+"   let g:ycm_autoclose_preview_window_after_insertion = 1
+" "}}}
 Plug 'jmcantrell/vim-virtualenv' "{{{
   let g:virtualenv_auto_activate = 1
 "}}}
@@ -710,12 +711,13 @@ Plug 'dbeniamine/cheat.sh-vim' "{{{
 call plug#end()
 
 " Manually loaded plugins {{{
-augroup plugins_load_insert_enter
-  autocmd!
-  autocmd InsertEnter * call plug#load('ultisnips', 'YouCompleteMe')
-                     \| call youcompleteme#Enable()
-                     \| autocmd! plugins_load_insert_enter
-augroup END
+" TODO: Don't load these for now, not using YCM
+" augroup plugins_load_insert_enter
+"   autocmd!
+"   autocmd InsertEnter * call plug#load('ultisnips', 'YouCompleteMe')
+"                      \| call youcompleteme#Enable()
+"                      \| autocmd! plugins_load_insert_enter
+" augroup END
 "}}}
 
 " built-in macros:
