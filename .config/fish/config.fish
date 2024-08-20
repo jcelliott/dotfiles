@@ -157,10 +157,11 @@ set -U __done_exclude 'vim|less'
 if available bat
   alias cat=bat
 end
-if available exa
-  alias ls=exa
-  alias l='exa -l'
-  alias la='exa -la'
+# https://github.com/eza-community/eza
+if available eza
+  alias ls=eza
+  alias l='eza -l'
+  alias la='eza -la'
 end
 if available mix
   alias dialyze='env MIX_ENV=test mix dialyzer'
