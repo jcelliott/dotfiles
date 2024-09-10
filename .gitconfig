@@ -5,7 +5,7 @@
 [core]
 	editor = vim
 	# pager = delta
-	excludesfile = ~/.gitignore_global
+	excludesFile = ~/.config/git/ignore
 	ignorecase = false
 	attributesfile = ~/.gitattributes
 
@@ -50,3 +50,5 @@
   rev = rev-parse --short HEAD
   untracked = ls-files --others
 
+[init]
+	defaultBranch = main

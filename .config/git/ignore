@@ -3,3 +3,4 @@
 .netrwhist
 tags
 .DS_Store
+.mise.local.toml
