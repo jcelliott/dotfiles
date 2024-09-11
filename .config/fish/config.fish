@@ -60,13 +60,15 @@ if test $_platform = "darwin"
 end
 
 ### PATH ###
+# Note: prefer global paths (fish_add_path -g) so we don't have universal
+# variables sticking around with old path values
 
 # asdf is installed; add asdf paths before others
-if test -f /usr/local/opt/asdf/asdf.fish
-  source /usr/local/opt/asdf/asdf.fish
-else if test -f $HOME/.asdf/asdf.fish
-  source $HOME/.asdf/asdf.fish
-end
+# if test -f /usr/local/opt/asdf/asdf.fish
+#   source /usr/local/opt/asdf/asdf.fish
+# else if test -f $HOME/.asdf/asdf.fish
+#   source $HOME/.asdf/asdf.fish
+# end
 
 # Go
 set -x GOPATH "$HOME/src/go"
@@ -81,15 +83,19 @@ end
 if test $_platform = "darwin"
   # path for Homebrew (add first, so other tools can override)
   eval (/opt/homebrew/bin/brew shellenv)
-  fish_add_path "/usr/local/bin"
-  fish_add_path "/usr/local/opt/python/libexec/bin"
-  fish_add_path "$HOME/Library/Python/3.10/bin"
-  fish_add_path "/Applications/Postgres.app/Contents/Versions/latest/bin"
-  fish_add_path "$HOME/.asdf/shims" "$HOME/.asdf/bin"
+  # shellenv above isn't putting homebrew paths before system paths, the move
+  # flag will move them to the correct location
+  fish_add_path -gP --move "/opt/homebrew/bin" "/opt/homebrew/sbin";
+  # fish_add_path "/usr/local/bin"
+  # fish_add_path "/usr/local/opt/python/libexec/bin"
+  # fish_add_path "$HOME/Library/Python/3.10/bin"
+  fish_add_path -g "/Applications/Postgres.app/Contents/Versions/latest/bin"
+  # fish_add_path "$HOME/.asdf/shims" "$HOME/.asdf/bin"
 end
 
-fish_add_path "$HOME/bin" "$GOPATH/bin" "$HOME/.local/bin"
-fish_add_path "$HOME/.cargo/bin"  # Rust
+fish_add_path -g "$HOME/bin" "$GOPATH/bin" "$HOME/.local/bin"
+fish_add_path -g "$HOME/.cargo/bin"  # Rust
+fish_add_path -g "/opt/homebrew/opt/rustup/bin"
 
 # Manpath
 if test $_platform = "darwin"
@@ -136,16 +142,6 @@ fundle init
 # Elixir/Erlang
 set -x ERL_AFLAGS "-kernel shell_history enabled"
 
-# fasd
-if type -q fasd
-  # hook fasd into fish preexec event
-  function __fasd_run -e fish_preexec
-    command fasd --proc (command fasd --sanitize "$argv") > "/dev/null" 2>&1
-  end
-else
-  perror "fasd is not installed"
-end
-
 # franciscolourenco/done
 set -U __done_exclude 'vim|less'
 
@@ -179,4 +175,19 @@ set -x ANDROID_SDK_ROOT "/usr/local/share/android-sdk"
 # Ruby
 if test -e /usr/local/share/chruby/chruby.fish
   source /usr/local/share/chruby/chruby.fish
+end
+
+# Use mise for tool management
+# Activate at the end of config so mise-installed tools take priority
+if type -q mise
+  mise activate fish | source
+else
+  perror "mise is not installed"
+end
+
+# Activate zoxide
+if type -q zoxide
+  zoxide init fish --cmd j | source
+else
+  perror "zoxide is not installed"
 end
