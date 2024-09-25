@@ -34,6 +34,7 @@ abbr --add ev 'vim ~/.vimrc'
 abbr --add et 'vim ~/.tmux.conf'
 abbr --add efc 'vim ~/.config/fish/config.fish'
 abbr --add eff 'vim ~/.config/fish/functions'
+abbr --add efa 'vim ~/.config/fish/abbreviations.fish'
 abbr --add ef 'vim ~/.config/fish'
 abbr --add vs 'vim-search'
 abbr --add vsa 'vim-search --no-ignore'
@@ -65,8 +66,8 @@ abbr --add dm 'docker-machine'
 
 abbr --add c 'code'
 
-abbr --add fc 'source ~/.config/fish/config.fish'
 abbr --add sf 'source ~/.config/fish/config.fish'
+abbr --add sfa 'source ~/.config/fish/abbreviations.fish'
 
 abbr --add s 'sudo'
 abbr --add se 'sudo -E'
