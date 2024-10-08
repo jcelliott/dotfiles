@@ -125,8 +125,9 @@ function fish_mode_prompt
 end
 
 # Virtualfish (Python virtualenv)
-set -g VIRTUALFISH_COMPAT_ALIASES
-source "$HOME/.local/share/virtualfish/virtual.fish"
+# Install with:
+#     pipx install virtualfish
+#     vf install
 # Don't overwrite prompt in virtualenv (I'm already handling this in
 # fish_right_prompt)
 set -x VIRTUAL_ENV_DISABLE_PROMPT true

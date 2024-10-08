@@ -1,9 +1,6 @@
 [submodule ".zsh/plugins/antigen"]
 	path = .zsh/plugins/antigen
 	url = https://github.com/zsh-users/antigen.git
-[submodule ".local/share/virtualfish"]
-	path = .local/share/virtualfish
-	url = https://github.com/adambrenecki/virtualfish.git
 [submodule ".vim/vim-plug"]
 	path = .vim/vim-plug
 	url = https://github.com/junegunn/vim-plug.git
