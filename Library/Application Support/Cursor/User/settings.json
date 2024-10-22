@@ -2,11 +2,15 @@
     "editor.minimap.renderCharacters": false,
     "editor.formatOnSave": true,
     "workbench.colorCustomizations": {
-        "editorIndentGuide.background": "#1f1f1f",
-        "editorIndentGuide.activeBackground": "#393939",
-        "statusBar.background": "#005f5f",
-        "statusBar.noFolderBackground": "#005f5f",
-        "statusBar.debuggingBackground": "#005f5f",
+        "[Base16 Light*]": {
+            "editorIndentGuide.background1": "#dadada",
+            "editorIndentGuide.activeBackground1": "#774343"
+        },
+        "editorIndentGuide.background1": "#1f1f1f",
+        "editorIndentGuide.activeBackground1": "#704747",
+        "statusBar.background": "#5f0000",
+        "statusBar.noFolderBackground": "#5f0000",
+        "statusBar.debuggingBackground": "#5f0000",
         "editorInlayHint.foreground": "#868686f0",
         "editorInlayHint.background": "#3d3d3d48",
         "tab.activeBackground": "#ffffff3f",
@@ -308,7 +312,7 @@
     "rust-analyzer.inlayHints.typeHints.enable": false,
     "outline.showConstants": false,
     "telemetry.telemetryLevel": "error",
-    "workbench.colorTheme": "Base16 Dark Default",
+    "workbench.colorTheme": "Base16 Light Tomorrow",
     "workbench.preferredLightColorTheme": "Base16 Light Tomorrow",
     "workbench.preferredDarkColorTheme": "Base16 Dark Default",
     "[markdown]": {
@@ -346,5 +350,7 @@
     "vim.joinspaces": false,
     "vim.statusBarColorControl": true,
     "editor.scrollBeyondLastColumn": 5,
-    "workbench.editor.revealIfOpen": true
+    "workbench.editor.revealIfOpen": true,
+    "terminal.integrated.fastScrollSensitivity": 2,
+    "window.newWindowProfile": "Default"
 }
