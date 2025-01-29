@@ -1,6 +1,32 @@
 {
+    "global": { "show_in_menu_bar": false },
     "profiles": [
         {
+            "complex_modifications": {
+                "rules": [
+                    {
+                        "description": "ctrl+opt+cmd + j/k scrolls up and down (mouse wheel)",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "j",
+                                    "modifiers": { "mandatory": ["left_control", "left_option", "left_command"] }
+                                },
+                                "to": [{ "mouse_key": { "vertical_wheel": 40 } }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "k",
+                                    "modifiers": { "mandatory": ["left_control", "left_option", "left_command"] }
+                                },
+                                "to": [{ "mouse_key": { "vertical_wheel": -40 } }],
+                                "type": "basic"
+                            }
+                        ]
+                    }
+                ]
+            },
             "devices": [
                 {
                     "identifiers": {
@@ -115,7 +141,8 @@
             ],
             "virtual_hid_keyboard": {
                 "caps_lock_delay_milliseconds": 0,
-                "keyboard_type": "ansi"
+                "keyboard_type": "ansi",
+                "keyboard_type_v2": "ansi"
             }
         }
     ]
