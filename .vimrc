@@ -455,7 +455,7 @@ call plug#begin('~/.vim/bundle')
 "   map <silent> <leader>a :SyntasticReset<CR>
 "}}}
 Plug 'sjbach/lusty' "{{{
-  let g:LustyExplorerSuppressRubyWarning = 1
+  " let g:LustyExplorerSuppressRubyWarning = 1
   let g:LustyExplorerDefaultMappings = 0
   let g:LustyJugglerDefaultMappings = 0
   map <silent> <leader>, :LustyJuggler<CR>
@@ -464,7 +464,6 @@ Plug 'sjbach/lusty' "{{{
   map <silent> <leader>h :LustyFilesystemExplorer $HOME<CR>
   " map <silent> <leader>g :LustyBufferGrep<CR>
   map <silent> <leader>b :LustyBufferExplorer<CR>
-  " map <silent> <leader>b :LustyBufferExplorer<CR> " use <leader>lb
 "}}}
 
 Plug 'Raimondi/delimitMate'
@@ -622,8 +621,8 @@ Plug 'mrk21/yaml-vim', { 'for': 'yaml' }  " fixes indentation
 Plug 'tclh123/vim-thrift', { 'for': 'thrift' }
 Plug 'niklasl/vim-rdf'
 Plug 'leafgarland/typescript-vim'
-Plug 'Shougo/vimproc.vim', { 'for': 'typescript' } " dependency for tsuquyomi
-Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
+" Plug 'Shougo/vimproc.vim', { 'for': 'typescript' } " dependency for tsuquyomi
+" Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 Plug 'moll/vim-bbye'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'lambdatoast/elm.vim'
