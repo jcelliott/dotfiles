@@ -65,7 +65,8 @@ abbr --add dcs 'docker-compose stop'
 
 abbr --add dm 'docker-machine'
 
-abbr --add c 'code'
+# too close to 'cd'
+# abbr --add c 'code'
 
 abbr --add sf 'source ~/.config/fish/config.fish'
 abbr --add sfa 'source ~/.config/fish/abbreviations.fish'
@@ -117,11 +118,13 @@ abbr --add oc 'oxen commit -m'
 abbr --add och 'oxen checkout'
 abbr --add ocb 'oxen checkout -b'
 abbr --add ol 'oxen log'
+abbr --add op 'oxen pull'
 abbr --add ostage 'oxen db list .oxen/staged'
 abbr --add orefs 'oxen db list .oxen/refs'
-abbr --add op 'oxen-prd'
+abbr --add oprd 'oxen-prd'
 
 abbr --add cb 'cargo build'
 
 abbr --add ptp 'ptpython'
 abbr --add py 'ptipython'
+abbr --add vfa 'vf activate'
