@@ -8,9 +8,9 @@
         },
         "editorIndentGuide.background1": "#1f1f1f",
         "editorIndentGuide.activeBackground1": "#704747",
-        "statusBar.background": "#5f0000",
-        "statusBar.noFolderBackground": "#5f0000",
-        "statusBar.debuggingBackground": "#5f0000",
+        "statusBar.background": "#005f5f",
+        "statusBar.noFolderBackground": "#005f5f",
+        "statusBar.debuggingBackground": "#005f5f",
         "editorInlayHint.foreground": "#868686f0",
         "editorInlayHint.background": "#3d3d3d48",
         "tab.activeBackground": "#ffffff3f",
@@ -19,7 +19,9 @@
         "tab.unfocusedActiveBorderTop": "#ffffff11",
         "scrollbarSlider.background": "#ffffff3f",
         "statusBar.foreground": "#ffffff",
-        "statusBar.debuggingForeground": "#ffffff"
+        "statusBar.debuggingForeground": "#ffffff",
+        "titleBar.activeBackground": "#345c9d8c",
+        "titleBar.inactiveBackground": "#345c9d5c"
     },
     "breadcrumbs.enabled": true,
     "editor.renderWhitespace": "none",
@@ -352,5 +354,9 @@
     "editor.scrollBeyondLastColumn": 5,
     "workbench.editor.revealIfOpen": true,
     "terminal.integrated.fastScrollSensitivity": 2,
-    "window.newWindowProfile": "Default"
+    "window.newWindowProfile": "Default",
+    "window.autoDetectColorScheme": true,
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    }
 }

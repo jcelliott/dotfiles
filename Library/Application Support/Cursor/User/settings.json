@@ -5,7 +5,9 @@
         "[Base16 Light*]": {
             "editorIndentGuide.background1": "#dadada",
             "editorIndentGuide.activeBackground1": "#774343",
-            "scrollbarSlider.background": "#dadada96"
+            "scrollbarSlider.background": "#dadada96",
+            "list.activeSelectionBackground": "#bcbcbc",
+            "list.inactiveSelectionBackground": "#bcbcbc"
         },
         "editorIndentGuide.background1": "#1f1f1f",
         "editorIndentGuide.activeBackground1": "#704747",
@@ -365,7 +367,6 @@
     "workbench.editor.revealIfOpen": true,
     "terminal.integrated.fastScrollSensitivity": 2,
     "window.newWindowProfile": "Default",
-    "workbench.activityBar.location": "hidden",
     "editor.tokenColorCustomizations": {
         "[Base16 Dark Default]": {}
     },
@@ -375,5 +376,25 @@
     },
     "explorer.confirmDragAndDrop": false,
     "window.commandCenter": 1,
-    "vim.showMarksInGutter": true
+    "vim.showMarksInGutter": true,
+    "editor.accessibilitySupport": "off",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "editor.scrollBeyondLastLine": false,
+    "editor.padding.bottom": 100,
+    "workbench.activityBar.location": "hidden",
+    "outline.collapseItems": "alwaysCollapse",
+    "outline.showBooleans": false,
+    "outline.showArrays": false,
+    "outline.showFields": false,
+    "outline.showFiles": false,
+    "outline.showNull": false,
+    "outline.showNumbers": false,
+    "outline.showOperators": false,
+    "outline.showProperties": false,
+    "outline.showStrings": false,
+    "outline.showTypeParameters": false,
+    "outline.showVariables": false,
+    "ruff.lineLength": 100
 }
