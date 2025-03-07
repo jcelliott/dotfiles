@@ -10,7 +10,8 @@ end
 # set base16 colors
 set BASE16_SHELL "$HOME/.config/base16-shell"
 source "$BASE16_SHELL/profile_helper.fish"
-base16-default-dark
+# don't set the theme here, so it can be switched dynamically
+# base16-default-dark
 
 os_detect
 
