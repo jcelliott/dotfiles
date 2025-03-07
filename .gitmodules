@@ -6,7 +6,7 @@
 	url = https://github.com/junegunn/vim-plug.git
 [submodule ".config/base16-shell"]
 	path = .config/base16-shell
-	url = git@github.com:chriskempson/base16-shell.git
+	url = git@github.com:jcelliott/base16-shell.git
 [submodule ".tmux/plugins/tpm"]
 	path = .tmux/plugins/tpm
 	url = git@github.com:tmux-plugins/tpm.git
