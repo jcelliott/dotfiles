@@ -73,12 +73,6 @@ end
 
 # Go
 set -x GOPATH "$HOME/src/go"
-if test $_platform = "darwin"
-  # macports go root directory
-  # set -x GOROOT "/opt/local/lib/go"
-  # brew go root directory
-  set -x GOROOT "/usr/local/opt/go/libexec"
-end
 
 # Path
 if test $_platform = "darwin"
