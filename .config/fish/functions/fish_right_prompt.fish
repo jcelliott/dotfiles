@@ -6,8 +6,12 @@ function fish_right_prompt --description 'Write out the right prompt'
     function __fish_set_virtualenv_prompt --on-variable VIRTUAL_ENV --description "Event handler; change virtualenv prompt when VIRTUAL_ENV changes"
       if status --is-interactive
         if set -q VIRTUAL_ENV
-          set -g __fish_prompt_virtualenv "["(basename "$VIRTUAL_ENV")"]"
-          # set -g __fish_prompt_virtualenv "["$VIRTUAL_ENV"]"
+          if test '.venv' = (basename $VIRTUAL_ENV)
+            set -g __fish_prompt_virtualenv "["(basename (dirname "$VIRTUAL_ENV"))"]"
+          else
+            set -g __fish_prompt_virtualenv "["(basename "$VIRTUAL_ENV")"]"
+          end
+          # echo "[VIRTUAL_ENV updated]"
         else
           set -g __fish_prompt_virtualenv
         end
@@ -34,6 +38,13 @@ function fish_right_prompt --description 'Write out the right prompt'
           set -g __fish_prompt_docker_machine
         end
       end
+    end
+
+    if not set -q __fish_prompt_virtualenv_set
+      # Make sure we set it at least once. A new shell inheriting env from
+      # previous won't trigger the event handler for inherited variable.
+      __fish_set_virtualenv_prompt
+      set -g __fish_prompt_virtualenv_set 1
     end
 
     echo -ns "$__fish_rprompt_color" "$__fish_prompt_docker_machine" "$__fish_prompt_virtualenv" "$__fish_prompt_conda_env"

@@ -75,7 +75,7 @@ abbr --add s 'sudo'
 abbr --add se 'sudo -E'
 abbr --add sudoe 'sudo -E'
 
-abbr --add rp 'rsync -rltp --partial --info=progress2'
+abbr --add rp 'rsync -a --partial --info=progress2'
 
 # abbr --add k 'kubectl'
 abbr --add kg 'kubectl get'
