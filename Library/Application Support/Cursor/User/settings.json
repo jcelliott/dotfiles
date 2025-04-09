@@ -1,13 +1,15 @@
 {
     "editor.minimap.renderCharacters": false,
     "editor.formatOnSave": true,
+    "editor.scrollbar.verticalScrollbarSize": 16,
     "workbench.colorCustomizations": {
         "[Base16 Light*]": {
             "editorIndentGuide.background1": "#dadada",
             "editorIndentGuide.activeBackground1": "#774343",
-            "scrollbarSlider.background": "#dadada96",
+            "scrollbarSlider.background": "#79797974",
             "list.activeSelectionBackground": "#bcbcbc",
-            "list.inactiveSelectionBackground": "#bcbcbc"
+            "list.inactiveSelectionBackground": "#bcbcbc",
+            "editorOverviewRuler.border": "#000000"
         },
         "editorIndentGuide.background1": "#1f1f1f",
         "editorIndentGuide.activeBackground1": "#704747",
@@ -328,7 +330,7 @@
     "outline.showConstants": false,
     "telemetry.telemetryLevel": "error",
     "workbench.colorTheme": "Base16 Light Tomorrow",
-    "workbench.preferredLightColorTheme": "Base16 Light Tomorrow",
+    "workbench.preferredLightColorTheme": "Base16 Light Brewer",
     "workbench.preferredDarkColorTheme": "Base16 Dark Default",
     "[markdown]": {
         "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
