@@ -174,6 +174,7 @@ if test -e /usr/local/share/chruby/chruby.fish
 end
 
 # Use mise for tool management
+set -x MISE_PYTHON_DEFAULT_PACKAGES_FILE "$HOME/.config/mise/mise_default_python_packages"
 # Activate at the end of config so mise-installed tools take priority
 if type -q mise
   mise activate fish | source
