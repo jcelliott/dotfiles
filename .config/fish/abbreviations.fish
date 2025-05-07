@@ -124,6 +124,9 @@ abbr --add orefs 'oxen db list .oxen/refs'
 abbr --add oprd 'oxen-prd'
 
 abbr --add cb 'cargo build'
+abbr --add ccl 'cargo clippy --no-deps -- -D warnings'
+abbr --add cch 'cargo check'
+abbr --add ct 'cargo test'
 
 abbr --add ptp 'ptpython'
 abbr --add py 'ptipython'
