@@ -2,6 +2,11 @@
 # attach to main tmux session
 # usage: tm <new_session> [target_session]
 
-session=${2:-main}
+if [ $# -eq 1 ]; then
+  tmux new-session -A -s "$1"
+else
+  # session=${2:-main}
+  tmux new-session -t "$2" -s $1
+fi
 
-tmux new-session -t "$session" -A -s $1
+
