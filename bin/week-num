@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Print the current week number
+
+date +%V
