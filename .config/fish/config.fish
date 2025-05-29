@@ -82,10 +82,7 @@ if test $_platform = "darwin"
   # flag will move them to the correct location
   fish_add_path -gP --move "/opt/homebrew/bin" "/opt/homebrew/sbin";
   # fish_add_path "/usr/local/bin"
-  # fish_add_path "/usr/local/opt/python/libexec/bin"
-  # fish_add_path "$HOME/Library/Python/3.10/bin"
   fish_add_path -g "/Applications/Postgres.app/Contents/Versions/latest/bin"
-  # fish_add_path "$HOME/.asdf/shims" "$HOME/.asdf/bin"
 end
 
 fish_add_path -g "$HOME/bin" "$GOPATH/bin" "$HOME/.local/bin"
@@ -119,6 +116,7 @@ set -g __display_git_prompt true
 function fish_mode_prompt
 end
 
+# Python
 # Virtualfish (Python virtualenv)
 # Install with:
 #     pipx install virtualfish
@@ -126,6 +124,8 @@ end
 # Don't overwrite prompt in virtualenv (I'm already handling this in
 # fish_right_prompt)
 set -x VIRTUAL_ENV_DISABLE_PROMPT true
+# Run my Python startup script for interactive sessions
+set -x PYTHONSTARTUP "$HOME/.config/pythonstartup_manager.py"
 
 fundle plugin 'oh-my-fish/plugin-peco'
 fundle plugin 'tuvistavie/fish-completion-helpers'
