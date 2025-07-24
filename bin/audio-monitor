@@ -1,0 +1,5 @@
+#!/usr/bin/env fish
+
+pinfo "***** Running audio monitor (^c to stop)  ****"
+sox -V0 --multi-threaded --input-buffer 32 --buffer 128 -d -d
+
