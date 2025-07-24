@@ -349,7 +349,6 @@
     "cSpell.enableFiletypes": [
         "markdown"
     ],
-    "gitlens.currentLine.enabled": false,
     "gitlens.views.commitDetails.files.layout": "list",
     "window.confirmBeforeClose": "keyboardOnly",
     "cSpell.userWords": [
@@ -385,7 +384,6 @@
     },
     "editor.scrollBeyondLastLine": false,
     "editor.padding.bottom": 100,
-    "workbench.activityBar.location": "hidden",
     "outline.collapseItems": "alwaysCollapse",
     "outline.showBooleans": false,
     "outline.showArrays": false,
@@ -398,5 +396,13 @@
     "outline.showStrings": false,
     "outline.showTypeParameters": false,
     "outline.showVariables": false,
-    "ruff.lineLength": 100
+    "ruff.lineLength": 100,
+    "gitlens.currentLine.scrollable": false,
+    "gitlens.codeLens.scopes": [
+        "document"
+    ],
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "workbench.activityBar.location": "hidden"
 }
