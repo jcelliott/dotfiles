@@ -304,6 +304,9 @@ function! ReallyClear()
 endfunction
 nnoremap <silent> <leader><Space> :call ReallyClear()<CR>
 
+
+
+
 " <leader>/ highlights occurrences of the word under cursor. Like * but doesn't move
 map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<CR><Bar>:%s///gn<CR>
 
@@ -408,10 +411,6 @@ imap <silent> <F7> <C-o>:setlocal spell! spelllang=en_us<CR>
 nnoremap <silent> <F8> "=strftime("%a %b %d %Y")<CR>P
 inoremap <silent> <F8> <C-R>=strftime("%a %b %d %Y")<CR>
 
-" fix ;w mistakes
-imap ;w <ESC>
-imap ;w<CR> <ESC>
-
 "}}}
 
 "------------------------------------------------------------------------------
@@ -466,7 +465,7 @@ Plug 'sjbach/lusty' "{{{
   map <silent> <leader>b :LustyBufferExplorer<CR>
 "}}}
 
-Plug 'Raimondi/delimitMate'
+" Plug 'Raimondi/delimitMate'
 " (^) Looks like this might just need some configuration to work better, but
 " trying this one (v) instead
 " Plug 'jiangmiao/auto-pairs' " works better with newlines
@@ -574,6 +573,11 @@ Plug 'christoomey/vim-tmux-navigator' "{{{
   nnoremap <silent> <C-l> :TmuxNavigateRight<CR>
   " this doesn't work right now, terminal doesn't see a unique keycap for C-, vs just ,
   " nnoremap <silent> <C-,> :TmuxNavigatePrevious<CR>
+  " enable in insert mode as well
+  inoremap <silent> <C-h> <C-o>:TmuxNavigateLeft<CR>
+  inoremap <silent> <C-j> <C-o>:TmuxNavigateDown<CR>
+  inoremap <silent> <C-k> <C-o>:TmuxNavigateUp<CR>
+  inoremap <silent> <C-l> <C-o>:TmuxNavigateRight<CR>
 "}}}
 " Plug 'honza/dockerfile.vim', { 'for': 'dockerfile' }
 Plug 'moby/moby' , {'rtp': '/contrib/syntax/vim/', 'for': 'dockerfile'}
