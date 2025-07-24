@@ -2,11 +2,39 @@
 #
 # Loads a global pythonstartup.py next to this script and then loads a
 # project-specific .pythonstartup.py from the current directory
-
 import hashlib
 import json
+import os
+import sys
 from pathlib import Path
 
+def get_script_path():
+    """Get the path of this startup script, handling both regular Python and IPython."""
+    try:
+        # Try to use __file__ (works in regular Python)
+        return Path(__file__)
+    except NameError:
+        # __file__ is not defined in IPython interactive shell
+        # Use alternative methods to find the script location
+        
+        # Method 1: Check PYTHONSTARTUP environment variable
+        startup_env = os.environ.get('PYTHONSTARTUP')
+        if startup_env and os.path.exists(startup_env):
+            return Path(startup_env)
+        
+        # Method 2: Use sys.argv[0] if available
+        if sys.argv and sys.argv[0]:
+            script_path = Path(sys.argv[0])
+            if script_path.exists():
+                return script_path
+        
+        # Method 3: Default to home directory .pythonstartup location
+        default_path = Path.home() / '.pythonstartup.py'
+        if default_path.exists():
+            return default_path
+        
+        # If all else fails, use current directory
+        return Path.cwd() / 'pythonstartup.py'
 
 def find_project_startup():
     current_dir = Path.cwd()
@@ -22,7 +50,8 @@ def find_project_startup():
     return None
 
 def get_trusted_hashes_file():
-    return Path(__file__).parent / '.pythonstartup_trusted_hashes.json'
+    script_path = get_script_path()
+    return script_path.parent / '.pythonstartup_trusted_hashes.json'
 
 def load_trusted_hashes():
     hashes_file = get_trusted_hashes_file()
@@ -67,12 +96,12 @@ def load_project_startup():
         trusted_hashes = load_trusted_hashes()
         
         if trusted_hashes.get(str(project_startup)) == file_hash:
-            exec(content)
+            exec(content, globals())
             print(f"Loaded trusted project startup: {project_startup}")
         else:
             if prompt_user_to_trust(project_startup, content):
                 save_trusted_hash(project_startup, file_hash)
-                exec(content)
+                exec(content, globals())
                 print(f"Loaded and trusted project startup: {project_startup}")
             else:
                 print(f"Skipped loading project startup: {project_startup}")
@@ -80,12 +109,16 @@ def load_project_startup():
         print(f"Error loading project startup {project_startup}: {e}")
 
 def load_global_startup():
-    global_startup_file = Path(__file__).parent / 'pythonstartup.py'
+    script_path = get_script_path()
+    global_startup_file = script_path.parent / 'pythonstartup.py'
     if global_startup_file.exists():
-        global_startup_content = global_startup_file.read_text()
-        exec(global_startup_content)
+        try:
+            global_startup_content = global_startup_file.read_text()
+            exec(global_startup_content, globals())
+            print(f"Loaded global startup: {global_startup_file}")
+        except Exception as e:
+            print(f"Error loading global startup {global_startup_file}: {e}")
 
 
 load_global_startup()
 load_project_startup()
-
