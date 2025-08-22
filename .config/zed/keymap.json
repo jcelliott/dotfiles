@@ -1,0 +1,59 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+  {
+    "bindings": {
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-l": "workspace::ActivatePaneRight",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-j": "workspace::ActivatePaneDown",
+      "ctrl-cmd-h": "pane::ActivatePreviousItem",
+      "ctrl-cmd-l": "pane::ActivateNextItem"
+    }
+  },
+  {
+    // having no context here might be too aggressive, but worth a try
+    "context": "VimControl",
+    "bindings": {
+      ";": "command_palette::Toggle",
+      ", e": "project_panel::ToggleFocus",
+      ", b": "outline::Toggle",
+      ", o": "outline_panel::ToggleFocus",
+      ", g": "git_panel::ToggleFocus",
+      ", .": ["workspace::SendKeystrokes", "ctrl-tab enter"],
+      ", ,": "tab_switcher::Toggle"
+    }
+  },
+  {
+    "context": "VimControl",
+    "bindings": {
+      "H": ["workspace::SendKeystrokes", "^"],
+      "L": ["workspace::SendKeystrokes", "$"],
+      "g r": "editor::FindAllReferences"
+    }
+  },
+  {
+    "context": "TabSwitcher",
+    "bindings": {
+      "j": "menu::SelectNext",
+      "k": "menu::SelectPrevious"
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      // "shift shift": "file_finder::Toggle"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      // "j k": ["workspace::SendKeystrokes", "escape"]
+    }
+  }
+]

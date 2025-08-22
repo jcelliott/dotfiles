@@ -1,0 +1,51 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "icon_theme": "Bearded Icon Theme",
+  "vim_mode": true,
+  "base_keymap": "VSCode",
+  "ui_font_size": 13,
+  // "buffer_font_family": "Zed Plex Mono",
+  "buffer_font_family": "CommitMono",
+  "buffer_font_size": 13,
+  "theme": {
+    "mode": "system",
+    "light": "Base16 One Light",
+    "dark": "Base16 Default Dark"
+  },
+  "scrollbar": {
+    "axes": {
+      // disable horizontal scrollbar
+      "horizontal": false
+    }
+  },
+  "active_pane_modifiers": {
+    "magnification": 1.0,
+    "border_size": 1.0,
+    "inactive_opacity": 0.8
+  },
+
+  "tabs": {
+    "git_status": true
+  },
+  "lsp_highlight_debounce": 500,
+  "use_smartcase_search": true,
+  "always_treat_brackets_as_autoclosed": true,
+  "experimental.theme_overrides": {
+    "editor.document_highlight.read_background": "#59585A"
+  },
+  "project_panel": {
+    "entry_spacing": "standard",
+    "indent_size": 15
+  },
+  "vertical_scroll_margin": 5,
+  "gutter": {
+    "min_line_number_digits": 3
+  }
+}
