@@ -30,6 +30,8 @@ abbr --add gms 'git merge staging'
 abbr --add gba 'git branch -a'
 abbr --add gr 'git remote -v'
 abbr --add gb 'peco-select-git-branch'
+abbr --add gwa 'git worktree add'
+abbr --add gwr 'git worktree remove'
 
 abbr --add ev 'vim ~/.vimrc'
 abbr --add et 'vim ~/.tmux.conf'
@@ -129,6 +131,7 @@ abbr --add owl 'oxen workspace list'
 
 abbr --add cb 'cargo build'
 abbr --add ccl 'cargo clippy --no-deps -- -D warnings'
+abbr --add ccf 'cargo clippy --fix'
 abbr --add cch 'cargo check'
 abbr --add ct 'cargo test'
 
