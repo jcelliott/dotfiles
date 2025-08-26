@@ -128,6 +128,7 @@ abbr --add ostage 'oxen db list .oxen/staged'
 abbr --add ow 'oxen workspace'
 abbr --add owa 'oxen workspace add'
 abbr --add owl 'oxen workspace list'
+abbr --add os 'peco-select-oxen-worktree'
 
 abbr --add cb 'cargo build'
 abbr --add ccl 'cargo clippy --no-deps -- -D warnings'
