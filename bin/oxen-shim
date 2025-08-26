@@ -1,0 +1,57 @@
+#!/usr/bin/env fish
+
+# Get the binary name from how this script was called
+set binary_name (basename (status filename))
+
+# Default project path - adjust as needed
+set -l project_root "$HOME/src/oxen/Oxen"
+
+# Check for environment variable first
+if set -q OXEN_WORKTREE
+    set worktree $OXEN_WORKTREE
+    set source "environment variable"
+else
+    # Try to detect from current directory
+    set current_dir (pwd)
+    if string match --ignore-case --quiet "$project_root*" $current_dir
+        # Extract worktree name from path
+        set relative_path (string replace --ignore-case "$project_root/" "" $current_dir)
+        set worktree (string split "/" $relative_path)[1]
+        set source "current directory"
+    else
+        # Default to main worktree
+        set worktree "main"
+        set source "default [main]"
+    end
+end
+
+
+if string match -q $binary_name "oxen-which"
+    set binary_path "$project_root/$worktree/oxen-rust/target/debug/oxen"
+    echo "Worktree: $worktree (from $source)"
+    echo "Binary: $binary_path"
+
+    if test -f $binary_path
+        echo "Status: ✅ exists"
+        exit 0
+    else
+        echo "Status: ❌ not found"
+        exit 1
+    end
+end
+
+# Construct path to binary
+set binary_path "$project_root/$worktree/oxen-rust/target/debug/$binary_name"
+
+# Check if binary exists
+if not test -f $binary_path
+    echo "Error: $binary_name binary not found at $binary_path" >&2
+    echo "Current worktree: $worktree" (from $source) >&2
+    echo "Set OXEN_WORKTREE environment variable or run from a worktree directory" >&2
+    exit 1
+end
+
+echo (set_color brblack)"[Running $binary_name from $worktree worktree]"(set_color normal)
+
+# Execute the actual binary with all arguments
+exec $binary_path $argv
