@@ -40,12 +40,23 @@ function fish_right_prompt --description 'Write out the right prompt'
       end
     end
 
-    if not set -q __fish_prompt_virtualenv_set
-      # Make sure we set it at least once. A new shell inheriting env from
-      # previous won't trigger the event handler for inherited variable.
-      __fish_set_virtualenv_prompt
-      set -g __fish_prompt_virtualenv_set 1
+    function __fish_set_oxen_worktree_prompt --on-variable OXEN_WORKTREE --description "Event handler; change oxen worktree prompt when OXEN_WORKTREE changes"
+      if status --is-interactive
+        if set -q OXEN_WORKTREE
+          set -g __fish_prompt_oxen_worktree "[oxen:$OXEN_WORKTREE]"
+        else
+          set -g __fish_prompt_oxen_worktree
+        end
+      end
     end
 
-    echo -ns "$__fish_rprompt_color" "$__fish_prompt_docker_machine" "$__fish_prompt_virtualenv" "$__fish_prompt_conda_env"
+    if not set -q __fish_right_prompt_initialized
+      # Make sure we set variables at least once. A new shell inheriting env
+      # from previous won't trigger the event handler for inherited variable.
+      __fish_set_virtualenv_prompt
+      __fish_set_oxen_worktree_prompt
+      set -g __fish_right_prompt_initialized 1
+    end
+
+    echo -ns "$__fish_rprompt_color" "$__fish_prompt_oxen_worktree" "$__fish_prompt_docker_machine" "$__fish_prompt_virtualenv" "$__fish_prompt_conda_env"
 end
