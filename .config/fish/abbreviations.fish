@@ -42,6 +42,12 @@ abbr --add ef 'vim ~/.config/fish'
 abbr --add vs 'vim-search'
 abbr --add vsa 'vim-search --no-ignore'
 
+# mnemonics starting with 'fish' - 'fish edit config', etc.
+abbr --add fec 'vim ~/.config/fish/config.fish'
+abbr --add fea 'vim ~/.config/fish/abbreviations.fish'
+abbr --add fs 'source ~/.config/fish/config.fish'
+abbr --add fsa 'source ~/.config/fish/abbreviations.fish'
+
 abbr --add vup 'vagrant up'
 abbr --add vsh 'vagrant ssh'
 
