@@ -142,8 +142,10 @@ abbr --add ccf 'cargo clippy --fix'
 abbr --add cch 'cargo check'
 abbr --add ct 'cargo test'
 
+abbr --add rlt 'set -x RUST_LOG trace'
 abbr --add rld 'set -x RUST_LOG debug'
 abbr --add rli 'set -x RUST_LOG info'
+abbr --add rlw 'set -x RUST_LOG warn'
 abbr --add rle 'set -x RUST_LOG error'
 
 abbr --add ptp 'ptpython'
