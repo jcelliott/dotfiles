@@ -51,7 +51,7 @@ if not test -f $binary_path
     exit 1
 end
 
-echo (set_color brblack)"[Running $binary_name from «$worktree» worktree]"(set_color normal)
+echo (set_color brblack)"[Running $binary_name from «$worktree» worktree]"(set_color normal) >&2
 
 # Execute the actual binary with all arguments
 exec $binary_path $argv
