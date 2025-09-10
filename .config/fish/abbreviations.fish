@@ -151,3 +151,5 @@ abbr --add rle 'set -x RUST_LOG error'
 abbr --add ptp 'ptpython'
 abbr --add py 'ptipython'
 abbr --add vfa 'vf activate'
+
+abbr --add z 'zed .'
