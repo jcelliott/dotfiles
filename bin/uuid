@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# print random uuid in lowercase format
+
+uuidgen | tr '[:upper:]' '[:lower:]'
+
