@@ -5,6 +5,33 @@
             "complex_modifications": {
                 "rules": [
                     {
+                        "description": "Mouse back and forward",
+                        "manipulators": [
+                            {
+                                "description": "Mouse back",
+                                "from": { "pointing_button": "button4" },
+                                "to": [
+                                    {
+                                        "key_code": "open_bracket",
+                                        "modifiers": ["left_command"]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "Mouse forward",
+                                "from": { "pointing_button": "button5" },
+                                "to": [
+                                    {
+                                        "key_code": "close_bracket",
+                                        "modifiers": ["left_command"]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "ctrl+opt+cmd + j/k scrolls up and down (mouse wheel)",
                         "manipulators": [
                             {
@@ -118,7 +145,35 @@
                         "vendor_id": 1133
                     },
                     "ignore": true,
+                    "ignore_vendor_events": true,
                     "manipulate_caps_lock_led": false
+                },
+                {
+                    "identifiers": {
+                        "is_pointing_device": true,
+                        "product_id": 32793,
+                        "vendor_id": 1149
+                    },
+                    "ignore": false,
+                    "ignore_vendor_events": true,
+                    "simple_modifications": [
+                        {
+                            "from": { "pointing_button": "button3" },
+                            "to": [{ "pointing_button": "button4" }]
+                        },
+                        {
+                            "from": { "pointing_button": "button4" },
+                            "to": [{ "apple_vendor_keyboard_key_code": "mission_control" }]
+                        }
+                    ]
+                },
+                {
+                    "identifiers": {
+                        "is_pointing_device": true,
+                        "product_id": 49291,
+                        "vendor_id": 1133
+                    },
+                    "ignore": false
                 }
             ],
             "fn_function_keys": [
