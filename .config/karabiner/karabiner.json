@@ -8,6 +8,15 @@
                         "description": "Mouse back and forward",
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^com.apple.finder",
+                                            "^/System/Library/CoreServices/Finder.app/Contents/MacOS/Finder"
+                                        ],
+                                        "type": "frontmost_application_if"
+                                    }
+                                ],
                                 "description": "Mouse back",
                                 "from": { "pointing_button": "button4" },
                                 "to": [
@@ -19,6 +28,15 @@
                                 "type": "basic"
                             },
                             {
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^com.apple.finder",
+                                            "^/System/Library/CoreServices/Finder.app/Contents/MacOS/Finder"
+                                        ],
+                                        "type": "frontmost_application_if"
+                                    }
+                                ],
                                 "description": "Mouse forward",
                                 "from": { "pointing_button": "button5" },
                                 "to": [
