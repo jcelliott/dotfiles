@@ -8,3 +8,13 @@ git submodule init
 git submodule update
 ```
 
+Add this to `.git/info/exclude`:
+
+```
+# ignore everything by default
+*
+```
+
+Putting it there rather than in `.gitignore` prevents other tooling from reading
+it while the git repo is disabled, which has caused some issues.
+
