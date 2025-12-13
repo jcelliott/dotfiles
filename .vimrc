@@ -57,14 +57,12 @@ set splitbelow          " horizontal splits to below
 set display=lastline    " show as much of last line as possible, instead of "@"
 
 set formatoptions=cqnlj " settings for formatting (see :help fo-table)
-set textwidth=80        " wrap lines at 100 chars
+set textwidth=100       " wrap lines at 100 chars
 set tabstop=2
 set softtabstop=2
 set shiftwidth=2
 set smarttab
-" set nosmarttab
 set expandtab           " expand tabs to spaces
-" set noexpandtab         " don't expand tabs to spaces
 set autoindent
 set nojoinspaces
 
@@ -72,8 +70,6 @@ set pastetoggle=<F2>    " toggle paste mode (while paste is enabled, all formatt
                         " OR :set paste!<CR>:set paste?<CR>
 
 set ttyfast             " improves redrawing for fast terminal connection
-" set lazyredraw          " don't redraw the screen for non-typed commands (smoother looking plugins)
-" ^ doesn't print some command line messages I expect
 set synmaxcol=256
 
 set clipboard=unnamed
@@ -113,11 +109,6 @@ augroup trailing_whitespace
   autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 augroup END
 
-" automatically close location list window when leaving a buffer
-" prevents the annoying case where the location list stays open after closing
-" its associated file buffer
-" TODO: bug - this closes the location list window when you try to switch to it
-" autocmd BufLeave * lclose
 
 "}}}
 
@@ -231,10 +222,6 @@ xnoremap . :normal .<CR>
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
 
-" use <M-k> for digraphs instead of <C-k>
-" this makes [exit insert mode and go up a line] hard
-" inoremap k <C-k>
-
 "}}}
 
 " ----- Movement and Selection ----- "{{{
@@ -303,9 +290,6 @@ function! ReallyClear()
   endif
 endfunction
 nnoremap <silent> <leader><Space> :call ReallyClear()<CR>
-
-
-
 
 " <leader>/ highlights occurrences of the word under cursor. Like * but doesn't move
 map <silent> <leader>/ :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<CR><Bar>:%s///gn<CR>
@@ -507,7 +491,6 @@ Plug 'tomtom/tcomment_vim' "{{{
 Plug 'kana/vim-textobj-user', { 'for': 'ruby' } " only used for vim-textobj-rubyblock
 Plug 'nelstrom/vim-textobj-rubyblock', { 'for': 'ruby' }
 Plug 'tmux-plugins/vim-tmux'
-Plug 'digitaltoad/vim-jade', { 'for': 'jade' }
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim', { 'on': 'Gist' } "{{{
   let g:gist_detect_filetype = 1
@@ -530,13 +513,6 @@ Plug 'SirVer/ultisnips', { 'on': [] } "{{{
   let g:UltiSnipsSnippetDirectories=["UltiSnips", "ultisnips"]
 "}}}
 Plug 'honza/vim-snippets' " snippets collection
-" TODO: not using YCM
-" Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] } " {{{
-"   " let g:ycm_complete_in_strings = 0
-"   let g:ycm_collect_identifiers_from_tags_files = 1
-"   let g:ycm_seed_identifiers_with_syntax = 1
-"   let g:ycm_autoclose_preview_window_after_insertion = 1
-" "}}}
 Plug 'jmcantrell/vim-virtualenv' "{{{
   let g:virtualenv_auto_activate = 1
 "}}}
@@ -587,7 +563,6 @@ Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' } "{{{
   let g:gundo_preview_height = 20
   let g:gundo_close_on_revert = 1
 "}}}
-Plug 'kylef/apiblueprint.vim', { 'for': 'apiblueprint' }
 Plug 'dbakker/vim-lint'
 Plug 'mustache/vim-mustache-handlebars'
 " Dash / Zeal documentation {{{
@@ -613,7 +588,6 @@ Plug 'gregsexton/gitv', { 'on': 'Gitv' } "{{{
   nmap \G :Gitv!<CR>
 "}}}
 Plug 'junegunn/vim-peekaboo'
-Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 Plug 'elixir-lang/vim-elixir'
 Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
 " hack for this issue: https://github.com/slashmili/alchemist.vim/issues/33
@@ -622,7 +596,6 @@ Plug 'dzeban/vim-log-syntax'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'cespare/vim-toml', { 'for': 'toml' }
 Plug 'mrk21/yaml-vim', { 'for': 'yaml' }  " fixes indentation
-Plug 'tclh123/vim-thrift', { 'for': 'thrift' }
 Plug 'niklasl/vim-rdf'
 Plug 'leafgarland/typescript-vim'
 " Plug 'Shougo/vimproc.vim', { 'for': 'typescript' } " dependency for tsuquyomi
@@ -630,8 +603,8 @@ Plug 'leafgarland/typescript-vim'
 Plug 'moll/vim-bbye'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'lambdatoast/elm.vim'
-" Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
 Plug 'mhinz/vim-grepper' "{{{
+  " Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
   let g:grepper = {}
   let g:grepper.simple_prompt = 1
   let g:grepper.dir = 'repo,file'
@@ -673,10 +646,6 @@ Plug 'w0rp/ale' "{{{
 "   let g:searchant_map_stop = 0
 "   highlight SearchCurrent ctermbg=DarkYellow
 " "}}}
-
-" not working?
-" Plug 'ConradIrwin/vim-bracketed-paste'
-
 Plug 'dbeniamine/cheat.sh-vim' "{{{
   let g:CheatSheetDoNotMap=1
   let g:CheatDoNotReplaceKeywordPrg=1
@@ -709,6 +678,16 @@ Plug 'dbeniamine/cheat.sh-vim' "{{{
 "   let g:lua_interpreter_path = 'lua5.1'
 " "}}}
 " Plug 'dahu/VimLint'
+" Plug 'digitaltoad/vim-jade', { 'for': 'jade' }
+" Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] } " {{{
+"   " let g:ycm_complete_in_strings = 0
+"   let g:ycm_collect_identifiers_from_tags_files = 1
+"   let g:ycm_seed_identifiers_with_syntax = 1
+"   let g:ycm_autoclose_preview_window_after_insertion = 1
+" "}}}
+" Plug 'kylef/apiblueprint.vim', { 'for': 'apiblueprint' }
+" Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
+" Plug 'tclh123/vim-thrift', { 'for': 'thrift' }
 "}}}
 
 call plug#end()
