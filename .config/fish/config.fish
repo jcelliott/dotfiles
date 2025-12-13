@@ -133,6 +133,7 @@ fundle plugin 'edc/bass'
 fundle plugin 'laughedelic/pisces'
   set -U pisces_only_insert_at_eol 1
 fundle plugin 'franciscolourenco/done'
+  set -U __done_notification_command "echo \$message | terminal-notifier -title \$title"
 fundle init
 
 # Elixir/Erlang
