@@ -7,6 +7,10 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "edit_predictions": {
+    "mode": "subtle"
+  },
+  "hover_popover_delay": 1000,
   "icon_theme": "Bearded Icon Theme",
   "vim_mode": true,
   "base_keymap": "VSCode",
@@ -34,7 +38,56 @@
   "tabs": {
     "git_status": true
   },
+  "languages": {
+    "Elixir": {
+      "formatter": {
+        "external": {
+          "command": "mix",
+          "arguments": ["format", "--stdin-filename", "{buffer_path}", "-"]
+        }
+      },
+      "format_on_save": "on",
+      "language_servers": [
+        "!expert",
+        "elixir-ls",
+        "!next-ls",
+        "!lexical",
+        "..."
+      ]
+    },
+    "HEEX": {
+      "language_servers": [
+        "!expert",
+        "elixir-ls",
+        "!next-ls",
+        "!lexical",
+        "..."
+      ]
+    },
+    "JavaScript": {
+      "formatter": {
+        "external": {
+          "command": "prettier",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      }
+    }
+  },
   "lsp_highlight_debounce": 500,
+  "lsp": {
+    "vscode-css-language-server": {
+      "settings": {
+        "css": {
+          "lint": {
+            "unknownAtRules": "ignore"
+          }
+        }
+      }
+    }
+  },
+  "file_types": {
+    "GitHub Actions": [".github/workflows/*.yml", ".github/workflows/*.yaml"]
+  },
   "use_smartcase_search": true,
   "always_treat_brackets_as_autoclosed": true,
   "experimental.theme_overrides": {
@@ -47,5 +100,13 @@
   "vertical_scroll_margin": 5,
   "gutter": {
     "min_line_number_digits": 3
+  },
+  "agent_servers": {
+    "claude": {
+      "env": {
+        "CLAUDE_CODE_EXECUTABLE": "~/.claude-work/local/claude",
+        "CLAUDE_CONFIG_DIR": "~/.claude-work"
+      }
+    }
   }
 }
