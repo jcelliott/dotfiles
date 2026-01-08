@@ -7,13 +7,13 @@ if not status --is-interactive
   exit 0
 end
 
+### Appearance ###
+#
 # set base16 colors
 set BASE16_SHELL "$HOME/.config/base16-shell"
 source "$BASE16_SHELL/profile_helper.fish"
 # don't set the theme here, so it can be switched dynamically
 # base16-default-dark
-
-os_detect
 
 # Emulates vim's cursor shape behavior
 # Set the normal and visual mode cursors to a block
@@ -24,15 +24,20 @@ set -x fish_cursor_insert line
 set -x fish_cursor_replace_one underscore
 # set -x fish_vi_force_cursor true
 
-source "$HOME/.config/fish/abbreviations.fish"
+# set colors
+set -U fish_color_command blue
+set -U fish_color_user blue
+set -U fish_color_host cyan
+set -U fish_color_cwd green
+set -U fish_color_status red
+set -U fish_color_search_match --background=red
+set -U fish_color_selection --background=green
 
-# this only sets the variables if they aren't defined
-set_fish_colors
+### Environment ###
+#
+os_detect
 
-# Editor
 set -x EDITOR vim
-
-### Program-specific settings ###
 
 # ls
 if test $_platform = "darwin"
@@ -130,8 +135,8 @@ set -x PYTHONSTARTUP "$HOME/.config/pythonstartup_manager.py"
 fundle plugin 'oh-my-fish/plugin-peco'
 fundle plugin 'tuvistavie/fish-completion-helpers'
 fundle plugin 'edc/bass'
-fundle plugin 'laughedelic/pisces'
-  set -U pisces_only_insert_at_eol 1
+# fundle plugin 'laughedelic/pisces'
+  # set -U pisces_only_insert_at_eol 1
 fundle plugin 'franciscolourenco/done'
   set -U __done_notification_command "echo \$message | terminal-notifier -title \$title"
 fundle init
@@ -144,6 +149,9 @@ set -U __done_exclude 'vim|less'
 
 # Base16 Shell
 # eval sh $HOME/.base16-default.dark.sh
+
+# Abbreviations
+source "$HOME/.config/fish/abbreviations.fish"
 
 # Aliases
 # https://github.com/sharkdp/bat
@@ -177,11 +185,11 @@ end
 # Use mise for tool management
 set -x MISE_PYTHON_DEFAULT_PACKAGES_FILE "$HOME/.config/mise/mise_default_python_packages"
 # Activate at the end of config so mise-installed tools take priority
-if type -q mise
-  mise activate fish | source
-else
-  perror "mise is not installed"
-end
+# if type -q mise
+#   mise activate fish | source
+# else
+#   perror "mise is not installed"
+# end
 
 # Activate zoxide
 if type -q zoxide
@@ -189,3 +197,8 @@ if type -q zoxide
 else
   perror "zoxide is not installed"
 end
+
+# Added by OrbStack: command-line tools and integration
+# This won't be added again if you remove it.
+source ~/.orbstack/shell/init2.fish 2>/dev/null || :
+
