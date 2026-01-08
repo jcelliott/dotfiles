@@ -65,34 +65,30 @@ if test $_platform = "darwin"
   set -x JAVA_HOME "/Library/Java/JavaVirtualMachines/openjdk.jdk/Contents/Home"
 end
 
-### PATH ###
-# Note: prefer global paths (fish_add_path -g) so we don't have universal
-# variables sticking around with old path values
-
-# asdf is installed; add asdf paths before others
-# if test -f /usr/local/opt/asdf/asdf.fish
-#   source /usr/local/opt/asdf/asdf.fish
-# else if test -f $HOME/.asdf/asdf.fish
-#   source $HOME/.asdf/asdf.fish
-# end
-
 # Go
 set -x GOPATH "$HOME/src/go"
 
-# Path
+### PATH ###
+# Notes:
+# * prefer global paths (fish_add_path -g) so we don't have universal variables
+#   sticking around with old path values.
+# * Also prefer modifying PATH directly (fish_add_path --path/-P)
+# * The --move/-m flag moves already-included directories to the place they
+#   would be added - by default they would be left in place and not added again.
+#   This is necessary because in some scenarios (i.e., within tmux) the current
+#   session will inherit the PATH of a parent session and the entries would not
+#   be moved to the correct location.
+
+# Mac-specific path
 if test $_platform = "darwin"
   # path for Homebrew (add first, so other tools can override)
-  eval (/opt/homebrew/bin/brew shellenv)
-  # shellenv above isn't putting homebrew paths before system paths, the move
-  # flag will move them to the correct location
-  fish_add_path -gP --move "/opt/homebrew/bin" "/opt/homebrew/sbin";
-  # fish_add_path "/usr/local/bin"
-  fish_add_path -g "/Applications/Postgres.app/Contents/Versions/latest/bin"
+  /opt/homebrew/bin/brew shellenv | source
+  fish_add_path -gPm "/Applications/Postgres.app/Contents/Versions/latest/bin"
+  fish_add_path -gPm "/opt/homebrew/opt/rustup/bin"
 end
 
-fish_add_path -g "$HOME/bin" "$GOPATH/bin" "$HOME/.local/bin"
-fish_add_path -g "$HOME/.cargo/bin"  # Rust
-fish_add_path -g "/opt/homebrew/opt/rustup/bin"
+fish_add_path -gPm "$HOME/bin" "$GOPATH/bin" "$HOME/.local/bin"
+fish_add_path -gPm "$HOME/.cargo/bin"  # Rust
 
 # Manpath
 if test $_platform = "darwin"
@@ -182,15 +178,6 @@ if test -e /usr/local/share/chruby/chruby.fish
   source /usr/local/share/chruby/chruby.fish
 end
 
-# Use mise for tool management
-set -x MISE_PYTHON_DEFAULT_PACKAGES_FILE "$HOME/.config/mise/mise_default_python_packages"
-# Activate at the end of config so mise-installed tools take priority
-# if type -q mise
-#   mise activate fish | source
-# else
-#   perror "mise is not installed"
-# end
-
 # Activate zoxide
 if type -q zoxide
   zoxide init fish --cmd j | source
@@ -199,6 +186,16 @@ else
 end
 
 # Added by OrbStack: command-line tools and integration
-# This won't be added again if you remove it.
 source ~/.orbstack/shell/init2.fish 2>/dev/null || :
+
+### Mise ###
+# Activate at the end of config so mise-installed tools take priority
+# Disable auto-activate so we can control activation more closely
+set -Ux MISE_FISH_AUTO_ACTIVATE 0
+set -x MISE_PYTHON_DEFAULT_PACKAGES_FILE "$HOME/.config/mise/mise_default_python_packages"
+if type -q mise
+  mise activate fish | source
+else
+  perror "mise is not installed"
+end
 
