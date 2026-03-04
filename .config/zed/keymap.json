@@ -13,8 +13,8 @@
       "ctrl-k": "workspace::ActivatePaneUp",
       "ctrl-j": "workspace::ActivatePaneDown",
       "ctrl-cmd-h": "pane::ActivatePreviousItem",
-      "ctrl-cmd-l": "pane::ActivateNextItem"
-    }
+      "ctrl-cmd-l": "pane::ActivateNextItem",
+    },
   },
   {
     // having no context here might be too aggressive, but worth a try
@@ -22,38 +22,41 @@
     "bindings": {
       ";": "command_palette::Toggle",
       ", e": "project_panel::ToggleFocus",
+      ", f": "pane::RevealInProjectPanel",
+      "-": "pane::RevealInProjectPanel",
       ", b": "outline::Toggle",
+      ", t": "project_symbols::Toggle",
       ", o": "outline_panel::ToggleFocus",
       ", g": "git_panel::ToggleFocus",
       ", .": ["workspace::SendKeystrokes", "ctrl-tab enter"],
-      ", ,": "tab_switcher::Toggle"
-    }
+      ", ,": "tab_switcher::Toggle",
+    },
   },
   {
     "context": "VimControl",
     "bindings": {
       "H": ["workspace::SendKeystrokes", "^"],
       "L": ["workspace::SendKeystrokes", "$"],
-      "g r": "editor::FindAllReferences"
-    }
+      "g r": "editor::FindAllReferences",
+    },
   },
   {
     "context": "TabSwitcher",
     "bindings": {
       "j": "menu::SelectNext",
-      "k": "menu::SelectPrevious"
-    }
+      "k": "menu::SelectPrevious",
+    },
   },
   {
     "context": "Workspace",
     "bindings": {
       // "shift shift": "file_finder::Toggle"
-    }
+    },
   },
   {
     "context": "Editor",
     "bindings": {
       // "j k": ["workspace::SendKeystrokes", "escape"]
-    }
-  }
+    },
+  },
 ]
