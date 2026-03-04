@@ -4,3 +4,5 @@
 tags
 .DS_Store
 .mise.local.toml
+
+**/.claude/settings.local.json
