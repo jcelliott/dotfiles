@@ -7,44 +7,78 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  "edit_predictions": {
-    "mode": "subtle"
+  // ##### APPEARANCE #####
+  "sticky_scroll": {
+    "enabled": true
   },
-  "hover_popover_delay": 1000,
   "icon_theme": "Bearded Icon Theme",
-  "vim_mode": true,
-  "base_keymap": "VSCode",
+  "minimum_contrast_for_highlights": 40.0,
   "ui_font_size": 13,
-  // "buffer_font_family": "Zed Plex Mono",
   "buffer_font_family": "CommitMono",
   "buffer_font_size": 13,
   "theme": {
     "mode": "system",
     "light": "Base16 One Light",
-    "dark": "Base16 Default Dark"
+    "dark": "Base16 Default Dark",
   },
+  "theme_overrides": {
+    "Base16 One Light": {
+      "element.selected": "#c1840180",
+      "element.hover": "#c184013f",
+      "ghost_element.selected": "#c1840180",
+      "search.match_background": "#c184013f",
+      "search.active_match_background": "#c1840180",
+      "editor.document_highlight.read_background": "#c184013f",
+      "editor.document_highlight.write_background": "#c1840180",
+      "element.selection_background": "#c7403a83",
+    },
+  },
+  // "experimental.theme_overrides": {
+  //   "editor.document_highlight.read_background": "#59585A",
+  // },
   "scrollbar": {
     "axes": {
       // disable horizontal scrollbar
-      "horizontal": false
-    }
+      "horizontal": false,
+    },
   },
   "active_pane_modifiers": {
-    "magnification": 1.0,
     "border_size": 1.0,
-    "inactive_opacity": 0.8
+    "inactive_opacity": 0.8,
+  },
+  "tabs": {
+    "git_status": true,
+  },
+  "project_panel": {
+    "default_width": 240,
+    "bold_folder_labels": true,
+    "entry_spacing": "standard",
+    "indent_size": 15,
+  },
+  "outline_panel": {
+    "default_width": 240,
+    "indent_size": 15,
+  },
+  "gutter": {
+    "min_line_number_digits": 3,
   },
 
-  "tabs": {
-    "git_status": true
-  },
+  // ##### EDITOR #####
+  "vim_mode": true,
+  "base_keymap": "VSCode",
+  "hover_popover_delay": 1000,
+  "use_smartcase_search": true,
+  "always_treat_brackets_as_autoclosed": true,
+  "vertical_scroll_margin": 5,
+
+  // ##### LANGUAGES #####
   "languages": {
     "Elixir": {
       "formatter": {
         "external": {
           "command": "mix",
-          "arguments": ["format", "--stdin-filename", "{buffer_path}", "-"]
-        }
+          "arguments": ["format", "--stdin-filename", "{buffer_path}", "-"],
+        },
       },
       "format_on_save": "on",
       "language_servers": [
@@ -52,8 +86,8 @@
         "elixir-ls",
         "!next-ls",
         "!lexical",
-        "..."
-      ]
+        "...",
+      ],
     },
     "HEEX": {
       "language_servers": [
@@ -61,17 +95,17 @@
         "elixir-ls",
         "!next-ls",
         "!lexical",
-        "..."
-      ]
+        "...",
+      ],
     },
     "JavaScript": {
       "formatter": {
         "external": {
           "command": "prettier",
-          "arguments": ["--stdin-filepath", "{buffer_path}"]
-        }
-      }
-    }
+          "arguments": ["--stdin-filepath", "{buffer_path}"],
+        },
+      },
+    },
   },
   "lsp_highlight_debounce": 500,
   "lsp": {
@@ -79,34 +113,44 @@
       "settings": {
         "css": {
           "lint": {
-            "unknownAtRules": "ignore"
-          }
-        }
-      }
-    }
+            "unknownAtRules": "ignore",
+          },
+        },
+      },
+    },
   },
   "file_types": {
-    "GitHub Actions": [".github/workflows/*.yml", ".github/workflows/*.yaml"]
+    "GitHub Actions": [".github/workflows/*.yml", ".github/workflows/*.yaml"],
   },
-  "use_smartcase_search": true,
-  "always_treat_brackets_as_autoclosed": true,
-  "experimental.theme_overrides": {
-    "editor.document_highlight.read_background": "#59585A"
+
+  // ##### AI #####
+  "agent": {
+    "default_profile": "ask",
+    "default_model": {
+      "provider": "anthropic",
+      "model": "claude-opus-4-5-latest",
+    },
+    "favorite_models": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-4-5-latest",
+      },
+      {
+        "provider": "anthropic",
+        "model": "claude-sonnet-4-5-latest",
+      },
+    ],
+    "model_parameters": [],
   },
-  "project_panel": {
-    "entry_spacing": "standard",
-    "indent_size": 15
-  },
-  "vertical_scroll_margin": 5,
-  "gutter": {
-    "min_line_number_digits": 3
+  "edit_predictions": {
+    "mode": "subtle",
   },
   "agent_servers": {
     "claude": {
       "env": {
         "CLAUDE_CODE_EXECUTABLE": "~/.claude-work/local/claude",
-        "CLAUDE_CONFIG_DIR": "~/.claude-work"
-      }
-    }
-  }
+        "CLAUDE_CONFIG_DIR": "~/.claude-work",
+      },
+    },
+  },
 }
