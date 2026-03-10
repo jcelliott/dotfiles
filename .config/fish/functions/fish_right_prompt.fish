@@ -1,62 +1,62 @@
 function fish_right_prompt --description 'Write out the right prompt'
-    if not set -q __fish_rprompt_color
-        set -g __fish_rprompt_color (set_color --bold black)
-    end
+  if not set -q __fish_rprompt_color
+    set -g __fish_rprompt_color (set_color --bold black)
+  end
 
-    function __fish_set_virtualenv_prompt --on-variable VIRTUAL_ENV --description "Event handler; change virtualenv prompt when VIRTUAL_ENV changes"
-      if status --is-interactive
-        if set -q VIRTUAL_ENV
-          if test '.venv' = (basename $VIRTUAL_ENV)
-            set -g __fish_prompt_virtualenv "["(basename (dirname "$VIRTUAL_ENV"))"]"
-          else
-            set -g __fish_prompt_virtualenv "["(basename "$VIRTUAL_ENV")"]"
-          end
-          # echo "[VIRTUAL_ENV updated]"
+  function __fish_set_virtualenv_prompt --on-variable VIRTUAL_ENV --description "Event handler; change virtualenv prompt when VIRTUAL_ENV changes"
+    if status --is-interactive
+      if set -q VIRTUAL_ENV
+        if test '.venv' = (basename $VIRTUAL_ENV)
+          set -g __fish_prompt_virtualenv "["(basename (dirname "$VIRTUAL_ENV"))"]"
         else
-          set -g __fish_prompt_virtualenv
+          set -g __fish_prompt_virtualenv "["(basename "$VIRTUAL_ENV")"]"
         end
+        # echo "[VIRTUAL_ENV updated]"
+      else
+        set -g __fish_prompt_virtualenv
       end
     end
+  end
 
-    function __fish_set_conda_env_prompt --on-variable CONDA_DEFAULT_ENV --description "Event handler; change conda env prompt"
-      if status --is-interactive
-        if set -q CONDA_DEFAULT_ENV
-          set -g __fish_prompt_conda_env "["$CONDA_DEFAULT_ENV"]"
-        else
-          set -g __fish_prompt_conda_env
-        end
+  function __fish_set_conda_env_prompt --on-variable CONDA_DEFAULT_ENV --description "Event handler; change conda env prompt"
+    if status --is-interactive
+      if set -q CONDA_DEFAULT_ENV
+        set -g __fish_prompt_conda_env "["$CONDA_DEFAULT_ENV"]"
+      else
+        set -g __fish_prompt_conda_env
       end
     end
+  end
 
-    function __fish_set_docker_machine_prompt --on-variable DOCKER_MACHINE_NAME --description "Event handler; change docker machine prompt when DOCKER_MACHINE_NAME changes"
-      if status --is-interactive
-        if set -q DOCKER_MACHINE_NAME
-          set -g __fish_prompt_docker_machine "[$DOCKER_MACHINE_NAME]"
-        else if set -q DOCKER_HOST
-          set -g __fish_prompt_docker_machine "[DOCKER]"
-        else
-          set -g __fish_prompt_docker_machine
-        end
+  function __fish_set_docker_machine_prompt --on-variable DOCKER_MACHINE_NAME --description "Event handler; change docker machine prompt when DOCKER_MACHINE_NAME changes"
+    if status --is-interactive
+      if set -q DOCKER_MACHINE_NAME
+        set -g __fish_prompt_docker_machine "[$DOCKER_MACHINE_NAME]"
+      else if set -q DOCKER_HOST
+        set -g __fish_prompt_docker_machine "[DOCKER]"
+      else
+        set -g __fish_prompt_docker_machine
       end
     end
+  end
 
-    function __fish_set_oxen_worktree_prompt --on-variable OXEN_WORKTREE --description "Event handler; change oxen worktree prompt when OXEN_WORKTREE changes"
-      if status --is-interactive
-        if set -q OXEN_WORKTREE
-          set -g __fish_prompt_oxen_worktree "[oxen:$OXEN_WORKTREE]"
-        else
-          set -g __fish_prompt_oxen_worktree
-        end
+  function __fish_set_oxen_worktree_prompt --on-variable OXEN_WORKTREE --description "Event handler; change oxen worktree prompt when OXEN_WORKTREE changes"
+    if status --is-interactive
+      if set -q OXEN_WORKTREE
+        set -g __fish_prompt_oxen_worktree "[oxen:$OXEN_WORKTREE]"
+      else
+        set -g __fish_prompt_oxen_worktree
       end
     end
+  end
 
-    if not set -q __fish_right_prompt_initialized
-      # Make sure we set variables at least once. A new shell inheriting env
-      # from previous won't trigger the event handler for inherited variable.
-      __fish_set_virtualenv_prompt
-      __fish_set_oxen_worktree_prompt
-      set -g __fish_right_prompt_initialized 1
-    end
+  if not set -q __fish_right_prompt_initialized
+    # Make sure we set variables at least once. A new shell inheriting env
+    # from previous won't trigger the event handler for inherited variable.
+    __fish_set_virtualenv_prompt
+    __fish_set_oxen_worktree_prompt
+    set -g __fish_right_prompt_initialized 1
+  end
 
-    echo -ns "$__fish_rprompt_color" "$__fish_prompt_oxen_worktree" "$__fish_prompt_docker_machine" "$__fish_prompt_virtualenv" "$__fish_prompt_conda_env"
+  echo -ns "$__fish_rprompt_color" "$__fish_prompt_oxen_worktree" "$__fish_prompt_docker_machine" "$__fish_prompt_virtualenv" "$__fish_prompt_conda_env"
 end

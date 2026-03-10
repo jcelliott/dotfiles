@@ -1,12 +1,10 @@
 function peco-select-oxen-worktree
   set -l project_root "$HOME/src/oxen/Oxen"
-
   set -l query "$argv[1]"
-
 
   set peco_flag "--layout=bottom-up" "--initial-filter=Fuzzy" "--select-1"
   if [ -n $query ]
-	set peco_flag $peco_flag "--query" $query
+    set peco_flag $peco_flag "--query" $query
   end
 
   if [ "$status" = "0" ]
