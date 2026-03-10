@@ -4,7 +4,7 @@ function fish_prompt --description 'Write out the prompt'
 
     # Just calculate these once, to save a few cycles when displaying the prompt
     if not set -q __fish_prompt_hostname
-        set -g __fish_prompt_hostname (hostname|cut -d . -f 1)
+        set -g __fish_prompt_hostname (hostname -s)
     end
     if not set -q __fish_prompt_normal
         set -g __fish_prompt_normal (set_color normal)
@@ -20,8 +20,8 @@ function fish_prompt --description 'Write out the prompt'
         end
     end
     if not set -q __fish_prompt_host
-        if set -q fish_prompt_show_host
-            set -g __fish_prompt_host "@"(set_color $fish_color_host)"$__fish_prompt_hostname"(set_color normal)
+        if set -q SSH_TTY
+            set -g __fish_prompt_host (set_color $fish_color_host)"[$__fish_prompt_hostname]"
         else
             set -g __fish_prompt_host ""
         end

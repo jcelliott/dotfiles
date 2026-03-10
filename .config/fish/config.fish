@@ -25,13 +25,13 @@ set -x fish_cursor_replace_one underscore
 # set -x fish_vi_force_cursor true
 
 # set colors
-set -U fish_color_command blue
-set -U fish_color_user blue
-set -U fish_color_host cyan
-set -U fish_color_cwd green
-set -U fish_color_status red
-set -U fish_color_search_match --background=red
-set -U fish_color_selection --background=green
+set fish_color_command blue
+set fish_color_user blue
+set fish_color_host cyan
+set fish_color_cwd green
+set fish_color_status red
+set fish_color_search_match --background=red
+set fish_color_selection --background=green
 
 ### Environment ###
 #
