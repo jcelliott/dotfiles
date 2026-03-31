@@ -76,6 +76,7 @@ abbr --add dm 'docker-machine'
 # abbr --add c 'code'
 
 abbr --add sf 'source ~/.config/fish/config.fish'
+abbr --add sfc 'source ~/.config/fish/config.fish'
 abbr --add sfa 'source ~/.config/fish/abbreviations.fish'
 
 abbr --add s 'sudo'
