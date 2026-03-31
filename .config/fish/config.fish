@@ -62,7 +62,7 @@ set -x APPLE_SSH_ADD_BEHAVIOR "macos"
 
 # Java
 if test $_platform = "darwin"
-  set -x JAVA_HOME "/Library/Java/JavaVirtualMachines/openjdk.jdk/Contents/Home"
+  set -x JAVA_HOME /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home
 end
 
 # Go
