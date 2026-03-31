@@ -5,6 +5,7 @@ set binary_name (basename (status filename))
 
 # Default project path - adjust as needed
 set -l project_root "$HOME/src/oxen/Oxen"
+set -l worktrees_dir "$HOME/src/oxen/Oxen__worktrees"
 
 # Check for environment variable first
 if set -q OXEN_WORKTREE
@@ -13,10 +14,14 @@ if set -q OXEN_WORKTREE
 else
     # Try to detect from current directory
     set current_dir (pwd)
-    if string match --ignore-case --quiet "$project_root*" $current_dir
-        # Extract worktree name from path
-        set relative_path (string replace --ignore-case "$project_root/" "" $current_dir)
+    if string match --quiet "$worktrees_dir/*" $current_dir
+        # Inside a worktree — extract worktree name
+        set relative_path (string replace "$worktrees_dir/" "" $current_dir)
         set worktree (string split "/" $relative_path)[1]
+        set source "current directory"
+    else if string match --quiet "$project_root*" $current_dir
+        # Inside the main project directory
+        set worktree "main"
         set source "current directory"
     else
         # Default to main worktree
@@ -25,9 +30,15 @@ else
     end
 end
 
+# Resolve worktree name to directory path
+if test "$worktree" = "main"
+    set worktree_path "$project_root"
+else
+    set worktree_path "$worktrees_dir/$worktree"
+end
 
 if string match -q $binary_name "oxen-which"
-    set binary_path "$project_root/$worktree/oxen-rust/target/debug/oxen"
+    set binary_path "$worktree_path/target/debug/oxen"
     echo "Worktree: $worktree (from $source)"
     echo "Binary: $binary_path"
 
@@ -41,7 +52,7 @@ if string match -q $binary_name "oxen-which"
 end
 
 # Construct path to binary
-set binary_path "$project_root/$worktree/oxen-rust/target/debug/$binary_name"
+set binary_path "$worktree_path/target/debug/$binary_name"
 
 # Check if binary exists
 if not test -f $binary_path
