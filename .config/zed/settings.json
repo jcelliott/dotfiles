@@ -8,13 +8,14 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
   // ##### APPEARANCE #####
+  "ui_font_weight": 300.0,
   "sticky_scroll": {
-    "enabled": true
+    "enabled": true,
   },
   "icon_theme": "Bearded Icon Theme",
   "minimum_contrast_for_highlights": 40.0,
   "ui_font_size": 13,
-  "buffer_font_family": "CommitMono",
+  "buffer_font_family": "Fira Code",
   "buffer_font_size": 13,
   "theme": {
     "mode": "system",
@@ -89,7 +90,7 @@
         "...",
       ],
     },
-    "HEEX": {
+    "HEEx": {
       "language_servers": [
         "!expert",
         "elixir-ls",
@@ -146,7 +147,8 @@
     "mode": "subtle",
   },
   "agent_servers": {
-    "claude": {
+    "claude-acp": {
+      "type": "registry",
       "env": {
         "CLAUDE_CODE_EXECUTABLE": "~/.claude-work/local/claude",
         "CLAUDE_CONFIG_DIR": "~/.claude-work",
