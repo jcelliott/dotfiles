@@ -128,7 +128,6 @@ set -x VIRTUAL_ENV_DISABLE_PROMPT true
 # Run my Python startup script for interactive sessions
 set -x PYTHONSTARTUP "$HOME/.config/pythonstartup_manager.py"
 
-fundle plugin 'oh-my-fish/plugin-peco'
 fundle plugin 'tuvistavie/fish-completion-helpers'
 fundle plugin 'edc/bass'
 # fundle plugin 'laughedelic/pisces'
@@ -180,6 +179,15 @@ if type -q zoxide
   zoxide init fish --cmd j | source
 else
   perror "zoxide is not installed"
+end
+
+# fzf shell integration — defines fzf-history-widget and friends.
+# The Ctrl-R binding is (re)applied in fish_user_key_bindings, because the
+# fish_vi_key_bindings call there erases any bindings this sets up.
+if type -q fzf
+  fzf --fish | source
+else
+  perror "fzf is not installed"
 end
 
 # Added by OrbStack: command-line tools and integration

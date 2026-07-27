@@ -1,9 +1,20 @@
 function fish_user_key_bindings --description "User key bindings for fish"
   fish_vi_key_bindings
 
-  # fuzzy history search with Peco
-  bind \cr 'peco_select_history (commandline -b)'
-  bind -M insert \cr 'peco_select_history (commandline -b)'
+  # fzf widgets, defined by the integration sourced in config.fish:
+  #   Ctrl-R  fuzzy history search
+  #   Ctrl-T  paste selected paths onto the command line
+  #   Alt-C   cd into a selected directory
+  # The integration also binds shift-tab to fzf completion; erase it so
+  # tab-completion behaviour is left untouched.
+  bind \cr fzf-history-widget
+  bind -M insert \cr fzf-history-widget
+  bind \ct fzf-file-widget
+  bind -M insert \ct fzf-file-widget
+  bind \ec fzf-cd-widget
+  bind -M insert \ec fzf-cd-widget
+  bind -e shift-tab
+  bind -M insert -e shift-tab
 
   # normal mode
   bind -m insert \n execute
