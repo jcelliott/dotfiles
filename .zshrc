@@ -61,6 +61,10 @@ setopt histignoredups
 unsetopt correct
 # CORRECTALL turns on spelling correction for all arguments.
 unsetopt correctall
+# NONOMATCH passes an unmatched glob through literally, as bash does. Claude Code
+# sessions only, so a pattern meant for another program (grep --include=*.ex)
+# doesn't fail with "no matches found"; interactive shells keep the error.
+[[ -n $CLAUDECODE ]] && setopt nonomatch
 
 # Use vi style bindings
 #bindkey -v
