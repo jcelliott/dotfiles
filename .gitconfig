@@ -12,6 +12,11 @@
 	algorithm = patience
 	colorMoved = default
 
+# git's built-in Elixir pattern crashes macOS's regex engine on working-tree
+# diffs. Remove this once git or macOS fixes it.
+[diff "elixir"]
+	xfuncname = "^[ \t]*((def[a-z]*|describe|test)[ \t(].*)$"
+
 [interactive]
 	diffFilter = delta --color-only
 
