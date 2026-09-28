@@ -2,6 +2,31 @@
 #
 # Joshua Elliott
 
+os_detect
+
+### PATH ###
+# Notes:
+# * prefer global paths (fish_add_path -g) so we don't have universal variables
+#   sticking around with old path values.
+# * Also prefer modifying PATH directly (fish_add_path --path/-P)
+# * The --move/-m flag moves already-included directories to the place they
+#   would be added - by default they would be left in place and not added again.
+#   This is necessary because in some scenarios (i.e., within tmux) the current
+#   session will inherit the PATH of a parent session and the entries would not
+#   be moved to the correct location.
+
+# Mac-specific path
+if test $_platform = "darwin"
+  # path for Homebrew (add first, so other tools can override)
+  /opt/homebrew/bin/brew shellenv | source
+  fish_add_path -gPm "/Applications/Postgres.app/Contents/Versions/latest/bin"
+  fish_add_path -gPm "/opt/homebrew/opt/rustup/bin"
+end
+
+fish_add_path -gPm "$HOME/bin" "$GOPATH/bin" "$HOME/.local/bin"
+fish_add_path -gPm "$HOME/.cargo/bin"  # Rust
+
+# END NON-INTERACTIVE
 # put anything needed for a non-interactive shell before this
 if not status --is-interactive
   exit 0
@@ -35,8 +60,6 @@ set fish_color_selection --background=green
 
 ### Environment ###
 #
-os_detect
-
 set -x EDITOR vim
 
 # ls
@@ -67,28 +90,6 @@ end
 
 # Go
 set -x GOPATH "$HOME/src/go"
-
-### PATH ###
-# Notes:
-# * prefer global paths (fish_add_path -g) so we don't have universal variables
-#   sticking around with old path values.
-# * Also prefer modifying PATH directly (fish_add_path --path/-P)
-# * The --move/-m flag moves already-included directories to the place they
-#   would be added - by default they would be left in place and not added again.
-#   This is necessary because in some scenarios (i.e., within tmux) the current
-#   session will inherit the PATH of a parent session and the entries would not
-#   be moved to the correct location.
-
-# Mac-specific path
-if test $_platform = "darwin"
-  # path for Homebrew (add first, so other tools can override)
-  /opt/homebrew/bin/brew shellenv | source
-  fish_add_path -gPm "/Applications/Postgres.app/Contents/Versions/latest/bin"
-  fish_add_path -gPm "/opt/homebrew/opt/rustup/bin"
-end
-
-fish_add_path -gPm "$HOME/bin" "$GOPATH/bin" "$HOME/.local/bin"
-fish_add_path -gPm "$HOME/.cargo/bin"  # Rust
 
 # Manpath
 if test $_platform = "darwin"
