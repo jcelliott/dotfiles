@@ -12,6 +12,12 @@ function oxen-server-loop
 		end
 		echo -e (set_color brblack)"*\n*\n*"(set_color normal)
 		psuccess "***** SERVER START *****"
+		# Samples this boot into its own CSV; finds the server as our child, so it is
+		# fine that it races the server start. Must be a separate process, not
+		# `oxen-server-sample &`: fish runs a backgrounded function synchronously,
+		# which stalls the server start until the function returns.
+		fish -c "oxen-server-sample $fish_pid" </dev/null >/dev/null 2>&1 &
+		disown 2>/dev/null
 		oxen-server start -i localhost
 		perror "***** SERVER STOPPED *****"
 		pwarn "(^c again to quit)"

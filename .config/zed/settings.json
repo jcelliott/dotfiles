@@ -150,8 +150,8 @@
     "claude-acp": {
       "type": "registry",
       "env": {
-        "CLAUDE_CODE_EXECUTABLE": "~/.claude-work/local/claude",
-        "CLAUDE_CONFIG_DIR": "~/.claude-work",
+        "CLAUDE_CODE_EXECUTABLE": "/Users/josh/.local/bin/claude",
+        "CLAUDE_CONFIG_DIR": "/Users/josh/.claude-work",
       },
     },
   },
