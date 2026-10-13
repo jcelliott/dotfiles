@@ -15,6 +15,9 @@ os_detect
 #   session will inherit the PATH of a parent session and the entries would not
 #   be moved to the correct location.
 
+# Go (set before PATH, which uses it)
+set -x GOPATH "$HOME/src/go"
+
 # Mac-specific path
 if test $_platform = "darwin"
   # path for Homebrew (add first, so other tools can override)
@@ -83,9 +86,6 @@ if test $_platform = "darwin"
   set -x JAVA_HOME /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home
 end
 
-# Go
-set -x GOPATH "$HOME/src/go"
-
 # Manpath
 if test $_platform = "darwin"
   # manpath for macports
@@ -129,7 +129,12 @@ fundle plugin 'edc/bass'
 # fundle plugin 'laughedelic/pisces'
   # set -U pisces_only_insert_at_eol 1
 fundle plugin 'franciscolourenco/done'
-  set -U __done_notification_command "echo \$message | terminal-notifier -title \$title"
+  # Linux uses done's default (notify-send)
+  if test $_platform = "darwin"
+    set -U __done_notification_command "echo \$message | terminal-notifier -title \$title"
+  else
+    set -eU __done_notification_command
+  end
 fundle init
 
 # Elixir/Erlang
