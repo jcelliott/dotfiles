@@ -1,0 +1,13 @@
+# Ghostty on macOS. Linux uses Omarchy's ~/.config/ghostty/config instead.
+
+# Omarchy Matte Black with colour16-21 shades (~/.config/ghostty/themes/)
+theme = omarchy-matte-black
+
+# font: Ghostty's built-in default (JetBrains Mono + Nerd Font symbols)
+
+# Option acts as Alt/Meta (tmux M- bindings, readline/vim Alt keys)
+macos-option-as-alt = left
+
+# install Ghostty's terminfo on remote hosts and fall back to
+# xterm-256color where that's not possible
+shell-integration-features = ssh-terminfo,ssh-env
