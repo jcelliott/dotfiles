@@ -1,7 +1,7 @@
 # Ghostty on macOS. Linux uses Omarchy's ~/.config/ghostty/config instead.
 
-# Omarchy Matte Black with colour16-21 shades (~/.config/ghostty/themes/)
-theme = omarchy-matte-black
+# base16 Default Dark, including the colour16-21 shades (~/.config/ghostty/themes/)
+theme = base16-default-dark
 
 # font: Ghostty's built-in default (JetBrains Mono + Nerd Font symbols)
 
