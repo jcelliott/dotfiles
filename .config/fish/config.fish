@@ -67,8 +67,6 @@ else
   set -x LS_COLORS (bash -c 'eval `dircolors ~/.config/.dircolors`; echo $LS_COLORS')
 end
 
-# grep
-set -x GREP_OPTIONS "--color=auto"
 # ripgrep
 set -x RIPGREP_CONFIG_PATH "$HOME/.config/ripgrep"
 
