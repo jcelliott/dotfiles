@@ -212,8 +212,6 @@ cask "font-cascadia-code"
 cask "font-hack-nerd-font"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
-# Terminal emulator
-cask "iterm2"
 # Keyboard customiser
 cask "karabiner-elements"
 cask "ngrok"

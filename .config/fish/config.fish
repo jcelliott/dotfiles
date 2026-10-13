@@ -159,8 +159,6 @@ if available mix
   alias dialyze='env MIX_ENV=test mix dialyzer'
 end
 
-test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
-
 # Android development
 set -x ANDROID_HOME "/usr/local/share/android-sdk"
 set -x ANDROID_SDK_ROOT "/usr/local/share/android-sdk"
