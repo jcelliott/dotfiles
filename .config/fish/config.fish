@@ -34,11 +34,6 @@ end
 
 ### Appearance ###
 #
-# set base16 colors
-set BASE16_SHELL "$HOME/.config/base16-shell"
-source "$BASE16_SHELL/profile_helper.fish"
-# don't set the theme here, so it can be switched dynamically
-# base16-default-dark
 
 # Emulates vim's cursor shape behavior
 # Set the normal and visual mode cursors to a block
@@ -160,9 +155,6 @@ end
 if available mix
   alias dialyze='env MIX_ENV=test mix dialyzer'
 end
-
-alias dark='base16-default-dark'
-alias light='base16-default-light'
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
