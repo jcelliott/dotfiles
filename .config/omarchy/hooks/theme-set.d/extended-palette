@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Push the base16-style extra shades (colour16-21, see
+# ~/.config/omarchy/themed/foot.ini.tpl) to running foot terminals, like
+# omarchy-theme-set-foot does for colour0-15. New terminals get them from the
+# generated foot.ini.
+
+colors_toml=$HOME/.local/state/omarchy/current/theme/colors.toml
+
+if [[ ! -f $colors_toml ]] || ! pgrep -x foot >/dev/null; then
+  exit 0
+fi
+
+declare -A COLORS
+while IFS=$'\t' read -r key value; do
+  COLORS[$key]="$value"
+done < <(omarchy-theme-color --file "$colors_toml" --all)
+
+osc=""
+i=16
+for key in orange brown lighter_background selection dark_foreground light_foreground; do
+  [[ -n ${COLORS[$key]:-} ]] && osc+=$(printf '\033]4;%d;%s\007' "$i" "${COLORS[$key]}")
+  i=$((i + 1))
+done
+[[ -n $osc ]] || exit 0
+
+for foot_pid in $(pgrep -x foot); do
+  for child_pid in $(pgrep -P "$foot_pid"); do
+    tty=$(readlink "/proc/$child_pid/fd/1" 2>/dev/null)
+    [[ $tty == /dev/pts/* ]] && printf '%s' "$osc" >"$tty"
+  done
+done
