@@ -1,0 +1,310 @@
+#!/usr/bin/env python3
+"""Generate the tetra themes (tetra-dark, tetra-mirage, tetra-light) for
+Omarchy and Ghostty.
+
+Tetra is Ayu (https://ayutheme.com/) toned down a little. For each variant:
+
+- Shades, orange and brown come from the base24 Ayu schemes in
+  tinted-theming/schemes (spec-0.11 branch).
+- Bright ANSI colours are Ayu's palette (ayu-theme/ayu-colors themes/*.yaml);
+  normal ones are darker versions of them, following Ayu's terminal rule
+  (OKLCH lightness offsets), or for Light a minimum contrast on the background.
+- Selection is Ayu's selection colour and muted is Ayu's comment gray.
+- Neutral shades (backgrounds, foregrounds, muted) and selection get half of
+  Ayu's tint: OKLCH chroma halved, lightness unchanged.
+
+Writes colors.toml, neovim.lua and icons.theme into
+~/.config/omarchy/themes/tetra-<variant>/, and a gradient wallpaper only when
+the theme has no backgrounds yet. Also writes the Ghostty theme
+~/.config/ghostty/themes/tetra-<variant>, with the same palette as Omarchy's
+terminal templates plus the extra shades in 16-21 that ~/.tmux.conf uses (see
+~/.config/omarchy/themed/foot.ini.tpl). If the active Omarchy theme is one of
+the generated ones, it is re-applied with omarchy-theme-refresh.
+
+Usage: generate [variant...]   (default: all)
+"""
+import os
+import subprocess
+import sys
+import textwrap
+
+THEMES_DIR = os.path.expanduser('~/.config/omarchy/themes')
+THEME_NAME_FILE = os.path.expanduser('~/.local/state/omarchy/current/theme.name')
+GHOSTTY_THEMES_DIR = os.path.expanduser('~/.config/ghostty/themes')
+
+# Fraction of Ayu's tint kept on neutral shades and selection.
+TINT = 0.5
+
+VARIANTS = {
+    'dark': dict(
+        title='Ayu Dark', mode='dark', nvim='ayu-dark',
+        # base24 Ayu Dark
+        base24=dict(b00='#0b0e14', b01='#131721', b04='#bfbdb6', b05='#e6e1cf', b06='#ece8db',
+                    b07='#f2f0e7', b09='#ff8f40', b0F='#e6b450', b10='#0a0d13', b11='#06070a'),
+        # ayu-colors themes/dark.yaml palette
+        hues=dict(red='#f07178', yellow='#ffb454', green='#aad94c', cyan='#95e6cb', blue='#59c2ff', magenta='#d2a6ff'),
+        normal_offset=-0.07, normal_offsets={}, bright_offsets={},
+        # Ayu's blue selection as used by fdidron/omarchy-ayu-dark-theme
+        # (close to ayu-colors' #3388ff at 25% over the editor background)
+        selection='#1b3a5b', gray='#5a6673', accent='#e6b450',
+        rule=("normal ones are those darkened by 0.07 OKLCH lightness, the rule Ayu's own "
+              "terminal themes use"),
+    ),
+    'mirage': dict(
+        title='Ayu Mirage', mode='dark', nvim='ayu-mirage',
+        base24=dict(b00='#1f2430', b01='#242936', b04='#707a8c', b05='#cccac2', b06='#d9d7ce',
+                    b07='#f3f4f5', b09='#ffad66', b0F='#f27983', b10='#171b24', b11='#1a1f29'),
+        hues=dict(red='#f28779', yellow='#ffcd66', green='#d5ff80', cyan='#95e6cb', blue='#73d0ff', magenta='#dfbfff'),
+        normal_offset=-0.07, normal_offsets=dict(red=-0.05), bright_offsets=dict(red=+0.02),
+        selection=('#409fff', 0.25, '#242936'), gray='#6e7c8f', accent='#ffcc66',
+        rule=("normal ones are those darkened by 0.07 OKLCH lightness (red by 0.05, and bright "
+              "red lightened by 0.02), the rule Ayu's own terminal themes use"),
+    ),
+    'light': dict(
+        title='Ayu Light', mode='light', nvim='ayu-light',
+        base24=dict(b00='#f8f9fa', b01='#edeff1', b04='#8a9199', b05='#5c6166', b06='#4e5257',
+                    b07='#404447', b09='#fa8d3e', b0F='#e6ba7e', b10=None, b11=None),
+        hues=dict(red='#f07171', yellow='#eba400', green='#86b300', cyan='#4cbf99', blue='#22a4e6', magenta='#a37acc'),
+        normal_offset=-0.07, normal_offsets={}, bright_offsets={}, normal_min_contrast=4.5,
+        # Omarchy light themes make dark(er)_background darker than the
+        # background; base24's base10/11 are lighter. Start from Ayu Light's
+        # "sunk" surface instead.
+        sunk='#ebeef0',
+        selection=('#035bd6', 0.15, '#fcfcfc'), gray='#adaeb1', accent='#f29718',
+        rule=("normal ones are darkened in OKLCH lightness until they reach 4.5:1 contrast on "
+              "the background (a fixed 0.07, as in tetra-dark, leaves these at 2.6-3.6:1; Ayu "
+              "Light's own terminal theme uses the same colour for both)"),
+    ),
+}
+
+NEOVIM_LUA = '''return {
+	{
+		"Shatur/neovim-ayu",
+		priority = 1000,
+	},
+	{
+		"LazyVim/LazyVim",
+		opts = {
+			colorscheme = "%s",
+		},
+	},
+}
+'''
+ICONS = 'Yaru-yellow\n'
+
+
+# --- colour maths (OKLab/OKLCH) ---------------------------------------------
+
+def _s2l(c):
+    c /= 255
+    return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+
+
+def _l2s(c):
+    c = max(0.0, min(1.0, c))
+    v = 12.92 * c if c <= 0.0031308 else 1.055 * c ** (1 / 2.4) - 0.055
+    return round(max(0.0, min(1.0, v)) * 255)
+
+
+def rgb(h):
+    h = h.lstrip('#')
+    return [int(h[i:i + 2], 16) for i in (0, 2, 4)]
+
+
+def oklab(h):
+    r, g, b = [_s2l(x) for x in rgb(h)]
+    l = (0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b) ** (1 / 3)
+    m = (0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b) ** (1 / 3)
+    s = (0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b) ** (1 / 3)
+    return (0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s,
+            1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s,
+            0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s)
+
+
+def from_oklab(L, a, b):
+    l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3
+    m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3
+    s = (L - 0.0894841775 * a - 1.2914855480 * b) ** 3
+    return '#%02x%02x%02x' % tuple(_l2s(x) for x in (
+        4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+        -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+        -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s))
+
+
+def lighten(h, d):
+    """Change OKLCH lightness by d."""
+    L, a, b = oklab(h)
+    return from_oklab(L + d, a, b)
+
+
+def tint(h, t=TINT):
+    """Scale OKLCH chroma by t, keeping lightness."""
+    L, a, b = oklab(h)
+    return from_oklab(L, a * t, b * t)
+
+
+def over(fg, alpha, bg):
+    """Alpha-blend fg over bg in sRGB, as editors do."""
+    return '#%02x%02x%02x' % tuple(round(f * alpha + b * (1 - alpha)) for f, b in zip(rgb(fg), rgb(bg)))
+
+
+def mix(a, b, t):
+    return '#%02x%02x%02x' % tuple(round(x * (1 - t) + y * t) for x, y in zip(rgb(a), rgb(b)))
+
+
+def contrast(a, b):
+    def lum(h):
+        r, g, bl = [_s2l(x) for x in rgb(h)]
+        return 0.2126 * r + 0.7152 * g + 0.0722 * bl
+    x, y = sorted([lum(a), lum(b)])
+    return (y + 0.05) / (x + 0.05)
+
+
+# --- theme ------------------------------------------------------------------
+
+def palette(v):
+    b = v['base24']
+    if v['mode'] == 'light':
+        dark_bg = v['sunk']
+        darker_bg = mix(v['sunk'], b['b05'], 0.08)
+    else:
+        # keep darker_background the darkest (base24 Mirage has them swapped)
+        dark_bg, darker_bg = sorted([b['b10'], b['b11']], key=lambda h: -oklab(h)[0])
+    sel = v['selection'] if isinstance(v['selection'], str) else over(*v['selection'])
+    bg = tint(b['b00'])
+
+    c = dict(
+        accent=v['accent'],
+        selection=tint(sel),
+        muted=tint(v['gray']),
+        background=bg,
+        dark_background=tint(dark_bg),
+        darker_background=tint(darker_bg),
+        lighter_background=tint(b['b01']),
+        foreground=tint(b['b05']),
+        dark_foreground=tint(b['b04']),
+        light_foreground=tint(b['b06']),
+        bright_foreground=tint(b['b07']),
+        orange=b['b09'],
+        brown=b['b0F'],
+    )
+    for name, hue in v['hues'].items():
+        d = v['normal_offsets'].get(name, v['normal_offset'])
+        normal = lighten(hue, d)
+        if v.get('normal_min_contrast'):
+            while contrast(normal, bg) < v['normal_min_contrast']:
+                d -= 0.005
+                normal = lighten(hue, d)
+        c[name] = normal
+        c['bright_' + name] = lighten(hue, v['bright_offsets'][name]) if name in v['bright_offsets'] else hue
+    return c
+
+
+def selection_source(v):
+    s = v['selection']
+    if isinstance(s, str):
+        return f"Ayu's blue selection {s}"
+    return "Ayu's editor selection (%s at %d%% over %s)" % (s[0], round(s[1] * 100), s[2])
+
+
+def colors_toml(variant, v, c):
+    text = (f"Shades, orange and brown follow base24 {v['title']} from tinted-theming. "
+            f"Bright ANSI colours are Ayu's palette; {v['rule']}. "
+            f"Selection is {selection_source(v)}, muted is Ayu's comment gray. "
+            "Neutral shades (backgrounds, foregrounds, muted) and selection have half of "
+            "Ayu's tint (OKLCH chroma halved, same lightness).")
+    if v['mode'] == 'light':
+        text += (" dark_background is Ayu Light's sunk surface and darker_background is that "
+                 "mixed 8% toward the foreground (Omarchy light themes darken these).")
+    lines = [f"# Tetra {variant.capitalize()}: {v['title']} (https://ayutheme.com/)",
+             "# Generated by ~/.config/omarchy/tetra/generate; edit that, not this file.",
+             "#"]
+    lines += ['# ' + l for l in textwrap.wrap(text, 77)]
+    lines += [f'mode = "{v["mode"]}"', '']
+    for group in (('accent', 'selection', 'muted'),
+                  ('background', 'dark_background', 'darker_background', 'lighter_background'),
+                  ('foreground', 'dark_foreground', 'light_foreground', 'bright_foreground'),
+                  ('red', 'yellow', 'orange', 'green', 'cyan', 'blue', 'magenta', 'brown'),
+                  ('bright_red', 'bright_yellow', 'bright_green', 'bright_cyan', 'bright_blue',
+                   'bright_magenta')):
+        lines += [f'{k} = "{c[k]}"' for k in group] + ['']
+    return '\n'.join(lines).rstrip() + '\n'
+
+
+def ghostty_theme(variant, v, c):
+    # Same mapping as Omarchy's ghostty.conf.tpl (selection foreground and
+    # cursor default to bright_foreground there), plus 16-21 like the foot
+    # template in ~/.config/omarchy/themed/.
+    ansi = ['background', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'foreground',
+            'muted', 'bright_red', 'bright_green', 'bright_yellow', 'bright_blue',
+            'bright_magenta', 'bright_cyan', 'bright_foreground',
+            'orange', 'brown', 'lighter_background', 'selection', 'dark_foreground',
+            'light_foreground']
+    lines = [f"# Tetra {variant.capitalize()}: {v['title']} (https://ayutheme.com/)",
+             "# Generated by ~/.config/omarchy/tetra/generate; edit that, not this file.",
+             "# Palette 0-15 ANSI, 16-21 extra shades (orange, brown, lighter background,",
+             "# selection, dark foreground, light foreground) used by ~/.tmux.conf.",
+             '',
+             f"background = {c['background']}",
+             f"foreground = {c['foreground']}",
+             f"cursor-color = {c['bright_foreground']}",
+             f"selection-background = {c['selection']}",
+             f"selection-foreground = {c['bright_foreground']}",
+             '']
+    lines += [f'palette = {i}={c[k]}' for i, k in enumerate(ansi)]
+    return '\n'.join(lines) + '\n'
+
+
+def write_wallpaper(theme_dir, v, c):
+    backgrounds = os.path.join(theme_dir, 'backgrounds')
+    if os.path.isdir(backgrounds) and os.listdir(backgrounds):
+        return
+    os.makedirs(backgrounds, exist_ok=True)
+    if v['mode'] == 'light':
+        center, edge = '#ffffff', c['dark_background']
+    else:
+        center, edge = lighten(c['background'], 0.06), c['background']
+    subprocess.run(['magick', '-size', '3840x2160', f'radial-gradient:{center}-{edge}',
+                    '-depth', '8', '-quality', '92',
+                    os.path.join(backgrounds, '1-ayu-gradient.jpg')], check=True)
+
+
+def main(args):
+    variants = args or list(VARIANTS)
+    for variant in variants:
+        if variant not in VARIANTS:
+            sys.exit(f'unknown variant {variant!r} (choose from {", ".join(VARIANTS)})')
+
+    generated = []
+    for variant in variants:
+        v = VARIANTS[variant]
+        c = palette(v)
+        name = f'tetra-{variant}'
+        theme_dir = os.path.join(THEMES_DIR, name)
+        os.makedirs(theme_dir, exist_ok=True)
+        with open(os.path.join(theme_dir, 'colors.toml'), 'w') as f:
+            f.write(colors_toml(variant, v, c))
+        with open(os.path.join(theme_dir, 'neovim.lua'), 'w') as f:
+            f.write(NEOVIM_LUA % v['nvim'])
+        with open(os.path.join(theme_dir, 'icons.theme'), 'w') as f:
+            f.write(ICONS)
+        write_wallpaper(theme_dir, v, c)
+        os.makedirs(GHOSTTY_THEMES_DIR, exist_ok=True)
+        with open(os.path.join(GHOSTTY_THEMES_DIR, name), 'w') as f:
+            f.write(ghostty_theme(variant, v, c))
+        generated.append(name)
+        print(f'{name}: foreground {contrast(c["foreground"], c["background"]):.1f}:1, '
+              f'lowest normal colour '
+              f'{min(contrast(c[k], c["background"]) for k in v["hues"]):.1f}:1')
+
+    try:
+        active = open(THEME_NAME_FILE).read().strip()
+    except OSError:
+        active = None
+    if active in generated:
+        print(f're-applying active theme {active}')
+        subprocess.run(['omarchy-theme-refresh'], check=False)
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
