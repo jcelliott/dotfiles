@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Omarchy's theme switch (omarchy-theme-set-tmux) sets tmux's window-style and
+# window-active-style to the theme's exact colours, which undoes the inactive
+# pane dimming in ~/.tmux.conf. Re-apply the styles from the @-options that
+# config defines. Theme-set hooks run after omarchy-theme-set-tmux.
+
+tmux list-sessions >/dev/null 2>&1 || exit 0
+
+inactive=$(tmux show -gv @inactive-pane-style 2>/dev/null)
+active=$(tmux show -gv @active-pane-style 2>/dev/null)
+
+[[ -n $inactive ]] && tmux set -g window-style "$inactive"
+[[ -n $active ]] && tmux set -g window-active-style "$active"
+exit 0
