@@ -5,7 +5,7 @@ function oxen-server-loop
 		echo -e (set_color brblack)"*\n*\n*"(set_color normal)
 		if test -e Cargo.toml
 			pinfo "***** BUILDING ****"
-			cargo build
+			cargo build --workspace --exclude oxen-py
 			echo "Built oxen on branch: "(git rev-parse --abbrev-ref HEAD)
 		else
 			pwarn "***** SKIPPING BUILD ****"
