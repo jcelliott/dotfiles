@@ -1,27 +1,20 @@
 #!/bin/bash
 
-# Push the base16-style extra shades (colour16-21, see
-# ~/.config/omarchy/themed/foot.ini.tpl) to running foot terminals, like
-# omarchy-theme-set-foot does for colour0-15. New terminals get them from the
-# generated foot.ini.
+# Push the extra shades (colour16-22, see ~/.config/omarchy/themed/foot.ini.tpl)
+# to running foot terminals, like omarchy-theme-set-foot does for colour0-15.
+# New terminals get them from the generated foot.ini, which this reads so the
+# values match the template's (including its mixes).
 
-colors_toml=$HOME/.local/state/omarchy/current/theme/colors.toml
+foot_ini=$HOME/.local/state/omarchy/current/theme/foot.ini
 
-if [[ ! -f $colors_toml ]] || ! pgrep -x foot >/dev/null; then
+if [[ ! -f $foot_ini ]] || ! pgrep -x foot >/dev/null; then
   exit 0
 fi
 
-declare -A COLORS
-while IFS=$'\t' read -r key value; do
-  COLORS[$key]="$value"
-done < <(omarchy-theme-color --file "$colors_toml" --all)
-
 osc=""
-i=16
-for key in orange brown lighter_background selection dark_foreground light_foreground; do
-  [[ -n ${COLORS[$key]:-} ]] && osc+=$(printf '\033]4;%d;%s\007' "$i" "${COLORS[$key]}")
-  i=$((i + 1))
-done
+while IFS== read -r slot value; do
+  [[ $value =~ ^[0-9A-Fa-f]{6}$ ]] && osc+=$(printf '\033]4;%d;#%s\007' "$slot" "$value")
+done < <(grep -E '^(1[6-9]|2[0-2])=' "$foot_ini")
 [[ -n $osc ]] || exit 0
 
 for foot_pid in $(pgrep -x foot); do

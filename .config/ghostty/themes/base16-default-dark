@@ -1,6 +1,7 @@
 # base16 Default Dark (Chris Kempson), laid out like base16-shell:
 # palette 0-15 ANSI (bright = normal, except 8 and 15), 16-21 extra shades
-# (16 = base09, 17 = base0F, 18 = base01, 19 = base02, 20 = base04, 21 = base06)
+# (16 = base09, 17 = base0F, 18 = base01, 19 = base02, 20 = base04, 21 = base06),
+# 22 = base01 mixed 3% toward base05 (tmux status bar)
 
 background = #181818
 foreground = #d8d8d8
@@ -30,3 +31,4 @@ palette = 18=#282828
 palette = 19=#383838
 palette = 20=#b8b8b8
 palette = 21=#e8e8e8
+palette = 22=#2d2d2d

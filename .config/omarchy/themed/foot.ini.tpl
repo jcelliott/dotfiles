@@ -24,10 +24,12 @@ bright5={{ bright_magenta_strip }}
 bright6={{ bright_cyan_strip }}
 bright7={{ bright_foreground_strip }}
 
-# base16-style extra shades in colour16-21 (used by ~/.tmux.conf)
+# base16-style extra shades in colour16-21, plus a tmux status bar shade in 22
+# (lighter_background a touch lighter); used by ~/.tmux.conf
 16={{ orange_strip }}
 17={{ brown_strip }}
 18={{ lighter_background_strip }}
 19={{ selection_strip }}
 20={{ dark_foreground_strip }}
 21={{ light_foreground_strip }}
+22={{ mix_strip lighter_background foreground 3% }}
