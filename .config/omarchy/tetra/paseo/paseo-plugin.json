@@ -1,0 +1,6 @@
+{
+  "id": "tetra",
+  "requirements": {
+    "paseo": ">=0.12.0"
+  }
+}
