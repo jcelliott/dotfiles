@@ -8,6 +8,12 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
   // ##### APPEARANCE #####
+  "collaboration_panel": {
+    "button": false
+  },
+  "git_panel": {
+    "dock": "left"
+  },
   "ui_font_weight": 300.0,
   "sticky_scroll": {
     "enabled": true,
@@ -51,12 +57,14 @@
     "git_status": true,
   },
   "project_panel": {
+    "dock": "left",
     "default_width": 240,
     "bold_folder_labels": true,
     "entry_spacing": "standard",
     "indent_size": 15,
   },
   "outline_panel": {
+    "dock": "left",
     "default_width": 240,
     "indent_size": 15,
   },
@@ -126,6 +134,11 @@
 
   // ##### AI #####
   "agent": {
+    "threads_sidebar": {
+      "auto_open": false,
+      "position": "right"
+    },
+    "dock": "right",
     "default_profile": "ask",
     "default_model": {
       "provider": "anthropic",
