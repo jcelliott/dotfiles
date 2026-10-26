@@ -2,16 +2,16 @@
 """Generate the tetra themes (tetra-dark, tetra-mirage, tetra-light) for
 Omarchy and Ghostty.
 
-Tetra is Ayu (https://ayutheme.com/) toned down a little. For each variant:
+Each variant is built like this:
 
-- Shades, orange and brown come from the base24 Ayu schemes in
+- Shades, orange and brown come from the base24 source schemes in
   tinted-theming/schemes (spec-0.11 branch).
-- Bright ANSI colours are Ayu's palette (ayu-theme/ayu-colors themes/*.yaml);
-  normal ones are darker versions of them, following Ayu's terminal rule
+- Bright ANSI colours are the source palette in VARIANTS; normal ones are
+  darker versions of them, following the source terminal rule
   (OKLCH lightness offsets), or for Light a minimum contrast on the background.
-- Selection is Ayu's selection colour and muted is Ayu's comment gray.
+- Selection is the source selection colour and muted its comment gray.
 - Neutral shades (backgrounds, foregrounds, muted) and selection get half of
-  Ayu's tint: OKLCH chroma halved, lightness unchanged.
+  the source tint: OKLCH chroma halved, lightness unchanged.
 
 Writes colors.toml, neovim.lua and icons.theme into
 ~/.config/omarchy/themes/tetra-<variant>/, and a gradient wallpaper only when
@@ -39,48 +39,48 @@ THEME_NAME_FILE = os.path.expanduser('~/.local/state/omarchy/current/theme.name'
 GHOSTTY_THEMES_DIR = os.path.expanduser('~/.config/ghostty/themes')
 PASEO_PLUGIN_DIR = os.path.expanduser('~/.config/omarchy/tetra/paseo')
 
-# Fraction of Ayu's tint kept on neutral shades and selection.
+# Fraction of the source tint kept on neutral shades and selection.
 TINT = 0.5
 
 VARIANTS = {
     'dark': dict(
-        title='Ayu Dark', mode='dark', nvim='ayu-dark',
-        # base24 Ayu Dark
+        mode='dark', nvim='ayu-dark',
+        # base24 source scheme
         base24=dict(b00='#0b0e14', b01='#131721', b04='#bfbdb6', b05='#e6e1cf', b06='#ece8db',
                     b07='#f2f0e7', b09='#ff8f40', b0F='#e6b450', b10='#0a0d13', b11='#06070a'),
-        # ayu-colors themes/dark.yaml palette
+        # source palette
         hues=dict(red='#f07178', yellow='#ffb454', green='#aad94c', cyan='#95e6cb', blue='#59c2ff', magenta='#d2a6ff'),
         normal_offset=-0.07, normal_offsets={}, bright_offsets={},
-        # Ayu's blue selection as used by fdidron/omarchy-ayu-dark-theme
-        # (close to ayu-colors' #3388ff at 25% over the editor background)
+        # blue editor selection
+        # (close to #3388ff at 25% over the editor background)
         selection='#1b3a5b', gray='#5a6673', accent='#e6b450',
-        rule=("normal ones are those darkened by 0.07 OKLCH lightness, the rule Ayu's own "
+        rule=("normal ones are those darkened by 0.07 OKLCH lightness, the rule the source "
               "terminal themes use"),
     ),
     'mirage': dict(
-        title='Ayu Mirage', mode='dark', nvim='ayu-mirage',
+        mode='dark', nvim='ayu-mirage',
         base24=dict(b00='#1f2430', b01='#242936', b04='#707a8c', b05='#cccac2', b06='#d9d7ce',
                     b07='#f3f4f5', b09='#ffad66', b0F='#f27983', b10='#171b24', b11='#1a1f29'),
         hues=dict(red='#f28779', yellow='#ffcd66', green='#d5ff80', cyan='#95e6cb', blue='#73d0ff', magenta='#dfbfff'),
         normal_offset=-0.07, normal_offsets=dict(red=-0.05), bright_offsets=dict(red=+0.02),
         selection=('#409fff', 0.25, '#242936'), gray='#6e7c8f', accent='#ffcc66',
         rule=("normal ones are those darkened by 0.07 OKLCH lightness (red by 0.05, and bright "
-              "red lightened by 0.02), the rule Ayu's own terminal themes use"),
+              "red lightened by 0.02), the rule the source terminal themes use"),
     ),
     'light': dict(
-        title='Ayu Light', mode='light', nvim='ayu-light',
+        mode='light', nvim='ayu-light',
         base24=dict(b00='#f8f9fa', b01='#edeff1', b04='#8a9199', b05='#5c6166', b06='#4e5257',
                     b07='#404447', b09='#fa8d3e', b0F='#e6ba7e', b10=None, b11=None),
         hues=dict(red='#f07171', yellow='#eba400', green='#86b300', cyan='#4cbf99', blue='#22a4e6', magenta='#a37acc'),
         normal_offset=-0.07, normal_offsets={}, bright_offsets={}, normal_min_contrast=4.5,
         # Omarchy light themes make dark(er)_background darker than the
-        # background; base24's base10/11 are lighter. Start from Ayu Light's
+        # background; base24's base10/11 are lighter. Start from the source's
         # "sunk" surface instead.
         sunk='#ebeef0',
         selection=('#035bd6', 0.15, '#fcfcfc'), gray='#adaeb1', accent='#f29718',
         rule=("normal ones are darkened in OKLCH lightness until they reach 4.5:1 contrast on "
-              "the background (a fixed 0.07, as in tetra-dark, leaves these at 2.6-3.6:1; Ayu "
-              "Light's own terminal theme uses the same colour for both)"),
+              "the background (a fixed 0.07, as in tetra-dark, leaves these at 2.6-3.6:1; the "
+              "source Light terminal theme uses the same colour for both)"),
     ),
 }
 
@@ -214,20 +214,20 @@ def palette(v):
 def selection_source(v):
     s = v['selection']
     if isinstance(s, str):
-        return f"Ayu's blue selection {s}"
-    return "Ayu's editor selection (%s at %d%% over %s)" % (s[0], round(s[1] * 100), s[2])
+        return f"the source blue selection {s}"
+    return "the source editor selection (%s at %d%% over %s)" % (s[0], round(s[1] * 100), s[2])
 
 
 def colors_toml(variant, v, c):
-    text = (f"Shades, orange and brown follow base24 {v['title']} from tinted-theming. "
-            f"Bright ANSI colours are Ayu's palette; {v['rule']}. "
-            f"Selection is {selection_source(v)}, muted is Ayu's comment gray. "
+    text = ("Shades, orange and brown follow the base24 source scheme from tinted-theming. "
+            f"Bright ANSI colours are the source palette; {v['rule']}. "
+            f"Selection is {selection_source(v)}, muted is the source comment gray. "
             "Neutral shades (backgrounds, foregrounds, muted) and selection have half of "
-            "Ayu's tint (OKLCH chroma halved, same lightness).")
+            "the source tint (OKLCH chroma halved, same lightness).")
     if v['mode'] == 'light':
-        text += (" dark_background is Ayu Light's sunk surface and darker_background is that "
+        text += (" dark_background is the source sunk surface and darker_background is that "
                  "mixed 8% toward the foreground (Omarchy light themes darken these).")
-    lines = [f"# Tetra {variant.capitalize()}: {v['title']} (https://ayutheme.com/)",
+    lines = [f"# Tetra {variant.capitalize()}",
              "# Generated by ~/.config/omarchy/tetra/generate; edit that, not this file.",
              "#"]
     lines += ['# ' + l for l in textwrap.wrap(text, 77)]
@@ -252,7 +252,7 @@ def ghostty_theme(variant, v, c):
             'bright_magenta', 'bright_cyan', 'bright_foreground',
             'orange', 'brown', 'lighter_background', 'selection', 'dark_foreground',
             'light_foreground']
-    lines = [f"# Tetra {variant.capitalize()}: {v['title']} (https://ayutheme.com/)",
+    lines = [f"# Tetra {variant.capitalize()}",
              "# Generated by ~/.config/omarchy/tetra/generate; edit that, not this file.",
              "# Palette 0-15 ANSI, 16-21 extra shades (orange, brown, lighter background,",
              "# selection, dark foreground, light foreground, status bar) used by",
@@ -329,7 +329,7 @@ def write_wallpaper(theme_dir, v, c):
         center, edge = lighten(c['background'], 0.06), c['background']
     subprocess.run(['magick', '-size', '3840x2160', f'radial-gradient:{center}-{edge}',
                     '-depth', '8', '-quality', '92',
-                    os.path.join(backgrounds, '1-ayu-gradient.jpg')], check=True)
+                    os.path.join(backgrounds, '1-gradient.jpg')], check=True)
 
 
 def main(args):
