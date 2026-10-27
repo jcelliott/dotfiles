@@ -1,0 +1,6 @@
+[
+  {"line": 7, "col": 19, "end_col": 27, "severity": "INFO", "message": "Import from collections.abc instead"},
+  {"line": 11, "col": 7, "end_col": 12, "severity": "HINT", "message": "\"WHITE\" is not accessed"},
+  {"line": 35, "col": 12, "end_col": 20, "severity": "ERROR", "message": "\"float\" is not assignable to \"int\""},
+  {"line": 62, "col": 24, "end_col": 32, "severity": "WARN", "message": "\"continue\" is not needed here"}
+]

@@ -1,0 +1,527 @@
+<title>Tetra Theme</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: one reading column; the page itself wears the chosen Tetra variant,
+   a live desktop mock first, then the palette as swatches, then the terminal slots. */
+:root {
+  --bg: #f8f9f9; --surface: #eeeff0; --sunk: #eceeef; --control: #e3e4e5; --line: #c6c6c8;
+  --fg: #5e6163; --strong: #424445; --soft: #717275; --muted: #aeaeb0;
+  --accent: #f29718; --accent-ink: #b45900; --sel: #dde3ec;
+  --warn: #c2484b;
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c0e11; --surface: #15171c; --sunk: #0b0d10; --control: #202328; --line: #41454c;
+    --fg: #e3e1d8; --strong: #f1f0eb; --soft: #9ea1a0; --muted: #5f656c;
+    --accent: #e6b450; --accent-ink: #e6b450; --sel: #2b3a4a; --warn: #f07178;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0c0e11; --surface: #15171c; --sunk: #0b0d10; --control: #202328; --line: #41454c;
+  --fg: #e3e1d8; --strong: #f1f0eb; --soft: #9ea1a0; --muted: #5f656c;
+  --accent: #e6b450; --accent-ink: #e6b450; --sel: #2b3a4a; --warn: #f07178;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font: 15px/1.55 var(--body);
+  transition: background-color .25s, color .25s;
+}
+::selection { background: var(--sel); color: var(--strong); }
+.wrap {
+  max-width: 1640px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 72px;
+  display: grid; gap: 56px;
+}
+h1, h2, h3 { font-family: var(--display); color: var(--strong); text-wrap: balance; margin: 0; }
+h2 { font-size: 1.45rem; font-weight: 700; letter-spacing: -0.01em; }
+h3 { font: 600 .75rem/1.2 var(--body); text-transform: uppercase; letter-spacing: .09em; color: var(--soft); }
+p { margin: 0; max-width: 68ch; }
+code, .mono { font-family: var(--mono); font-size: .88em; }
+.sec { display: grid; gap: 20px; }
+.sec-head { display: grid; gap: 6px; }
+.sec-head p { color: var(--soft); }
+
+/* header */
+header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 24px; }
+.brand { display: grid; gap: 10px; min-width: 0; }
+.brand h1 { font-size: clamp(2.6rem, 6vw, 4rem); line-height: .95; font-weight: 700; letter-spacing: -0.03em; display: flex; align-items: center; gap: 14px; }
+.brand h1 .gem { width: .62em; height: .62em; background: var(--accent); clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); flex: none; transition: background-color .25s; }
+.brand p { color: var(--soft); }
+.seg { display: inline-flex; padding: 4px; gap: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; }
+/* the variant switcher stays pinned to the top corner while the page scrolls */
+#seg { position: fixed; z-index: 25; top: calc(12px + env(safe-area-inset-top, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); box-shadow: 0 6px 20px rgb(0 0 0 / .18); }
+@media (max-width: 560px) { #seg button { padding: 6px 10px; } }
+.seg button {
+  font: 500 .9rem var(--body); color: var(--fg); background: transparent; border: 0;
+  padding: 8px 16px; border-radius: 999px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+}
+.seg button .dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--bg); color: var(--strong); box-shadow: 0 0 0 1px var(--line); }
+.seg button:hover { color: var(--strong); }
+button:focus-visible, .hex:focus-visible, .mini:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+
+/* desktop mock */
+.desk-scroll { overflow-x: auto; border-radius: 6px; }
+.desk {
+  --gap: 10px;
+  position: relative; min-width: 820px; aspect-ratio: 16 / 9.4;
+  background: radial-gradient(ellipse at 50% 50%, var(--wall-a), var(--wall-b) 75%);
+  display: grid; grid-template-rows: auto 1fr;
+  font-family: var(--mono); font-size: 12px; line-height: 1.5;
+  overflow: hidden; color: var(--c-foreground);
+}
+.bar {
+  height: 26px; background: var(--c-background); color: var(--c-foreground);
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 12px; font-size: 11.5px;
+}
+.bar .ws { display: flex; gap: 12px; }
+.bar .ws span { color: var(--c-muted); }
+.bar .ws span.on { color: var(--c-foreground); font-weight: 700; }
+.bar .right { justify-self: end; display: flex; gap: 14px; }
+.bar .rec { color: var(--c-red); }
+.tiles { padding: var(--gap); display: grid; grid-template-columns: 1.05fr 1fr; gap: var(--gap); min-height: 0; }
+.win { border: 2px solid var(--c-inactive); min-height: 0; overflow: hidden; display: grid;
+  font-variant-ligatures: none; font-feature-settings: "calt" 0, "liga" 0; }   /* foot draws no ligatures */
+.win.active { border-color: var(--c-accent); }
+.term { background: var(--c-background); grid-template-rows: 1fr auto; }
+.term pre, .nv pre { margin: 0; font: inherit; white-space: pre; overflow: hidden; }
+.nv pre.code { overflow-y: auto; scrollbar-width: none; min-height: 0; }
+.nv pre.code::-webkit-scrollbar { display: none; }
+.term pre { padding: 8px 10px; }
+.tmux { background: var(--c-status); display: flex; justify-content: space-between; padding: 0 8px; }
+.tmux .cur { background: var(--c-green); color: var(--c-background); padding: 0 4px; }
+.cursor { background: var(--c-bright_foreground); color: var(--c-background); }
+.tsel { background: var(--c-selection); color: var(--c-bright_foreground); }
+.a0{color:var(--c-background)} .a1{color:var(--c-red)} .a2{color:var(--c-green)} .a3{color:var(--c-yellow)}
+.a4{color:var(--c-blue)} .a5{color:var(--c-magenta)} .a6{color:var(--c-cyan)} .a7{color:var(--c-foreground)}
+.a8{color:var(--c-muted)} .a9{color:var(--c-bright_red)} .a10{color:var(--c-bright_green)} .a11{color:var(--c-bright_yellow)}
+.a12{color:var(--c-bright_blue)} .a13{color:var(--c-bright_magenta)} .a14{color:var(--c-bright_cyan)} .a15{color:var(--c-bright_foreground)}
+.b { font-weight: 700; }
+
+/* LazyVim with the generated aether theme, in foot. Nerd Font icons need it installed locally. */
+.nv { background: var(--c-background); color: var(--c-foreground); grid-template-rows: 1fr auto;
+  font-family: "JetBrainsMono Nerd Font", "JetBrainsMono NF", "Symbols Nerd Font Mono", var(--mono); }
+.nv pre { padding: 0; }
+.nv .ln { display: block; }
+/* CursorLine is the foreground at 20% over the background; the status column keeps its own background */
+.nv .ln.cur { background: linear-gradient(to right, transparent var(--gutter), color-mix(in srgb, var(--c-foreground) 20%, var(--c-background)) var(--gutter)); }
+.nv .bd { font-weight: 700; } .nv .it { font-style: italic; }
+/* diagnostic undercurls; build.py sets each colour */
+.nv [class*="cu-"] { text-decoration-line: underline; text-decoration-style: wavy; text-decoration-skip-ink: none; text-underline-offset: 2px; }
+/*__NVIM_CSS__*/
+.nv .status { display: flex; min-width: 0; overflow: hidden; white-space: pre; background: var(--c-background); color: var(--c-foreground); }
+.nv .status > * { flex: none; }
+.nv .status .fill { flex: 1; }
+.nv .status .path { flex: 0 1 auto; min-width: 0; overflow: hidden; }   /* lualine shortens the path first */
+/* powerline separators as triangles, so they draw without a Nerd Font */
+.nv .status .sep { width: 1ch; position: relative; background: var(--under, var(--c-background)); }
+.nv .status .sep::before { content: ""; position: absolute; inset: 0; background: var(--over, var(--c-yellow)); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.nv .status .sep.l::before { clip-path: polygon(100% 0, 0 50%, 100% 100%); }
+.nv .status .sep.thin::before { clip-path: polygon(0 0, 18% 0, 100% 50%, 18% 100%, 0 100%, 82% 50%); }
+
+.notif {
+  position: absolute; top: calc(26px + var(--gap) + 12px); right: calc(var(--gap) + 14px); width: 270px;
+  background: var(--c-background); border: 2px solid var(--c-accent); color: var(--c-foreground);
+  font-family: var(--body); font-size: 12.5px; padding: 10px 12px 12px; display: grid; gap: 2px;
+  box-shadow: 0 10px 30px rgb(0 0 0 / .25);
+}
+.notif b { color: var(--c-bright_foreground); font-weight: 600; }
+.notif .bar-t { height: 3px; background: var(--c-lighter_background); margin-top: 8px; }
+.notif .bar-t i { display: block; height: 100%; width: 62%; background: var(--c-accent); }
+.notif, .menu { transition: opacity .2s; }
+.desk:hover .notif, .desk:hover .menu { opacity: 0; pointer-events: none; }
+.menu {
+  position: absolute; left: 50%; bottom: 46px; transform: translateX(-50%); width: 300px;
+  background: var(--c-background); border: 2px solid var(--c-foreground);
+  font-family: var(--body); font-size: 12.5px; color: var(--c-foreground); padding: 6px;
+  box-shadow: 0 14px 36px rgb(0 0 0 / .3);
+}
+.menu input { all: unset; display: block; width: 100%; padding: 6px 8px; color: var(--c-foreground); border-bottom: 1px solid var(--c-lighter_background); margin-bottom: 4px; }
+.menu div { padding: 4px 8px; }
+.menu .sel { color: var(--c-accent); background: color-mix(in srgb, var(--c-foreground) 8%, transparent); outline: 1px solid color-mix(in srgb, var(--c-foreground) 25%, transparent); }
+
+.where { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; color: var(--soft); font-size: .9rem; }
+.where .chip { display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px; border-radius: 999px; background: var(--surface); color: var(--fg); border: 1px solid var(--line); }
+.where .chip i { width: 10px; height: 10px; border-radius: 2px; background: var(--accent); }
+.note { color: var(--soft); font-size: .9rem; }
+.note strong { color: var(--fg); font-weight: 600; }
+
+/* swatches */
+.groups { display: grid; gap: 32px; }
+.group { display: grid; gap: 12px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+.grid.pairs { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+.sw { display: grid; gap: 8px; min-width: 0; }
+.chipset { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--line); }
+.block { height: 76px; position: relative; }
+.block .src {
+  position: absolute; right: 0; bottom: 0; width: 34%; height: 40%;
+  border-top-left-radius: 6px; display: flex; align-items: end; justify-content: end; padding: 3px 5px;
+  font: 600 9px/1 var(--body); letter-spacing: .08em; text-transform: uppercase;
+}
+.meta { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 10px; }
+.meta > div { display: grid; gap: 1px; min-width: 0; }
+.name { font-weight: 600; color: var(--strong); font-size: .9rem; overflow-wrap: anywhere; }
+.hex { font: .82rem var(--mono); color: var(--fg); background: none; border: 0; padding: 0; text-align: left; cursor: copy; width: fit-content; }
+.hex:hover { color: var(--accent-ink); }
+.how { font-size: .78rem; color: var(--soft); }
+.cr { font: .74rem var(--mono); color: var(--soft); font-variant-numeric: tabular-nums; }
+.cr.low { color: var(--warn); }
+
+/* terminal slots */
+.slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
+.slot { display: grid; grid-template-rows: 44px auto; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--surface); }
+.slot .s-c { display: flex; align-items: center; justify-content: center; font: 700 .8rem var(--mono); }
+.slot .s-t { padding: 6px 8px; display: grid; gap: 0; font-size: .75rem; color: var(--soft); min-width: 0; }
+.slot .s-t b { color: var(--strong); font: 600 .78rem var(--mono); }
+
+/* compare */
+.compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.mini {
+  all: unset; cursor: pointer; display: grid; gap: 10px; padding: 16px; border: 2px solid; min-width: 0;
+  font-family: var(--mono); font-size: 12px; box-sizing: border-box;
+}
+.mini .t { font: 700 1.05rem var(--display); }
+.mini .dots { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
+.mini .dots i { aspect-ratio: 1; border-radius: 50%; }
+.mini .here { font: 600 .7rem var(--body); letter-spacing: .08em; text-transform: uppercase; }
+.paseo { display: flex; flex-wrap: wrap; gap: 8px; }
+.paseo div { display: flex; align-items: center; gap: 8px; padding: 6px 10px 6px 6px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); font-size: .8rem; }
+.paseo i { width: 22px; height: 22px; border-radius: 4px; border: 1px solid var(--line); }
+.paseo span { display: grid; line-height: 1.2; }
+.paseo span code { color: var(--soft); font-size: .72rem; }
+
+/* editing */
+.studio { display: grid; gap: 56px; }
+@media (min-width: 1560px) {
+  .studio { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; gap: 40px; }
+  .studio > .sec:first-child { position: sticky; top: calc(16px + env(safe-area-inset-top, 0px)); }
+}
+.tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.tools p { color: var(--soft); flex: 1 1 320px; font-size: .9rem; }
+.tools p strong { color: var(--strong); font-weight: 600; }
+.state { font: 600 .72rem var(--body); letter-spacing: .06em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--control); color: var(--fg); white-space: nowrap; }
+.state.err { color: var(--warn); }
+.btn { font: 500 .85rem var(--body); color: var(--strong); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn:disabled { opacity: .5; cursor: default; }
+.btn:focus-visible, .reset:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+.block { cursor: pointer; display: block; }
+.block input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; border: 0; padding: 0; }
+.block:focus-within { outline: 2px solid var(--accent-ink); outline-offset: -2px; z-index: 1; }
+.block .src { pointer-events: none; }
+.hexin { font: .82rem var(--mono); color: var(--fg); background: transparent; border: 1px solid transparent; border-radius: 4px; padding: 1px 4px; margin-left: -5px; width: 10ch; }
+.hexin:hover { border-color: var(--line); }
+.hexin:focus { outline: none; border-color: var(--accent-ink); background: var(--bg); color: var(--strong); }
+.hexin[aria-invalid="true"] { border-color: var(--warn); }
+.meta > div.mod .name::after { content: "changed"; margin-left: 8px; font: 600 .62rem var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); }
+.reset { font: .74rem var(--body); color: var(--accent-ink); background: none; border: 0; padding: 0; cursor: pointer; text-align: left; width: fit-content; text-decoration: underline; text-underline-offset: 2px; }
+
+button.block { width: 100%; border: 0; padding: 0; font: inherit; }
+.block[aria-pressed="true"] { outline: 3px solid var(--accent-ink); outline-offset: -3px; z-index: 1; }
+.block:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: -2px; }
+
+.rules { display: grid; gap: 14px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.rule { display: grid; gap: 6px; }
+.rules-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.rule-row { display: grid; grid-template-columns: minmax(9rem, auto) minmax(0, 280px) 8ch; align-items: center; gap: 10px; font-size: .85rem; color: var(--fg); }
+.rule-row input[type=range] { width: 100%; accent-color: var(--accent-ink); }
+.rule-row input[type=number] { font: .82rem var(--mono); width: 100%; color: var(--strong); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 3px 4px; }
+.rule-row input:disabled, .rule-row input:disabled + input { opacity: .45; }
+.hexin:disabled { opacity: .5; }
+.hue-list { display: flex; flex-wrap: wrap; gap: 6px 12px; font: .78rem var(--mono); color: var(--fg); }
+.hue-chip { display: inline-flex; align-items: center; gap: 6px; }
+.hue-chip i { width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--line); }
+@media (max-width: 560px) { .rule-row { grid-template-columns: minmax(0, 1fr) 8ch; } .rule-row label { grid-column: 1 / -1; } }
+
+.grounds { display: grid; gap: 8px; font-size: .85rem; }
+.g-row { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr) minmax(0, 1fr) minmax(0, 13rem); gap: 12px; align-items: center; }
+.g-head { color: var(--soft); font: 600 .7rem var(--body); letter-spacing: .06em; text-transform: uppercase; }
+.g-name { font-weight: 600; color: var(--strong); }
+.g-name em { font: 400 .75rem var(--body); color: var(--soft); font-style: normal; margin-left: 4px; }
+.g-in { display: grid; grid-template-columns: minmax(0, 1fr) 7ch; gap: 6px; align-items: center; }
+.g-in input[type=range] { width: 100%; accent-color: var(--accent-ink); }
+.g-in input[type=number] { font: .8rem var(--mono); width: 100%; color: var(--strong); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 3px 4px; }
+.g-in input:disabled { opacity: .45; }
+.g-acc { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.g-acc .g-chip { width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--line); flex: none; padding: 0; cursor: pointer; }
+.g-acc .g-chip:disabled { cursor: default; }
+@media (max-width: 760px) { .g-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .g-head { display: none; } .g-name { grid-column: 1 / -1; } .g-acc { grid-column: 1 / -1; } }
+
+/* OKLCH picker */
+.picker[hidden] { display: none; }
+.picker {
+  position: fixed; z-index: 20;
+  right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  width: min(740px, calc(100vw - 32px)); max-height: calc(100vh - 32px); overflow: auto;
+  background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 10px;
+  box-shadow: 0 24px 60px rgb(0 0 0 / .35); padding: 14px 16px 16px; display: grid; gap: 14px;
+}
+.pk-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.pk-head .sw-big { width: 34px; height: 34px; border-radius: 6px; border: 1px solid var(--line); flex: none; }
+.pk-head .name { font-size: 1rem; }
+.pk-head .hex { font-size: .85rem; }
+.pk-head .x { margin-left: auto; font: 500 1.1rem var(--body); width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--strong); cursor: pointer; }
+.pk-head .x:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+.pk-body { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 20px; align-items: start; }
+.wheel { position: relative; width: 260px; height: 260px; border-radius: 50%; touch-action: none; cursor: crosshair;
+  background: repeating-linear-gradient(135deg, var(--control) 0 3px, var(--surface) 3px 8px); }
+.wheel canvas, .wheel svg { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; }
+.wheel svg, .strip svg { overflow: visible; }
+.picker .grid { fill: none; stroke: var(--bg); stroke-opacity: .35; stroke-width: 1; }
+.picker .pair { stroke: var(--strong); stroke-opacity: .5; stroke-width: 1.2; }
+.picker .tick { fill: var(--soft); font: 9px var(--mono); }
+.picker .lbl { fill: var(--strong); font: 600 11px var(--mono); paint-order: stroke; stroke: var(--bg); stroke-width: 3px; }
+.picker .dot { stroke: var(--strong); stroke-width: 1; cursor: pointer; }
+.picker .dot.shade { stroke-opacity: .7; }
+.picker .dot.sel { stroke-width: 2.5; cursor: grab; }
+.picker .cur { stroke: var(--strong); stroke-opacity: .35; stroke-dasharray: 2 3; }
+.pk-side { display: grid; gap: 14px; min-width: 0; }
+.strip { position: relative; touch-action: none; cursor: ew-resize; display: grid; gap: 2px; }
+.strip svg { width: 100%; height: 92px; display: block; }
+.strip canvas { margin-left: var(--x0, 50px); width: calc(100% - var(--x0, 50px) - 8px); height: 22px; border-radius: 4px; display: block; }
+.pk-cap { font-size: .76rem; color: var(--soft); }
+.sl { display: grid; grid-template-columns: 1.4ch minmax(0, 1fr) 8ch; align-items: center; gap: 10px; }
+.sl label { font: 700 .85rem var(--mono); color: var(--strong); }
+.sl input[type=range] { -webkit-appearance: none; appearance: none; height: 16px; border-radius: 4px; border: 1px solid var(--line); margin: 0; width: 100%; min-width: 0; }
+.sl input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 22px; border-radius: 3px; background: var(--bg); border: 2px solid var(--strong); }
+.sl input[type=range]::-moz-range-thumb { width: 8px; height: 20px; border-radius: 3px; background: var(--bg); border: 2px solid var(--strong); }
+.sl input[type=range]:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+.sl input[type=number] { font: .82rem var(--mono); color: var(--strong); background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 3px 4px; width: 100%; }
+.pk-modes { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.seg.small { padding: 3px; }
+.seg.small button { padding: 4px 12px; font-size: .8rem; }
+.tog { display: inline-flex; align-items: center; gap: 6px; font: 500 .85rem var(--body); color: var(--strong); cursor: pointer; }
+.tog input { accent-color: var(--accent-ink); width: 16px; height: 16px; }
+.even-ctl { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: .85rem; }
+.even-ctl input[type=range] { width: 280px; max-width: 100%; accent-color: var(--accent-ink); }
+.even-ctl input[type=number] { font: .82rem var(--mono); width: 8ch; color: var(--strong); background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 3px 4px; }
+.btn.primary { background: var(--accent-ink); color: var(--bg); border-color: var(--accent-ink); }
+.picker.previewing .sl { opacity: .45; }
+.picker .guide { stroke: var(--strong); stroke-width: 1.4; stroke-dasharray: 4 4; }
+.picker .move { stroke: var(--strong); stroke-opacity: .7; stroke-width: 1; }
+.picker .link { stroke: var(--strong); stroke-opacity: .45; stroke-width: 1; stroke-dasharray: 2 2; }
+.picker .dot.role { stroke-dasharray: 2 1.5; stroke-width: 1.5; }
+.picker .ghost { fill: none; stroke: var(--strong); stroke-width: 1.2; }
+.cr.coord { color: var(--fg); white-space: pre-wrap; }
+.pk-foot { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; font-size: .8rem; color: var(--soft); }
+.pk-foot .warn { color: var(--warn); }
+@media (max-width: 640px) {
+  .pk-body { grid-template-columns: minmax(0, 1fr); }
+  .wheel { justify-self: center; }
+  .picker { max-height: 78vh; }
+}
+
+.toast {
+  z-index: 30;
+  position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 12px);
+  background: var(--strong); color: var(--bg); padding: 8px 14px; border-radius: 999px; font: 500 .85rem var(--body);
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media (max-width: 560px) { .grid.pairs { grid-template-columns: 1fr; } .wrap { gap: 44px; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <h1><span class="gem" aria-hidden="true"></span>Tetra</h1>
+      <p>Three variants for Omarchy, Ghostty and Paseo, all written by <code>~/.config/omarchy/tetra/generate</code>. Inspired by Ayu.</p>
+    </div>
+    <div class="seg" role="group" aria-label="Variant" id="seg"></div>
+  </header>
+
+  <div class="tools">
+    <span class="state" id="state">Loading</span>
+    <p id="summary">Click a swatch to open the picker, or edit a hex code. Changes save as you go, so Claude can read them back into the generator.</p>
+    <div class="seg small" role="group" aria-label="Colour space"><button data-space="oklch" aria-pressed="true">OKLCH</button><button data-space="hsl" aria-pressed="false">HSL</button><button data-space="okhsl" aria-pressed="false">OKHSL</button></div>
+    <button class="btn" id="open-picker">Open picker</button>
+    <button class="btn" id="copy-changes" disabled>Copy changes</button>
+    <button class="btn" id="reset-all" disabled>Reset all</button>
+  </div>
+
+  <div class="studio">
+  <section class="sec" aria-labelledby="h-desk">
+    <div class="sec-head">
+      <h2 id="h-desk">On the desktop</h2>
+      <p>Omarchy defaults: 2px borders, 10px outer gaps, square corners. The terminal is active; Neovim is not. Hover the desktop to hide the popups, and scroll the Neovim window to see the rest of the sample file, which touches every syntax colour and each diagnostic level.</p>
+    </div>
+    <div class="desk-scroll">
+      <div class="desk" role="img" aria-label="Mock Hyprland desktop in the selected Tetra variant">
+        <div class="bar">
+          <div class="ws"><span class="on">1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+          <div>Monday 14:32</div>
+          <div class="right"><span class="rec">● rec</span><span>wifi</span><span>vol 62%</span><span>bat 81%</span></div>
+        </div>
+        <div class="tiles">
+          <div class="win active term">
+<pre><span class="a10">josh</span>@osmium <span class="a2">~/s/paseo-dash</span> (main)&gt; <span class="a4">git</span> <span class="a6">status -sb</span>
+## <span class="a2">main</span>...<span class="a1">origin/main</span> [ahead <span class="a2">2</span>]
+ <span class="a1">M</span> src/ui/<span class="tsel">panel.ts</span>
+ <span class="a1">M</span> src/ui/theme.ts
+<span class="a2">A</span>  src/ui/swatch.ts
+<span class="a1">??</span> notes.md
+<span class="a10">josh</span>@osmium <span class="a2">~/s/paseo-dash</span> (main)&gt; <span class="a4">ls</span> <span class="a6">-F</span>
+<span class="a4 b">dist/</span>  <span class="a4 b">node_modules/</span>  <span class="a4 b">scripts/</span>  <span class="a4 b">src/</span>
+<span class="a2 b">build.sh*</span>  <span class="a6">latest@</span>  package.json  README.md
+<span class="a10">josh</span>@osmium <span class="a2">~/s/paseo-dash</span> (main)&gt; <span class="a4">npm</span> <span class="a6">test</span> <span class="a8"># rerun after theme fix</span>
+ <span class="a2">✓</span> panel renders workstreams <span class="a8">(12 ms)</span>
+ <span class="a2">✓</span> theme picks the tetra accent <span class="a8">(4 ms)</span>
+ <span class="a1">✗</span> swatch copies hex to clipboard
+   <span class="a3">warn</span> clipboard API missing in jsdom
+   <span class="a5">expected</span> <span class="a11">"#e6b450"</span>, <span class="a14">received</span> <span class="a13">undefined</span>
+ Tests  <span class="a9 b">1 failed</span> | <span class="a10 b">2 passed</span> <span class="a12">(3)</span>
+<span class="a10">josh</span>@osmium <span class="a2">~/s/paseo-dash</span> (main)&gt; <span class="a4">git</span> log<span class="cursor"> </span><span class="a8">--oneline -3</span></pre>
+            <div class="tmux"><span>[main] 0:fish  <span class="cur">1:nvim*</span>  2:logs</span><span>osmium 14:32</span></div>
+          </div>
+          <div class="win nv">
+<pre class="code" style="--gutter: __NVIM_GUTTER__ch">__NVIM_CODE__</pre>
+            <div class="status">__NVIM_STATUS__</div>
+          </div>
+        </div>
+        <div class="notif"><b id="notif-title">Tetra Dark</b><span>Theme applied. Borders, bar and terminals updated.</span><div class="bar-t"><i></i></div></div>
+        <div class="menu"><input id="menu-q" value="theme" aria-label="Launcher search (mock)" readonly><div>Install theme…</div><div data-menu="dark">Tetra Dark</div><div data-menu="mirage">Tetra Mirage</div><div data-menu="light">Tetra Light</div></div>
+      </div>
+    </div>
+    <div class="where"><span>The accent shows up in</span>
+      <span class="chip"><i></i>active window border</span>
+      <span class="chip"><i></i>notification border and countdown</span>
+      <span class="chip"><i></i>selected row in menus and the launcher</span>
+      <span class="chip"><i></i>lock screen field and selection</span>
+      <span class="chip"><i></i>polkit lock icon</span>
+    </div>
+    <p class="note"><strong>Neovim uses these syntax colours.</strong> Each theme's <code>neovim.lua</code> configures aether.nvim with Tetra's palette, editor roles and this mapping. The generator applies the same rules as this page, so new edits here reach Neovim once they're copied into it.</p>
+  </section>
+
+  <section class="sec" aria-labelledby="h-pal">
+    <div class="sec-head">
+      <h2 id="h-pal">Palette</h2>
+      <p>Every key in <code>colors.toml</code>. When you edit a colour, a corner patch shows its default under the current rules. Ratios are WCAG contrast against <code>background</code>, or for the shades, the contrast of <code>foreground</code> on them. Click a swatch to open the picker, or type a hex code.</p>
+    </div>
+    <div class="rules">
+      <div class="rules-head"><h3>Theme rules, for all three variants</h3><button class="btn" id="r-reset" type="button" title="Reset the numbers, grounds and accents in this panel; which rules are on stays as it is">Reset to defaults</button></div>
+      <div class="rule">
+        <label class="tog"><input type="checkbox" id="r-system"> Derive Mirage and Light from Dark</label>
+        <p class="note">Dark, after the rules below, is the definition. Each variant only sets its ground (the OKHSL lightness of its background and foreground) and an accent, which follows Dark's unless set. Every colour keeps Dark's hue and saturation. Neutrals, <code>muted</code> and <code>selection</code> sit at the same position between background and foreground. The hues keep Dark's lightness distance from the background, scaled by the light-ground depth on a light variant, so moving the foreground doesn't darken them. Normal colours are their bright colour darkened by Dark's step, held to 4.5:1. A variant is light when its background is lighter than its foreground.</p>
+        <div class="rule-row"><label for="r-depth">Light-ground colour depth, %</label><input type="range" id="r-depth" min="30" max="100" step="0.5"><input type="number" id="r-depthn" min="0" max="150" step="0.5" aria-label="Light-ground colour depth, percent"></div>
+        <div class="grounds">
+          <div class="g-row g-head"><span></span><span>Background L</span><span>Foreground L</span><span>Accent</span></div>
+          <div class="g-row"><span class="g-name">Dark <em id="g-dark-mode"></em></span>
+            <span class="g-in"><input type="range" id="g-dark-bg" min="0" max="100" step="0.1" aria-label="Dark background lightness"><input type="number" id="g-dark-bgn" min="0" max="100" step="0.1" aria-label="Dark background lightness, percent"></span>
+            <span class="g-in"><input type="range" id="g-dark-fg" min="0" max="100" step="0.1" aria-label="Dark foreground lightness"><input type="number" id="g-dark-fgn" min="0" max="100" step="0.1" aria-label="Dark foreground lightness, percent"></span>
+            <span class="g-acc"><button class="g-chip" id="g-dark-chip" type="button" aria-label="Edit Dark accent in the picker" title="Edit Dark’s accent in the picker"></button><input class="hexin" id="g-dark-accent" maxlength="7" spellcheck="false" autocomplete="off" aria-label="Dark accent hex"><button class="reset" id="g-dark-reset" type="button"></button></span></div>
+          <div class="g-row"><span class="g-name">Mirage <em id="g-mirage-mode"></em></span>
+            <span class="g-in"><input type="range" id="g-mirage-bg" min="0" max="100" step="0.1" aria-label="Mirage background lightness"><input type="number" id="g-mirage-bgn" min="0" max="100" step="0.1" aria-label="Mirage background lightness, percent"></span>
+            <span class="g-in"><input type="range" id="g-mirage-fg" min="0" max="100" step="0.1" aria-label="Mirage foreground lightness"><input type="number" id="g-mirage-fgn" min="0" max="100" step="0.1" aria-label="Mirage foreground lightness, percent"></span>
+            <span class="g-acc"><button class="g-chip" id="g-mirage-chip" type="button" aria-label="Edit Mirage accent in the picker" title="Edit Mirage’s accent in the picker"></button><input class="hexin" id="g-mirage-accent" maxlength="7" spellcheck="false" autocomplete="off" aria-label="Mirage accent hex"><button class="reset" id="g-mirage-reset" type="button"></button></span></div>
+          <div class="g-row"><span class="g-name">Light <em id="g-light-mode"></em></span>
+            <span class="g-in"><input type="range" id="g-light-bg" min="0" max="100" step="0.1" aria-label="Light background lightness"><input type="number" id="g-light-bgn" min="0" max="100" step="0.1" aria-label="Light background lightness, percent"></span>
+            <span class="g-in"><input type="range" id="g-light-fg" min="0" max="100" step="0.1" aria-label="Light foreground lightness"><input type="number" id="g-light-fgn" min="0" max="100" step="0.1" aria-label="Light foreground lightness, percent"></span>
+            <span class="g-acc"><button class="g-chip" id="g-light-chip" type="button" aria-label="Edit Light accent in the picker" title="Edit Light’s accent in the picker"></button><input class="hexin" id="g-light-accent" maxlength="7" spellcheck="false" autocomplete="off" aria-label="Light accent hex"><button class="reset" id="g-light-reset" type="button"></button></span></div>
+        </div>
+      </div>
+      <div class="rule">
+        <label class="tog"><input type="checkbox" id="r-neutral"> Neutral shades</label>
+        <p class="note">Backgrounds and foregrounds become the grey with the same OKLab lightness, so the steps between them don't change.</p>
+      </div>
+      <div class="rule">
+        <label class="tog"><input type="checkbox" id="r-sel"> Selection from accent</label>
+        <p class="note"><code>selection</code> sits at the hue opposite <code>accent</code>'s and keeps its own saturation. Its lightness is a percentage of the way from black to <code>accent</code>'s, or from white in Light (all OKHSL).</p>
+        <div class="rule-row"><label for="r-selpct">Lightness, % toward accent's</label><input type="range" id="r-selpct" min="0" max="100" step="0.5"><input type="number" id="r-selpctn" min="0" max="100" step="0.5" aria-label="Selection lightness, percent of the way toward accent's"></div>
+      </div>
+      <div class="rule">
+        <label class="tog"><input type="checkbox" id="r-muted"> Muted from selection</label>
+        <p class="note"><code>muted</code> takes <code>selection</code>'s OKHSL hue and saturation at its own OKHSL lightness, so it keeps its contrast as comment and line-number text.</p>
+      </div>
+      <div class="rule">
+        <label class="tog"><input type="checkbox" id="r-hues"> Hue layout</label>
+        <p class="note">60° steps of OKHSL hue from red, with <code>brown</code> in the slot after red and yellow and orange split either side of it. Each colour keeps its own OKHSL lightness and saturation.</p>
+        <div class="rule-row"><label for="r-red">Red at</label><input type="range" id="r-red" min="0" max="359.9" step="0.1"><input type="number" id="r-redn" min="0" max="360" step="0.1" aria-label="Red's hue, degrees"></div>
+        <div class="rule-row"><label for="r-split">Yellow / orange from brown</label><input type="range" id="r-split" min="0" max="30" step="0.1"><input type="number" id="r-splitn" min="0" max="60" step="0.1" aria-label="Yellow and orange offset from brown, degrees"></div>
+        <div class="hue-list" id="r-hue-list"></div>
+      </div>
+    </div>
+    <div class="groups" id="groups"></div>
+  </section>
+  </div>
+
+  <section class="sec" aria-labelledby="h-slots">
+    <div class="sec-head">
+      <h2 id="h-slots">Terminal slots</h2>
+      <p>What foot and Ghostty get: ANSI 0–15, then 16–22 for tmux. Slot 22 is <code>lighter_background</code> mixed 3% toward <code>foreground</code>, for the status bar.</p>
+    </div>
+    <div class="slots" id="slots"></div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-all">
+    <div class="sec-head">
+      <h2 id="h-all">All three</h2>
+      <p>Each card is drawn in its own variant with its active border. Pick one to switch the page.</p>
+    </div>
+    <div class="compare" id="compare"></div>
+    <div class="group">
+      <h3>Paseo app theme, <span id="paseo-name">Tetra Dark</span></h3>
+      <div class="paseo" id="paseo"></div>
+      <p class="note">Paseo's accent and muted text are darkened on Light so button text clears 4.5:1. The other variants use the theme values unchanged.</p>
+    </div>
+  </section>
+</div>
+<section class="picker" id="picker" role="dialog" aria-label="OKLCH picker" hidden>
+  <div class="pk-head">
+    <span class="sw-big" id="pk-swatch"></span>
+    <span class="name" id="pk-name"></span>
+    <button class="hex" id="pk-hex" title="Copy"></button>
+    <button class="hex" id="pk-coord" title="Copy"></button>
+    <button class="reset" id="pk-reset" type="button"></button>
+    <button class="x" id="pk-close" type="button" aria-label="Close picker">×</button>
+  </div>
+  <div class="pk-modes">
+    <div class="seg small" role="group" aria-label="Colour space"><button data-space="oklch" aria-pressed="true">OKLCH</button><button data-space="hsl" aria-pressed="false">HSL</button><button data-space="okhsl" aria-pressed="false">OKHSL</button></div>
+    <label class="tog"><input type="checkbox" id="pk-even"> Even hues</label>
+    <span class="even-ctl" id="pk-even-ctl" hidden>
+      <label for="pk-even-start">Red at</label>
+      <input type="range" id="pk-even-start" min="0" max="359.9" step="0.1">
+      <input type="number" id="pk-even-startn" min="0" max="360" step="0.1" aria-label="Red's hue, degrees">
+      <button class="btn" id="pk-even-fit" type="button">Best fit</button>
+      <button class="btn" id="pk-even-discard" type="button">Discard</button>
+      <button class="btn primary" id="pk-even-apply" type="button">Apply</button>
+    </span>
+  </div>
+  <p class="pk-cap" id="pk-even-moves"></p>
+  <div class="pk-body">
+    <div class="wheel" id="pk-wheel-wrap" title="Hue goes around, chroma goes out">
+      <canvas id="pk-wheel"></canvas>
+      <svg id="pk-wheel-marks" viewBox="0 0 260 260" aria-hidden="true"></svg>
+    </div>
+    <div class="pk-side">
+      <div class="strip" id="pk-strip-wrap">
+        <svg id="pk-strip-marks" aria-hidden="true"></svg>
+        <canvas id="pk-strip"></canvas>
+      </div>
+      <p class="pk-cap"><span id="pk-strip-cap"></span> <span id="pk-strip-key">The thin bar under it turns red where text would fall below 4.5:1 on the background.</span></p>
+      <div class="sl"><label for="pk-L">L</label><input type="range" id="pk-L" min="0" max="100" step="0.1"><input type="number" id="pk-Ln" min="0" max="100" step="0.1" aria-label="Lightness, percent"></div>
+      <div class="sl"><label for="pk-C" id="pk-C-label">C</label><input type="range" id="pk-C" min="0" max="0.33" step="0.001"><input type="number" id="pk-Cn" min="0" max="0.33" step="0.001" aria-label="Chroma"></div>
+      <div class="sl"><label for="pk-H">H</label><input type="range" id="pk-H" min="0" max="360" step="0.1"><input type="number" id="pk-Hn" min="0" max="360" step="0.1" aria-label="Hue, degrees"></div>
+      <div class="pk-foot"><span id="pk-contrast"></span><span class="warn" id="pk-gamut"></span></div>
+    </div>
+  </div>
+  <p class="pk-cap"><span id="pk-wheel-cap"></span> Dots are every colour in the variant; solid lines join each normal colour to its bright one, and dashed lines join each editor role (dashed dot) to the colour it's measured from. Click a dot to switch to it. With even hues on, dashed spokes mark the 60° slots and hollow dots show where each colour was.</p>
+</section>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+__SCRIPT__
+</script>
