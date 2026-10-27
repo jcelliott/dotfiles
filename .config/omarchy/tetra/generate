@@ -33,6 +33,11 @@ with `paseo plugin install`; after regenerating, run `paseo plugin reload tetra`
 on each. Paseo's app themes take only eight colours, and its terminal ANSI
 colours stay Paseo's own.
 
+Also writes slack.txt into each theme directory: the string for Slack's
+Preferences > Appearance > Custom theme > Import (see slack_theme()). Slack
+derives text colours itself; untick Window gradient, and tick Darker sidebars
+for Dark and Mirage only.
+
 Usage: generate [variant...]   (default: all)
 """
 import math
@@ -697,6 +702,12 @@ def paseo_plugin():
 PASEO_MANIFEST = '{\n  "id": "tetra",\n  "requirements": {\n    "paseo": ">=0.12.0"\n  }\n}\n'
 
 
+def slack_theme(c):
+    # Slack's import takes exactly four colours, in this order: system
+    # navigation, selected items, presence indication, notifications.
+    return ','.join(c[k] for k in ('background', 'accent', 'green', 'red')) + '\n'
+
+
 def write_wallpaper(theme_dir, mode, c):
     backgrounds = os.path.join(theme_dir, 'backgrounds')
     if os.path.isdir(backgrounds) and os.listdir(backgrounds):
@@ -729,6 +740,8 @@ def main(args):
             f.write(neovim_lua(variant, c, roles(c)))
         with open(os.path.join(theme_dir, 'icons.theme'), 'w') as f:
             f.write(ICONS)
+        with open(os.path.join(theme_dir, 'slack.txt'), 'w') as f:
+            f.write(slack_theme(c))
         write_wallpaper(theme_dir, mode, c)
         os.makedirs(GHOSTTY_THEMES_DIR, exist_ok=True)
         with open(os.path.join(GHOSTTY_THEMES_DIR, name), 'w') as f:
