@@ -2,18 +2,24 @@
 """Generate the tetra themes (tetra-dark, tetra-mirage, tetra-light) for
 Omarchy and Ghostty.
 
-Each variant is built like this:
+Tetra is a system: Dark is the definition, and Mirage and Light are Dark placed
+on their own ground (background and foreground lightness). See theme_palette().
+Dark's source palette() is built like this:
 
-- Shades, orange and brown come from the base24 source schemes in
+- Shades, orange and brown come from the base24 source scheme in
   tinted-theming/schemes (spec-0.11 branch).
 - Bright ANSI colours are the source palette in VARIANTS; normal ones are
-  darker versions of them, following the source terminal rule
-  (OKLCH lightness offsets), or for Light a minimum contrast on the background.
+  darker versions of them, following the source terminal rule (OKLCH
+  lightness offsets).
 - Selection is the source selection colour and muted its comment gray.
 - Neutral shades (backgrounds, foregrounds, muted) and selection get half of
   the source tint: OKLCH chroma halved, lightness unchanged.
 
-Writes colors.toml, neovim.lua and icons.theme into
+Mirage and Light keep source palettes in VARIANTS too. The showcase page
+compares against them; the themes don't use them.
+
+Writes colors.toml, neovim.lua (aether.nvim with Tetra's palette, editor roles
+and syntax colours) and icons.theme into
 ~/.config/omarchy/themes/tetra-<variant>/, and a gradient wallpaper only when
 the theme has no backgrounds yet. Also writes the Ghostty theme
 ~/.config/ghostty/themes/tetra-<variant>, with the same palette as Omarchy's
@@ -29,6 +35,7 @@ colours stay Paseo's own.
 
 Usage: generate [variant...]   (default: all)
 """
+import math
 import os
 import subprocess
 import sys
@@ -44,7 +51,7 @@ TINT = 0.5
 
 VARIANTS = {
     'dark': dict(
-        mode='dark', nvim='ayu-dark',
+        mode='dark',
         # base24 source scheme
         base24=dict(b00='#0b0e14', b01='#131721', b04='#bfbdb6', b05='#e6e1cf', b06='#ece8db',
                     b07='#f2f0e7', b09='#ff8f40', b0F='#e6b450', b10='#0a0d13', b11='#06070a'),
@@ -54,21 +61,17 @@ VARIANTS = {
         # blue editor selection
         # (close to #3388ff at 25% over the editor background)
         selection='#1b3a5b', gray='#5a6673', accent='#e6b450',
-        rule=("normal ones are those darkened by 0.07 OKLCH lightness, the rule the source "
-              "terminal themes use"),
     ),
     'mirage': dict(
-        mode='dark', nvim='ayu-mirage',
+        mode='dark',
         base24=dict(b00='#1f2430', b01='#242936', b04='#707a8c', b05='#cccac2', b06='#d9d7ce',
                     b07='#f3f4f5', b09='#ffad66', b0F='#f27983', b10='#171b24', b11='#1a1f29'),
         hues=dict(red='#f28779', yellow='#ffcd66', green='#d5ff80', cyan='#95e6cb', blue='#73d0ff', magenta='#dfbfff'),
         normal_offset=-0.07, normal_offsets=dict(red=-0.05), bright_offsets=dict(red=+0.02),
         selection=('#409fff', 0.25, '#242936'), gray='#6e7c8f', accent='#ffcc66',
-        rule=("normal ones are those darkened by 0.07 OKLCH lightness (red by 0.05, and bright "
-              "red lightened by 0.02), the rule the source terminal themes use"),
     ),
     'light': dict(
-        mode='light', nvim='ayu-light',
+        mode='light',
         base24=dict(b00='#f8f9fa', b01='#edeff1', b04='#8a9199', b05='#5c6166', b06='#4e5257',
                     b07='#404447', b09='#fa8d3e', b0F='#e6ba7e', b10=None, b11=None),
         hues=dict(red='#f07171', yellow='#eba400', green='#86b300', cyan='#4cbf99', blue='#22a4e6', magenta='#a37acc'),
@@ -78,25 +81,9 @@ VARIANTS = {
         # "sunk" surface instead.
         sunk='#ebeef0',
         selection=('#035bd6', 0.15, '#fcfcfc'), gray='#adaeb1', accent='#f29718',
-        rule=("normal ones are darkened in OKLCH lightness until they reach 4.5:1 contrast on "
-              "the background (a fixed 0.07, as in tetra-dark, leaves these at 2.6-3.6:1; the "
-              "source Light terminal theme uses the same colour for both)"),
     ),
 }
 
-NEOVIM_LUA = '''return {
-	{
-		"Shatur/neovim-ayu",
-		priority = 1000,
-	},
-	{
-		"LazyVim/LazyVim",
-		opts = {
-			colorscheme = "%s",
-		},
-	},
-}
-'''
 ICONS = 'Yaru-yellow\n'
 
 
@@ -128,14 +115,17 @@ def oklab(h):
             0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s)
 
 
-def from_oklab(L, a, b):
+def lab_to_linear(L, a, b):
     l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3
     m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3
     s = (L - 0.0894841775 * a - 1.2914855480 * b) ** 3
-    return '#%02x%02x%02x' % tuple(_l2s(x) for x in (
-        4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
-        -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
-        -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s))
+    return (4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+            -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+            -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s)
+
+
+def from_oklab(L, a, b):
+    return '#%02x%02x%02x' % tuple(_l2s(x) for x in lab_to_linear(L, a, b))
 
 
 def lighten(h, d):
@@ -211,27 +201,415 @@ def palette(v):
     return c
 
 
-def selection_source(v):
-    s = v['selection']
-    if isinstance(s, str):
-        return f"the source blue selection {s}"
-    return "the source editor selection (%s at %d%% over %s)" % (s[0], round(s[1] * 100), s[2])
+# --- OKHSL and editor roles -------------------------------------------------
+#
+# OKHSL (Björn Ottosson, "Okhsv and Okhsl", 2021) is OKLab with lightness put
+# through a toe so it tracks CIE L*, and saturation scaled so 1 is the sRGB edge
+# at every hue and lightness. Its hue is OKLCH's. Ported from his reference
+# code; the showcase page uses the same port.
+
+def _max_saturation(a, b):
+    if -1.88170328 * a - 0.80936493 * b > 1:
+        k0, k1, k2, k3, k4 = 1.19086277, 1.76576728, 0.59662641, 0.75515197, 0.56771245
+        wl, wm, ws = 4.0767416621, -3.3077115913, 0.2309699292
+    elif 1.81444104 * a - 1.19445276 * b > 1:
+        k0, k1, k2, k3, k4 = 0.73956515, -0.45954404, 0.08285427, 0.12541070, 0.14503204
+        wl, wm, ws = -1.2684380046, 2.6097574011, -0.3413193965
+    else:
+        k0, k1, k2, k3, k4 = 1.35733652, -0.00915799, -1.15130210, -0.50559606, 0.00692167
+        wl, wm, ws = -0.0041960863, -0.7034186147, 1.7076147010
+    S = k0 + k1 * a + k2 * b + k3 * a * a + k4 * a * b
+    kl = 0.3963377774 * a + 0.2158037573 * b
+    km = -0.1055613458 * a - 0.0638541728 * b
+    ks = -0.0894841775 * a - 1.2914855480 * b
+    l_, m_, s_ = 1 + S * kl, 1 + S * km, 1 + S * ks
+    f = wl * l_ ** 3 + wm * m_ ** 3 + ws * s_ ** 3
+    f1 = wl * 3 * kl * l_ * l_ + wm * 3 * km * m_ * m_ + ws * 3 * ks * s_ * s_
+    f2 = wl * 6 * kl * kl * l_ + wm * 6 * km * km * m_ + ws * 6 * ks * ks * s_
+    return S - f * f1 / (f1 * f1 - 0.5 * f * f2)   # one Halley step
 
 
-def colors_toml(variant, v, c):
-    text = ("Shades, orange and brown follow the base24 source scheme from tinted-theming. "
-            f"Bright ANSI colours are the source palette; {v['rule']}. "
-            f"Selection is {selection_source(v)}, muted is the source comment gray. "
-            "Neutral shades (backgrounds, foregrounds, muted) and selection have half of "
-            "the source tint (OKLCH chroma halved, same lightness).")
-    if v['mode'] == 'light':
-        text += (" dark_background is the source sunk surface and darker_background is that "
-                 "mixed 8% toward the foreground (Omarchy light themes darken these).")
+def _find_cusp(a, b):
+    S = _max_saturation(a, b)
+    L = (1 / max(lab_to_linear(1, S * a, S * b))) ** (1 / 3)
+    return L, L * S
+
+
+def _gamut_intersection(a, b, L1, C1, L0, cusp):
+    if (L1 - L0) * cusp[1] - (cusp[0] - L0) * C1 <= 0:
+        return cusp[1] * L0 / (C1 * cusp[0] + cusp[1] * (L0 - L1))
+    t = cusp[1] * (L0 - 1) / (C1 * (cusp[0] - 1) + cusp[1] * (L0 - L1))
+    dL, dC = L1 - L0, C1
+    kl = 0.3963377774 * a + 0.2158037573 * b
+    km = -0.1055613458 * a - 0.0638541728 * b
+    ks = -0.0894841775 * a - 1.2914855480 * b
+    ldt, mdt, sdt = dL + dC * kl, dL + dC * km, dL + dC * ks
+    L, C = L0 * (1 - t) + t * L1, t * C1
+    l_, m_, s_ = L + C * kl, L + C * km, L + C * ks
+    l, m, s = l_ ** 3, m_ ** 3, s_ ** 3
+    l1, m1, s1 = 3 * ldt * l_ * l_, 3 * mdt * m_ * m_, 3 * sdt * s_ * s_
+    l2, m2, s2 = 6 * ldt * ldt * l_, 6 * mdt * mdt * m_, 6 * sdt * sdt * s_
+
+    def step(w0, w1, w2):
+        r = w0 * l + w1 * m + w2 * s - 1
+        r1, r2 = w0 * l1 + w1 * m1 + w2 * s1, w0 * l2 + w1 * m2 + w2 * s2
+        u = r1 / (r1 * r1 - 0.5 * r * r2)
+        return -r * u if u >= 0 else float('inf')
+    return t + min(step(4.0767416621, -3.3077115913, 0.2309699292),
+                   step(-1.2684380046, 2.6097574011, -0.3413193965),
+                   step(-0.0041960863, -0.7034186147, 1.7076147010))
+
+
+def _ok_cs(L, a, b):
+    cusp = _find_cusp(a, b)
+    c_max = _gamut_intersection(a, b, L, 1, L, cusp)
+    st_max = (cusp[1] / cusp[0], cusp[1] / (1 - cusp[0]))
+    s_mid = 0.11516993 + 1 / (7.44778970 + 4.15901240 * b + a * (-2.19557347 + 1.75198401 * b + a * (
+        -2.13704948 - 10.02301043 * b + a * (-4.24894561 + 5.38770819 * b + 4.69891013 * a))))
+    t_mid = 0.11239642 + 1 / (1.61320320 - 0.68124379 * b + a * (0.40370612 + 0.90148123 * b + a * (
+        -0.27087943 + 0.61223990 * b + a * (0.00299215 - 0.45399568 * b - 0.14661872 * a))))
+    k = c_max / min(L * st_max[0], (1 - L) * st_max[1])
+    c_mid = 0.9 * k * (1 / (1 / (L * s_mid) ** 4 + 1 / ((1 - L) * t_mid) ** 4)) ** 0.25
+    c_0 = (1 / (1 / (L * 0.4) ** 2 + 1 / ((1 - L) * 0.8) ** 2)) ** 0.5
+    return c_0, c_mid, c_max
+
+
+_TK1, _TK2 = 0.206, 0.03
+_TK3 = (1 + _TK1) / (1 + _TK2)
+
+
+def _toe(x):
+    return 0.5 * (_TK3 * x - _TK1 + ((_TK3 * x - _TK1) ** 2 + 4 * _TK2 * _TK3 * x) ** 0.5)
+
+
+def _toe_inv(x):
+    return (x * x + _TK1 * x) / (_TK3 * (x + _TK2))
+
+
+def to_okhsl(h):
+    """(lightness, saturation, hue in degrees or None for a grey)."""
+    L, a, b = oklab(h)
+    C = math.hypot(a, b)
+    if C < 2e-4 or L <= 0 or L >= 1:
+        return _toe(L), 0.0, None
+    c_0, c_mid, c_max = _ok_cs(L, a / C, b / C)
+    if C < c_mid:
+        k1 = 0.8 * c_0
+        s = 0.8 * C / (k1 + (1 - k1 / c_mid) * C)
+    else:
+        k1 = 0.2 * c_mid * c_mid * 1.5625 / c_0
+        s = 0.8 + 0.2 * (C - c_mid) / (k1 + (1 - k1 / (c_max - c_mid)) * (C - c_mid))
+    return _toe(L), s, math.degrees(math.atan2(b, a)) % 360
+
+
+def from_okhsl(l, s, h):
+    if l >= 1:
+        return '#ffffff'
+    if l <= 0:
+        return '#000000'
+    a, b, L = math.cos(math.radians(h)), math.sin(math.radians(h)), _toe_inv(l)
+    c_0, c_mid, c_max = _ok_cs(L, a, b)
+    if s < 0.8:
+        t, k1 = 1.25 * s, 0.8 * c_0
+        C = t * k1 / (1 - (1 - k1 / c_mid) * t)
+    else:
+        t, k1 = (s - 0.8) / 0.2, 0.2 * c_mid * c_mid * 1.5625 / c_0
+        C = c_mid + t * k1 / (1 - (1 - k1 / (c_max - c_mid)) * t)
+    return from_oklab(L, C * a, C * b)
+
+
+# Editor roles beyond the palette, each an OKHSL offset (lightness, saturation,
+# hue in degrees) from the palette colour it sits beside, so it follows that
+# colour. Most keep the offset measured between the source editor theme's role
+# colour and the colour it pairs with; ROLE_OFFSETS are Tetra's own and apply
+# to every variant. An optional fourth number scales saturation before the
+# offset is added: special is accent at half its saturation.
+ROLE_BASE = dict(tag='bright_blue', special='accent', operator='orange', error='bright_red',
+                 vcs_added='bright_green', vcs_modified='bright_magenta', vcs_removed='bright_red')
+# Every variant's roles are measured from Dark's.
+SOURCE_ROLES = dict(   # role: (role colour, the colour it was measured against)
+    tag=('#39bae6', '#59c2ff'), vcs_added=('#7fd962', '#aad94c'))
+ROLE_OFFSETS = dict(special=(0, 0, 0, 0.5), operator=(-0.0035, -0.27, -9.63), error=(-0.0852, 0.0582, 7.8),
+                    vcs_removed=(-0.0022, 0.1631, 2.87), vcs_modified=(-0.0283, -0.1524, -12.32))
+
+
+def okhsl_offset(h, base):
+    (l1, s1, h1), (l0, s0, h0) = to_okhsl(h), to_okhsl(base)
+    return l1 - l0, s1 - s0, 0.0 if h1 is None or h0 is None else (h1 - h0 + 540) % 360 - 180
+
+
+def apply_offset(base, offset):
+    l, s, h = to_okhsl(base)
+    dl, ds, dh, ks = (*offset, 1)[:4]
+    return from_okhsl(min(1, max(0, l + dl)), min(1, max(0, s * ks + ds)), ((h or 0) + dh) % 360)
+
+
+def roles(c):
+    return {role: apply_offset(c[base], ROLE_OFFSETS.get(role) or okhsl_offset(*SOURCE_ROLES[role]))
+            for role, base in ROLE_BASE.items()}
+
+
+# --- Tetra as a system ------------------------------------------------------
+#
+# Dark's palette() after Tetra's rules is the definition. Each variant is a
+# ground, the OKHSL lightness of its background and foreground (Dark keeps its
+# own), and Dark's accent. The showcase page implements the same rules.
+#
+# The rules: neutral shades become the grey at their OKLab lightness. The hues
+# sit 60 degrees apart in OKHSL from red, with brown in the slot after red and
+# yellow and orange split either side of it, each keeping its OKHSL lightness
+# and saturation. Selection sits opposite accent's OKHSL hue at its own
+# saturation, its lightness sel_pct of the way from black to accent's (from
+# white on a light ground). Muted takes selection's hue and saturation.
+#
+# Placing on a ground keeps every colour's OKHSL hue and saturation. Neutrals,
+# muted and selection keep their position between background and foreground,
+# except that a light ground puts the two sunk backgrounds below the background,
+# as Omarchy's light themes do. The bright colours, orange and brown keep Dark's
+# lightness distance from the background, times light_depth on a light ground,
+# so the foreground never moves them. Normal colours are their bright colour
+# plus Dark's step from bright to normal, held to 4.5:1 on the background.
+RULES = dict(red=12, split=20, sel_pct=30, light_depth=0.6)
+GROUNDS = dict(mirage=(0.135, 0.833), light=(0.968, 0.255))
+HUES = ('red', 'yellow', 'green', 'cyan', 'blue', 'magenta')
+NEUTRAL_KEYS = ('background', 'dark_background', 'darker_background', 'lighter_background',
+                'foreground', 'dark_foreground', 'light_foreground', 'bright_foreground')
+HUE_SLOTS = dict(red=0, bright_red=0, brown=1, yellow=1, bright_yellow=1, orange=1, green=2, bright_green=2,
+                 cyan=3, bright_cyan=3, blue=4, bright_blue=4, magenta=5, bright_magenta=5)
+SPLIT_SIGN = dict(yellow=1, bright_yellow=1, orange=-1)   # toward green, toward red
+
+
+def okhsl(h):
+    l, s, hue = to_okhsl(h)
+    return l, s, hue or 0.0
+
+
+def apply_rules(c, mode, palette_rules=True):
+    """The rules on a palette; palette_rules=False applies only selection and muted."""
+    c = dict(c)
+    if palette_rules:
+        for k in NEUTRAL_KEYS:
+            c[k] = from_oklab(oklab(c[k])[0], 0, 0)
+        for k, slot in HUE_SLOTS.items():
+            l, s, _ = to_okhsl(c[k])
+            c[k] = from_okhsl(l, s, (RULES['red'] + 60 * slot + SPLIT_SIGN.get(k, 0) * RULES['split']) % 360)
+    al, _, ah = okhsl(c['accent'])
+    p = RULES['sel_pct'] / 100
+    c['selection'] = from_okhsl(1 - p * (1 - al) if mode == 'light' else p * al,
+                                to_okhsl(c['selection'])[1], (ah + 180) % 360)
+    _, s, h = okhsl(c['selection'])
+    c['muted'] = from_okhsl(to_okhsl(c['muted'])[0], s, h)
+    return c
+
+
+def place_on_ground(src, ground, accent):
+    clamp = lambda x: min(1, max(0, x))
+    sbg, sfg = to_okhsl(src['background'])[0], to_okhsl(src['foreground'])[0]
+    bg, fg = ground
+    light = bg > fg
+    away = 1 if fg > bg else -1
+    out = dict(src, accent=accent)
+    for k in NEUTRAL_KEYS + ('muted', 'selection'):
+        l, s, h = okhsl(src[k])
+        t = (l - sbg) / (sfg - sbg)
+        if light and k in ('dark_background', 'darker_background'):
+            t = abs(t)
+        out[k] = from_okhsl(clamp(bg + t * (fg - bg)), s, h)
+    depth = RULES['light_depth'] if light else 1
+    for k in ('orange', 'brown') + tuple('bright_' + h for h in HUES):
+        l, s, h = okhsl(src[k])
+        out[k] = from_okhsl(clamp(bg + away * depth * abs(l - sbg)), s, h)
+    for k in HUES:
+        l, s, h = okhsl(src[k])
+        nl = to_okhsl(out['bright_' + k])[0] + l - to_okhsl(src['bright_' + k])[0]
+        normal = from_okhsl(clamp(nl), s, h)
+        for _ in range(200):
+            if contrast(normal, out['background']) >= 4.5:
+                break
+            nl += away * 0.005
+            normal = from_okhsl(clamp(nl), s, h)
+        out[k] = normal
+    return out
+
+
+def theme_palette(variant):
+    """A variant's palette and mode (light when its background is the lighter)."""
+    src = apply_rules(palette(VARIANTS['dark']), 'dark')
+    ground = GROUNDS.get(variant) or (to_okhsl(src['background'])[0], to_okhsl(src['foreground'])[0])
+    mode = 'light' if ground[0] > ground[1] else 'dark'
+    return apply_rules(place_on_ground(src, ground, src['accent']), mode, palette_rules=False), mode
+
+
+# Tetra's syntax roles for aether. Code is coloured as in the source editor
+# theme: keywords orange, functions bright yellow, strings bright green,
+# constants bright magenta, types bright blue, with the editor roles above for
+# tags and properties, operators, punctuation, errors and git. Comments are the
+# only italics, and nothing is bold.
+NEOVIM_HIGHLIGHTS = """\
+				Comment = { fg = c.muted, italic = true },
+				Constant = { fg = c.bright_magenta },
+				String = { fg = c.bright_green },
+				Character = { fg = c.bright_green },
+				Number = { fg = c.bright_magenta },
+				Boolean = { fg = c.bright_magenta },
+				Float = { fg = c.bright_magenta },
+				Identifier = { fg = c.bright_blue },
+				Function = { fg = c.bright_yellow },
+				Statement = { fg = c.orange },
+				Conditional = { fg = c.orange },
+				Repeat = { fg = c.orange },
+				Label = { fg = c.orange },
+				Keyword = { fg = c.orange },
+				Exception = { fg = c.bright_red },
+				Operator = { fg = r.operator },
+				PreProc = { fg = c.accent },
+				Include = { fg = c.orange },
+				Define = { fg = c.orange },
+				Macro = { fg = c.accent },
+				Type = { fg = c.bright_blue },
+				StorageClass = { fg = c.orange },
+				Structure = { fg = r.special },
+				Typedef = { fg = c.bright_blue },
+				Special = { fg = c.accent },
+				SpecialChar = { fg = r.special },
+				Tag = { fg = r.tag },
+				Delimiter = { fg = r.special },
+				Title = { fg = c.orange },
+				Directory = { fg = c.bright_yellow },
+				Underlined = { sp = r.tag, underline = true },
+				Error = { fg = c.bg, bg = r.error },
+				ErrorMsg = { fg = r.error },
+				WarningMsg = { fg = c.orange },
+				Todo = { fg = c.bright_red },
+				Added = { fg = r.vcs_added },
+				Changed = { fg = r.vcs_modified },
+				Removed = { fg = r.vcs_removed },
+				GitSignsDelete = { fg = r.vcs_removed },
+				NeoTreeGitDeleted = { fg = r.vcs_removed },
+				NvimTreeGitDeleted = { fg = r.vcs_removed },
+				DiffviewStatusDeleted = { fg = r.vcs_removed },
+				DiagnosticError = { fg = r.error },
+				DiagnosticWarn = { fg = c.orange },
+				DiagnosticInfo = { fg = r.tag },
+				DiagnosticHint = { fg = c.bright_cyan },
+				["@comment.error"] = { fg = r.error },
+				["@comment.warning"] = { fg = c.orange },
+				["@comment.todo"] = { fg = c.bright_red },
+				["@constructor"] = { fg = c.accent },
+				["@constructor.tsx"] = { fg = c.accent },
+				["@keyword"] = { fg = c.orange },
+				["@keyword.function"] = { fg = c.orange },
+				["@label"] = { fg = c.orange },
+				["@module"] = { fg = c.bright_yellow },
+				["@module.builtin"] = { fg = c.bright_yellow },
+				["@operator"] = { fg = r.operator },
+				["@property"] = { fg = r.tag },
+				["@punctuation.bracket"] = { fg = r.special },
+				["@punctuation.delimiter"] = { fg = r.special },
+				["@punctuation.special"] = { fg = r.special },
+				["@string.documentation"] = { fg = c.bright_green },
+				["@string.escape"] = { fg = r.special },
+				["@string.regexp"] = { fg = c.bright_cyan },
+				["@tag"] = { fg = c.orange },
+				["@tag.attribute"] = { fg = c.bright_blue },
+				["@tag.delimiter.tsx"] = { fg = r.special },
+				["@tag.tsx"] = { fg = c.orange },
+				["@tag.javascript"] = { fg = c.orange },
+				["@type.builtin"] = { fg = c.bright_blue },
+				["@variable"] = { fg = c.fg },
+				["@variable.builtin"] = { fg = c.bright_yellow },
+				["@variable.member"] = { fg = r.tag },
+				["@variable.parameter"] = { fg = c.fg },
+				["@variable.parameter.builtin"] = { fg = c.fg },
+				["@markup.heading"] = { fg = c.orange },
+				["@lsp.type.class"] = { link = "@type" },
+				["@lsp.type.interface"] = { link = "@type" },
+				["@lsp.type.struct"] = { link = "@variable.member" },
+"""
+
+
+def neovim_lua(variant, c, r):
+    """A lazy.nvim spec for aether.nvim, the colour scheme Omarchy's own Neovim
+    template uses, with Tetra's palette, roles and syntax colours. aether reloads
+    it when the Omarchy theme changes."""
+    palette = dict(
+        bg=c['background'], dark_bg=c['dark_background'], darker_bg=c['darker_background'],
+        lighter_bg=c['lighter_background'], fg=c['foreground'], dark_fg=c['dark_foreground'],
+        light_fg=c['light_foreground'], bright_fg=c['bright_foreground'], muted=c['muted'],
+        **{k: c[k] for k in ('red', 'yellow', 'orange', 'green', 'cyan', 'blue', 'magenta', 'brown',
+                             'bright_red', 'bright_yellow', 'bright_green', 'bright_cyan',
+                             'bright_blue', 'bright_magenta', 'accent')},
+        cursor=c['bright_foreground'], foreground=c['foreground'], background=c['background'],
+        selection=c['selection'], selection_foreground=c['bright_foreground'],
+        selection_background=c['selection'])
+    colors = ''.join(f'\t\t\t\t{k} = "{h}",\n' for k, h in palette.items())
+    role_lines = ''.join(f'\t{k} = "{h}",\n' for k, h in r.items())
+    return (f'-- Tetra {variant.capitalize()} for Neovim: aether.nvim with Tetra\'s palette and syntax colours.\n'
+            '-- Generated by ~/.config/omarchy/tetra/generate; edit that, not this file.\n'
+            'local r = {\n' + role_lines + '}\n\n'
+            'return {\n'
+            '\t{\n'
+            '\t\t"bjarneo/aether.nvim",\n'
+            '\t\tbranch = "v3",\n'
+            '\t\tname = "aether",\n'
+            '\t\tpriority = 1000,\n'
+            '\t\topts = {\n'
+            '\t\t\tcolors = {\n' + colors + '\t\t\t},\n'
+            '\t\t\tstyles = { comments = { italic = true }, keywords = {}, functions = {}, variables = {} },\n'
+            '\t\t\ton_colors = function(c)\n'
+            '\t\t\t\tlocal blend = require("aether.utils").blend_bg\n'
+            '\t\t\t\tc.git = { add = r.vcs_added, delete = r.vcs_removed, change = r.vcs_modified, ignore = c.muted }\n'
+            '\t\t\t\tc.diff.add = blend(r.vcs_added, 0.25)\n'
+            '\t\t\t\tc.diff.delete = blend(r.vcs_removed, 0.25)\n'
+            '\t\t\t\tc.error, c.warning, c.info, c.hint, c.todo = r.error, c.orange, r.tag, c.bright_cyan, c.bright_red\n'
+            '\t\t\t\t-- terminal slots 0, 7, 8 and 15 as foot and Ghostty have them\n'
+            '\t\t\t\tc.terminal.black, c.terminal.white = c.bg, c.fg\n'
+            '\t\t\t\tc.terminal.black_bright, c.terminal.white_bright = c.muted, c.bright_fg\n'
+            '\t\t\tend,\n'
+            '\t\t\ton_highlights = function(hl, c)\n'
+            '\t\t\t\tfor group, spec in pairs({\n' + NEOVIM_HIGHLIGHTS.replace('\n\t\t\t\t', '\n\t\t\t\t\t').replace('\t\t\t\tComment', '\t\t\t\t\tComment', 1) +
+            '\t\t\t\t}) do\n'
+            '\t\t\t\t\thl[group] = spec\n'
+            '\t\t\t\tend\n'
+            '\t\t\tend,\n'
+            '\t\t},\n'
+            '\t},\n'
+            '\t{\n'
+            '\t\t"LazyVim/LazyVim",\n'
+            '\t\topts = {\n'
+            '\t\t\tcolorscheme = "aether",\n'
+            '\t\t},\n'
+            '\t},\n'
+            '}\n')
+
+
+def colors_toml(variant, mode, c):
+    r = RULES
+    if variant == 'dark':
+        text = ("Tetra Dark is the definition Mirage and Light are placed from. Shades, orange and "
+                "brown start from the base24 source scheme from tinted-theming, bright colours from "
+                "the source palette with normal ones 0.07 OKLCH lightness darker. Then the shades "
+                "become neutral greys at the same OKLab lightness, and the hues sit 60 degrees apart "
+                f"in OKHSL from red at {r['red']}, brown after red with yellow and orange "
+                f"{r['split']} degrees either side of it.")
+    else:
+        bg, fg = GROUNDS[variant]
+        text = (f"Tetra Dark placed on a ground of OKHSL lightness {bg * 100:.1f} for the "
+                f"background and {fg * 100:.1f} for the foreground. Every colour keeps Dark's OKHSL "
+                "hue and saturation. Shades, muted and selection keep their position between "
+                "background and foreground"
+                + (", with the sunk backgrounds below the background" if mode == 'light' else "") +
+                ". Bright colours, orange and brown keep Dark's lightness distance from the "
+                "background" + (f", at {r['light_depth']:.0%} on a light ground" if mode == 'light' else "") +
+                "; normal colours are their bright colour darkened by Dark's step, held to 4.5:1.")
+    text += (f" Selection sits opposite accent's OKHSL hue, {r['sel_pct']}% of the way from "
+             f"{'white' if mode == 'light' else 'black'} to accent's lightness, and muted takes "
+             "selection's hue and saturation.")
     lines = [f"# Tetra {variant.capitalize()}",
              "# Generated by ~/.config/omarchy/tetra/generate; edit that, not this file.",
              "#"]
     lines += ['# ' + l for l in textwrap.wrap(text, 77)]
-    lines += [f'mode = "{v["mode"]}"', '']
+    lines += [f'mode = "{mode}"', '']
     for group in (('accent', 'selection', 'muted'),
                   ('background', 'dark_background', 'darker_background', 'lighter_background'),
                   ('foreground', 'dark_foreground', 'light_foreground', 'bright_foreground'),
@@ -242,7 +620,7 @@ def colors_toml(variant, v, c):
     return '\n'.join(lines).rstrip() + '\n'
 
 
-def ghostty_theme(variant, v, c):
+def ghostty_theme(variant, c):
     # Same mapping as Omarchy's ghostty.conf.tpl (selection foreground and
     # cursor default to bright_foreground there), plus 16-21 like the foot
     # template in ~/.config/omarchy/themed/, including its 22: lighter_background
@@ -271,7 +649,7 @@ def ghostty_theme(variant, v, c):
     return '\n'.join(lines) + '\n'
 
 
-def paseo_colors(v, c):
+def paseo_colors(mode, c):
     # Paseo expands these into its surface ladder: raised, control, border and
     # ring become surface1-4, and ring doubles as the faintest text. control
     # and border sit between raised and ring where Paseo's built-in dark themes
@@ -279,7 +657,7 @@ def paseo_colors(v, c):
     # Buttons draw the background colour on the accent, so Light's accent and
     # muted text are darkened to the same contrast floor as its normal colours.
     def floor(h):
-        while v.get('normal_min_contrast') and contrast(h, c['background']) < v['normal_min_contrast']:
+        while mode == 'light' and contrast(h, c['background']) < 4.5:
             h = lighten(h, -0.005)
         return h
 
@@ -298,13 +676,14 @@ def paseo_colors(v, c):
 
 def paseo_plugin():
     themes = []
-    for variant, v in VARIANTS.items():
-        colors = paseo_colors(v, palette(v))
+    for variant in VARIANTS:
+        c, mode = theme_palette(variant)
+        colors = paseo_colors(mode, c)
         body = ''.join(f'      {k}: "{h}",\n' for k, h in colors.items())
         themes.append(f'  client.addTheme({{\n'
                       f'    id: "{variant}",\n'
                       f'    name: "Tetra {variant.capitalize()}",\n'
-                      f'    appearance: "{v["mode"]}",\n'
+                      f'    appearance: "{mode}",\n'
                       f'    colors: {{\n{body}    }},\n'
                       f'  }});\n')
     return ('// Generated by ~/.config/omarchy/tetra/generate; edit that, not this file.\n'
@@ -318,12 +697,12 @@ def paseo_plugin():
 PASEO_MANIFEST = '{\n  "id": "tetra",\n  "requirements": {\n    "paseo": ">=0.12.0"\n  }\n}\n'
 
 
-def write_wallpaper(theme_dir, v, c):
+def write_wallpaper(theme_dir, mode, c):
     backgrounds = os.path.join(theme_dir, 'backgrounds')
     if os.path.isdir(backgrounds) and os.listdir(backgrounds):
         return
     os.makedirs(backgrounds, exist_ok=True)
-    if v['mode'] == 'light':
+    if mode == 'light':
         center, edge = '#ffffff', c['dark_background']
     else:
         center, edge = lighten(c['background'], 0.06), c['background']
@@ -340,25 +719,24 @@ def main(args):
 
     generated = []
     for variant in variants:
-        v = VARIANTS[variant]
-        c = palette(v)
+        c, mode = theme_palette(variant)
         name = f'tetra-{variant}'
         theme_dir = os.path.join(THEMES_DIR, name)
         os.makedirs(theme_dir, exist_ok=True)
         with open(os.path.join(theme_dir, 'colors.toml'), 'w') as f:
-            f.write(colors_toml(variant, v, c))
+            f.write(colors_toml(variant, mode, c))
         with open(os.path.join(theme_dir, 'neovim.lua'), 'w') as f:
-            f.write(NEOVIM_LUA % v['nvim'])
+            f.write(neovim_lua(variant, c, roles(c)))
         with open(os.path.join(theme_dir, 'icons.theme'), 'w') as f:
             f.write(ICONS)
-        write_wallpaper(theme_dir, v, c)
+        write_wallpaper(theme_dir, mode, c)
         os.makedirs(GHOSTTY_THEMES_DIR, exist_ok=True)
         with open(os.path.join(GHOSTTY_THEMES_DIR, name), 'w') as f:
-            f.write(ghostty_theme(variant, v, c))
+            f.write(ghostty_theme(variant, c))
         generated.append(name)
         print(f'{name}: foreground {contrast(c["foreground"], c["background"]):.1f}:1, '
               f'lowest normal colour '
-              f'{min(contrast(c[k], c["background"]) for k in v["hues"]):.1f}:1')
+              f'{min(contrast(c[k], c["background"]) for k in HUES):.1f}:1')
 
     os.makedirs(PASEO_PLUGIN_DIR, exist_ok=True)
     with open(os.path.join(PASEO_PLUGIN_DIR, 'paseo-plugin.json'), 'w') as f:
