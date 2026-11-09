@@ -191,7 +191,6 @@ source ~/.orbstack/shell/init2.fish 2>/dev/null || :
 # Activate at the end of config so mise-installed tools take priority
 # Disable auto-activate so we can control activation more closely
 set -Ux MISE_FISH_AUTO_ACTIVATE 0
-set -x MISE_PYTHON_DEFAULT_PACKAGES_FILE "$HOME/.config/mise/mise_default_python_packages"
 if type -q mise
   mise activate fish | source
 else
