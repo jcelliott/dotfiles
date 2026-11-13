@@ -1,0 +1,60 @@
+#!/bin/bash
+# Sole Taildrop receiver on osmium, run in place of omarchy-tailscale-receive
+# (Taildrop has one inbox per machine, so two receivers race for each file).
+# *.linkdrop files hold one URL from a Mac's Hyper+click: http(s) URLs open in
+# the browser, anything else is discarded. Other files are saved to the
+# downloads directory with a notification, as Omarchy's receiver does.
+# Taildrop only accepts files from devices owned by our own tailnet user.
+set -u
+shopt -s dotglob nullglob
+
+downloads=${XDG_DOWNLOAD_DIR:-$HOME/Downloads}
+# Same filesystem as downloads, so saving a file is a link plus unlink.
+staging=$downloads/.linkdrop
+mkdir -p "$staging"
+
+open_link() {
+  local url
+  url=$(head -c 8192 -- "$1" | head -n 1)
+  rm -f -- "$1"
+  if [[ $url =~ ^https?://[^[:space:][:cntrl:]]+$ ]]; then
+    omarchy-launch-browser "$url"
+    omarchy-notification-send "Opened link" "$url" -g 󰌹 -t 5000 || true
+  else
+    echo "discarded ${1##*/}: not an http(s) URL"
+  fi
+}
+
+save_file() {
+  local name=${1##*/} base ext target n=0
+  base=${name%.*}
+  ext=${name#"$base"}
+  [[ -z $base ]] && { base=$name; ext=; }
+  target=$downloads/$name
+  # ln refuses an existing name, so nothing is overwritten.
+  until ln -- "$1" "$target" 2>/dev/null; do
+    ((++n > 999)) && return 1
+    target=$downloads/$base-$n$ext
+  done
+  rm -f -- "$1"
+  omarchy-notification-send "Received ${target##*/}" "Saved to ${downloads/#$HOME/\~}" \
+    -u critical -g 󰒊 --exec xdg-open "$target" || true
+}
+
+handle_staged() {
+  local f
+  for f in "$staging"/*; do
+    [[ -f $f ]] || continue
+    case $f in
+    *.linkdrop) open_link "$f" ;;
+    *) save_file "$f" ;;
+    esac
+  done
+}
+
+# Files left staged by an interrupted run still get handled.
+handle_staged
+while true; do
+  tailscale file get --wait --conflict=rename "$staging" >/dev/null || sleep 5
+  handle_staged
+done
