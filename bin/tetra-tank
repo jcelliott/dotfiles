@@ -1,0 +1,516 @@
+#!/usr/bin/env python3
+"""tetra-tank: a terminal aquarium of schooling tetras.
+
+Every colour is a terminal palette index, so the tank wears whatever theme the
+terminal has: Tetra on osmium and in Ghostty on the Macs, over SSH and inside
+tmux too. Indices 16-22 are Tetra's extras (orange, brown, background shades),
+as ~/.config/omarchy/themed/foot.ini.tpl and the generated Ghostty themes set
+them. Each cell is two square pixels (half blocks), so fish move smoothly up
+and down.
+
+Schools far back are small and drawn in the normal colours; near ones are
+larger and use the bright colours.
+
+Keys: f or space drops food, a click drops it where you click, q quits.
+
+Usage:
+  tetra-tank                  swim
+  tetra-tank --palette FILE   load an Omarchy colors.toml into the terminal's
+                              palette first (for a terminal started without the
+                              theme, like Omarchy's screensaver window)
+  tetra-tank --screensaver    quit on any key, click or mouse movement
+"""
+import math
+import os
+import random
+import re
+import select
+import shutil
+import signal
+import sys
+import termios
+import time
+import tty
+
+FPS = 24
+
+RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, FG, MUTED = 1, 2, 3, 4, 5, 6, 7, 8
+ORANGE, BROWN, SHADE, SELECTION, DIM_FG = 16, 17, 18, 19, 20
+EYE = 0  # palette 0 is the background in Omarchy themes, so the eye reads as a hole
+BRIGHT = {RED: 9, GREEN: 10, YELLOW: 11, BLUE: 12, MAGENTA: 13, CYAN: 14, FG: 15, MUTED: DIM_FG}
+
+# colors.toml key for each palette index, as Omarchy's terminal templates map them
+PALETTE_KEYS = {
+    0: 'background', 1: 'red', 2: 'green', 3: 'yellow', 4: 'blue', 5: 'magenta', 6: 'cyan',
+    7: 'foreground', 8: 'muted', 9: 'bright_red', 10: 'bright_green', 11: 'bright_yellow',
+    12: 'bright_blue', 13: 'bright_magenta', 14: 'bright_cyan', 15: 'bright_foreground',
+    16: 'orange', 17: 'brown', 18: 'lighter_background', 19: 'selection',
+    20: 'dark_foreground', 21: 'light_foreground',
+}
+
+# body, stripe, belly, fin; near schools use BRIGHT versions
+SPECIES = [
+    dict(b=MUTED, s=CYAN, r=RED, f=MUTED),         # cardinal
+    dict(b=ORANGE, s=RED, r=ORANGE, f=RED),        # ember
+    dict(b=YELLOW, s=FG, r=YELLOW, f=BROWN),       # lemon
+    dict(b=MUTED, s=GREEN, r=MUTED, f=MUTED),      # green neon
+    dict(b=MAGENTA, s=BLUE, r=MAGENTA, f=MUTED),   # emperor
+    dict(b=MUTED, s=ORANGE, r=MUTED, f=RED),       # glowlight
+]
+
+# facing right; '.' is the eye
+SPRITES = {
+    'far': ["f bbbb ",
+            " fsss.b",
+            "f rrrr "],
+    'near': ["    bbbb   ",
+             "f bbbbbbbb ",
+             " fsssssss.b",
+             "f rrrrrrbb ",
+             "    rrr    "],
+}
+
+
+def sprite_pixels(rows, colours, flip):
+    """[(dx, dy, colour)] centred on the fish, mirrored when it faces left."""
+    h, w = len(rows), max(map(len, rows))
+    out = []
+    for y, row in enumerate(rows):
+        row = row.ljust(w)
+        if flip:
+            row = row[::-1]
+        for x, ch in enumerate(row):
+            if ch == '.':
+                out.append((x - w // 2, y - h // 2, EYE))
+            elif ch != ' ':
+                out.append((x - w // 2, y - h // 2, colours[ch]))
+    return out
+
+
+class School:
+    def __init__(self, tank, species, depth, n):
+        self.depth = depth
+        near = depth == 'near'
+        colours = {k: (BRIGHT.get(v, v) if near else v) for k, v in species.items()}
+        rows = SPRITES[depth]
+        self.sprite = {1: sprite_pixels(rows, colours, False), -1: sprite_pixels(rows, colours, True)}
+        self.size = len(rows[0])
+        self.max_speed = 0.95 if near else 0.6
+        cx, cy = tank.random_point()
+        self.fish = []
+        for _ in range(n):
+            a = random.uniform(0, math.tau)
+            self.fish.append(Fish(cx + random.gauss(0, 8), cy + random.gauss(0, 4),
+                                  math.cos(a) * self.max_speed * 0.6, 0))
+        self.new_goal(tank)
+
+    def new_goal(self, tank):
+        self.goal = tank.random_point()
+        self.goal_until = time.monotonic() + random.uniform(6, 18)
+
+
+class Fish:
+    __slots__ = ('x', 'y', 'vx', 'vy', 'facing')
+
+    def __init__(self, x, y, vx, vy):
+        self.x, self.y, self.vx, self.vy = x, y, vx, vy
+        self.facing = 1 if vx >= 0 else -1
+
+
+class Tank:
+    def __init__(self, cols, rows):
+        self.cols, self.rows = cols, rows
+        self.w, self.h = cols, rows * 2
+        self.t = 0.0
+        self.sand_top = [0] * self.w
+        self.base = self.make_base()
+        self.plants_back, self.plants_front = self.make_plants()
+        self.bubblers = [random.uniform(0.1, 0.9) * self.w for _ in range(1 if self.w < 120 else 2)]
+        self.bubbles = []
+        self.food = []
+        self.schools = self.make_schools()
+        self.rays = [(random.uniform(-0.2, 1.0) * self.w, random.randint(3, 7), random.uniform(0, math.tau))
+                     for _ in range(max(2, self.w // 60))]
+
+    # the water column fish may use: under the surface, over the sand
+    def random_point(self):
+        return (random.uniform(8, self.w - 8),
+                random.uniform(4, max(5, self.h - self.sand_height - 12)))
+
+    def make_base(self):
+        """Static pixels: sand with pebbles and a couple of rocks."""
+        w, h = self.w, self.h
+        self.sand_height = max(3, int(h * 0.08))
+        base = [[None] * w for _ in range(h)]
+        p1, p2 = random.uniform(0, 9), random.uniform(0, 9)
+        for x in range(w):
+            dune = math.sin(x * 0.045 + p1) * 1.2 + math.sin(x * 0.11 + p2) * 0.7
+            top = h - self.sand_height + int(round(dune))
+            self.sand_top[x] = top
+            for y in range(max(0, top), h):
+                r = random.random()
+                if y == top:
+                    base[y][x] = BROWN if r < 0.8 else YELLOW
+                else:
+                    base[y][x] = BROWN if r < 0.22 else YELLOW if r < 0.25 else MUTED if r < 0.28 else SHADE
+        for _ in range(random.randint(1, 3)):
+            rx, rw, rh = random.uniform(0.05, 0.95) * w, random.randint(5, 12), random.randint(3, 6)
+            for x in range(int(rx - rw), int(rx + rw) + 1):
+                if not 0 <= x < w:
+                    continue
+                span = rh * math.sqrt(max(0.0, 1 - ((x - rx) / rw) ** 2))
+                top = self.sand_top[x] + 1
+                for y in range(int(top - span), top):
+                    if 0 <= y < h:
+                        base[y][x] = DIM_FG if y == int(top - span) else MUTED
+        return base
+
+    def make_plants(self):
+        back, front = [], []
+        water = self.h - self.sand_height
+        for _ in range(max(3, self.w // 26)):
+            back.append(dict(x=random.uniform(0, self.w), h=random.uniform(0.2, 0.6) * water,
+                             stem=random.choice([GREEN, GREEN, GREEN, RED]), leaf=None,
+                             phase=random.uniform(0, math.tau), amp=random.uniform(1.5, 4)))
+        for _ in range(max(2, self.w // 45)):
+            front.append(dict(x=random.uniform(0, self.w), h=random.uniform(0.12, 0.3) * water,
+                              stem=GREEN, leaf=BRIGHT[GREEN],
+                              phase=random.uniform(0, math.tau), amp=random.uniform(1, 2.5)))
+        return back, front
+
+    def make_schools(self):
+        area = self.w * self.h
+        total = max(8, min(120, area // 1500))
+        species = random.sample(SPECIES, len(SPECIES))
+        schools, i = [], 0
+        while total > 0:
+            n = min(total, random.randint(6, 14))
+            depth = 'far' if (i % 2 == 0 or self.w < 100) else 'near'
+            schools.append(School(self, species[i % len(species)], depth, n))
+            total -= n
+            i += 1
+        schools.sort(key=lambda s: s.depth != 'far')  # far ones draw first
+        return schools
+
+    def drop_food(self, x=None, y=None):
+        x = random.uniform(0.1, 0.9) * self.w if x is None else x
+        for _ in range(random.randint(5, 9) if y is None else random.randint(3, 5)):
+            self.food.append([x + random.gauss(0, 5), (y if y is not None else 1) + random.uniform(0, 3),
+                              random.uniform(0, math.tau), random.choice([ORANGE, YELLOW, RED]), 0.0])
+
+    def step(self, dt):
+        self.t += dt
+        now = time.monotonic()
+        floor = self.h - self.sand_height - 4
+        # food sinks with a wobble, rests on the sand, then dissolves
+        for f in self.food:
+            if f[1] < self.sand_top[min(self.w - 1, max(0, int(f[0])))] - 1:
+                f[1] += 0.18
+                f[0] += math.sin(self.t * 2 + f[2]) * 0.15
+            else:
+                f[4] += dt
+        self.food = [f for f in self.food if f[4] < 12 and 0 <= f[0] < self.w]
+
+        for school in self.schools:
+            fish = school.fish
+            if now > school.goal_until:
+                school.new_goal(self)
+            gx, gy = school.goal
+            sep_r = school.size * 1.7
+            near_r2 = (school.size * 4) ** 2
+            ms = school.max_speed
+            for a in fish:
+                cx = cy = avx = avy = sx = sy = 0.0
+                n = 0
+                for b in fish:
+                    if b is a:
+                        continue
+                    dx, dy = b.x - a.x, b.y - a.y
+                    d2 = dx * dx + dy * dy * 4  # vertical gaps count double: schools stay flat
+                    if d2 < near_r2:
+                        cx += dx; cy += dy; avx += b.vx; avy += b.vy; n += 1
+                        if d2 < sep_r * sep_r:
+                            d = math.sqrt(d2)
+                            if d < 0.01:
+                                sx += random.uniform(-1, 1); sy += random.uniform(-1, 1)
+                            else:
+                                push = (sep_r - d) / sep_r
+                                sx -= dx / d * push; sy -= dy / d * push
+                if n:
+                    a.vx += cx / n * 0.0015 + (avx / n - a.vx) * 0.05
+                    a.vy += cy / n * 0.002 + (avy / n - a.vy) * 0.05
+                gd = math.hypot(gx - a.x, gy - a.y) or 1.0
+                a.vx += sx * 0.15 + (gx - a.x) / gd * 0.012
+                a.vy += sy * 0.15 + (gy - a.y) / gd * 0.012
+                # the nearest flake in reach pulls hard; touching it eats it
+                best, bd = None, 50.0 ** 2
+                for f in self.food:
+                    d2 = (f[0] - a.x) ** 2 + (f[1] - a.y) ** 2
+                    if d2 < bd:
+                        best, bd = f, d2
+                if best is not None:
+                    if bd < 6:
+                        best[4] = 99
+                    else:
+                        d = math.sqrt(bd)
+                        a.vx += (best[0] - a.x) / d * 0.08
+                        a.vy += (best[1] - a.y) / d * 0.08
+                # soft walls
+                m = 10
+                if a.x < m: a.vx += 0.05
+                if a.x > self.w - m: a.vx -= 0.05
+                if a.y < 4: a.vy += 0.05
+                if a.y > floor: a.vy -= 0.05
+                a.vx += random.gauss(0, 0.02)
+                a.vy = a.vy * 0.94 + random.gauss(0, 0.01)
+                speed = math.hypot(a.vx, a.vy) or 1e-6
+                lo = ms * (0.8 if best is not None else 0.35)
+                hi = ms * (1.6 if best is not None else 1.0)
+                k = max(lo, min(hi, speed)) / speed
+                a.vx *= k; a.vy *= k
+                a.vy = max(-0.5 * ms, min(0.5 * ms, a.vy))
+                a.x += a.vx * dt * FPS
+                a.y += a.vy * dt * FPS
+                if a.vx > 0.12: a.facing = 1
+                elif a.vx < -0.12: a.facing = -1
+        self.food = [f for f in self.food if f[4] < 12]
+
+        # bubbles rise in bursts from each bubbler and pop at the surface
+        for bx in self.bubblers:
+            if random.random() < dt * 2.5:
+                self.bubbles.append([bx + random.uniform(-1, 1), self.h - self.sand_height - 1,
+                                     random.uniform(0.35, 0.7), random.uniform(0, math.tau)])
+        for b in self.bubbles:
+            b[1] -= b[2] * dt * FPS
+        self.bubbles = [b for b in self.bubbles if b[1] > 0.5]
+
+    def draw(self):
+        w, h, t = self.w, self.h, self.t
+        fb = [row[:] for row in self.base]
+        water = h - self.sand_height
+
+        # light shafts from the surface, solid near the top and dithered lower down
+        for x0, width, ph in self.rays:
+            length = int(water * 0.7)
+            sway = math.sin(t * 0.15 + ph) * 6
+            for y in range(length):
+                xs = int(x0 + sway + y * 0.45)
+                lo, hi = max(0, xs), min(w, xs + width)
+                if lo >= hi:
+                    continue
+                row = fb[y]
+                if y < length * 0.45:
+                    row[lo:hi] = [SHADE] * (hi - lo)
+                elif y < length * 0.75 or y % 2 == 0:
+                    start = lo + ((lo + y) % 2)
+                    row[start:hi:2] = [SHADE] * len(range(start, hi, 2))
+
+        # sparkle on the surface
+        row = fb[0]
+        for x in range(w):
+            if math.sin(x * 0.31 + t * 1.7) + math.sin(x * 0.13 - t * 1.1) > 1.45:
+                row[x] = MUTED
+
+        def plant(p):
+            base_x, ph, amp = p['x'], p['phase'], p['amp']
+            top = self.sand_top[min(w - 1, max(0, int(base_x)))]
+            height = int(p['h'])
+            for i in range(height):
+                y = top - i
+                if y < 0:
+                    break
+                frac = i / max(1, height)
+                x = int(round(base_x + amp * math.sin(t * 0.9 + ph + frac * 2.2) * frac ** 1.3))
+                if 0 <= x < w:
+                    fb[y][x] = p['stem']
+                if i % 4 == 2 and i < height - 1:
+                    side = 1 if (i // 4) % 2 else -1
+                    for k in (1, 2):
+                        lx = x + side * k
+                        ly = y - (k - 1)
+                        if 0 <= lx < w and ly >= 0:
+                            fb[ly][lx] = p['leaf'] or p['stem']
+
+        for p in self.plants_back:
+            plant(p)
+
+        for school in self.schools:
+            for f in school.fish:
+                fx, fy = int(round(f.x)), int(round(f.y))
+                for dx, dy, c in school.sprite[f.facing]:
+                    x, y = fx + dx, fy + dy
+                    if 0 <= x < w and 0 <= y < h:
+                        fb[y][x] = c
+
+        for b in self.bubbles:
+            x = int(round(b[0] + math.sin(t * 3 + b[3]) * 0.8))
+            y = int(b[1])
+            if 0 <= x < w and 0 <= y < h:
+                fb[y][x] = DIM_FG
+
+        for f in self.food:
+            x, y = int(f[0]), int(f[1])
+            if 0 <= x < w and 0 <= y < h:
+                fb[y][x] = f[3]
+
+        for p in self.plants_front:
+            plant(p)
+        return fb
+
+
+def sgr_fg(c):
+    return '\x1b[38;5;%dm' % c
+
+
+def sgr_bg(c):
+    return '\x1b[49m' if c is None else '\x1b[48;5;%dm' % c
+
+
+def render(fb, prev):
+    """Escape codes that turn the screen from prev into fb; updates prev."""
+    out = ['\x1b[0m']
+    cfg, cbg = None, None
+    for r in range(len(prev)):
+        top, bot, prow = fb[2 * r], fb[2 * r + 1], prev[r]
+        placed = False
+        for c in range(len(prow)):
+            t, b = top[c], bot[c]
+            key = (t, b)
+            if prow[c] == key:
+                placed = False
+                continue
+            prow[c] = key
+            if not placed:
+                out.append('\x1b[%d;%dH' % (r + 1, c + 1))
+                placed = True
+            if t == b:
+                ch, f, bg = ' ', cfg, t
+            elif b is None:
+                ch, f, bg = '▀', t, None
+            elif t is None:
+                ch, f, bg = '▄', b, None
+            else:
+                ch, f, bg = '▀', t, b
+            if f != cfg:
+                out.append(sgr_fg(f))
+                cfg = f
+            if bg != cbg:
+                out.append(sgr_bg(bg))
+                cbg = bg
+            out.append(ch)
+    out.append('\x1b[0m')
+    return ''.join(out)
+
+
+def load_palette(path):
+    colours = {}
+    for line in open(path):
+        m = re.match(r'\s*(\w+)\s*=\s*"#?([0-9a-fA-F]{6})"', line)
+        if m:
+            colours[m.group(1)] = m.group(2)
+    seq = []
+    for idx, key in PALETTE_KEYS.items():
+        if key in colours:
+            v = colours[key]
+            seq.append('\x1b]4;%d;rgb:%s/%s/%s\x1b\\' % (idx, v[0:2], v[2:4], v[4:6]))
+    for osc, key in ((10, 'foreground'), (11, 'background')):
+        if key in colours:
+            v = colours[key]
+            seq.append('\x1b]%d;rgb:%s/%s/%s\x1b\\' % (osc, v[0:2], v[2:4], v[4:6]))
+    return ''.join(seq)
+
+
+def self_check():
+    # one cell per glyph case: empty, top only, bottom only, both alike, both different
+    fb = [[None, 1, None, 2, 3], [None, None, 4, 2, 5]]
+    prev = [[(-1, -1)] * 5]
+    out = render(fb, prev)
+    assert ' \x1b[38;5;1m\u2580\x1b[38;5;4m\u2584\x1b[48;5;2m \x1b[38;5;3m\x1b[48;5;5m\u2580' in out, repr(out)
+    assert render(fb, prev) == '\x1b[0m\x1b[0m', 'an unchanged frame must write no cells'
+    random.seed(1)
+    tank = Tank(160, 45)
+    tank.drop_food(80, 20)
+    flakes = len(tank.food)
+    for _ in range(FPS * 60):
+        tank.step(1 / FPS)
+        tank.draw()
+    for s in tank.schools:
+        for f in s.fish:
+            assert -10 < f.x < tank.w + 10 and -5 < f.y < tank.h, (f.x, f.y)
+    assert len(tank.food) < flakes, 'fish should eat food dropped among them'
+    print('ok')
+
+
+MOUSE = re.compile(r'\x1b\[<(\d+);(\d+);(\d+)([Mm])')
+
+
+def main(argv):
+    screensaver = '--screensaver' in argv
+    palette = ''
+    if '--palette' in argv:
+        i = argv.index('--palette')
+        if i + 1 >= len(argv):
+            sys.exit(__doc__)
+        palette = load_palette(argv[i + 1])
+    if any(a in ('-h', '--help') for a in argv):
+        print(__doc__)
+        return
+    if '--check' in argv:
+        return self_check()
+    if not sys.stdin.isatty():
+        sys.exit('tetra-tank needs a terminal')
+
+    out = sys.stdout
+    fd = sys.stdin.fileno()
+    saved = termios.tcgetattr(fd)
+    resized = [True]
+    signal.signal(signal.SIGWINCH, lambda *_: resized.__setitem__(0, True))
+    signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))
+    mouse_on = '\x1b[?1000h\x1b[?1006h' + ('\x1b[?1003h' if screensaver else '')
+    try:
+        tty.setcbreak(fd)
+        out.write(palette + '\x1b[?1049h\x1b[?25l' + mouse_on + '\x1b[2J')
+        out.flush()
+        tank, prev = None, []
+        started = last = time.monotonic()
+        while True:
+            if resized[0]:
+                resized[0] = False
+                size = shutil.get_terminal_size()
+                tank = Tank(max(20, size.columns), max(8, size.lines))
+                prev = [[(-1, -1)] * tank.cols for _ in range(tank.rows)]
+                out.write('\x1b[0m\x1b[2J')
+            now = time.monotonic()
+            tank.step(min(0.1, now - last))
+            last = now
+            frame = render(tank.draw(), prev)
+            out.write('\x1b[?2026h' + frame + '\x1b[?2026l')
+            out.flush()
+
+            wait = max(0.0, 1.0 / FPS - (time.monotonic() - now))
+            if select.select([fd], [], [], wait)[0]:
+                data = os.read(fd, 1024).decode('utf-8', 'replace')
+                if screensaver:
+                    # the first moment can carry a stray event from the window opening
+                    if time.monotonic() - started > 1.0:
+                        return
+                    continue
+                for m in MOUSE.finditer(data):
+                    if m.group(4) == 'M' and int(m.group(1)) & 3 == 0 and int(m.group(1)) < 32:
+                        tank.drop_food(int(m.group(2)) - 1, (int(m.group(3)) - 1) * 2)
+                keys = MOUSE.sub('', data)
+                if 'q' in keys or 'Q' in keys:
+                    return
+                if 'f' in keys or ' ' in keys:
+                    tank.drop_food()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        reset = '\x1b]104\x1b\\\x1b]110\x1b\\\x1b]111\x1b\\' if palette else ''
+        out.write('\x1b[0m\x1b[?1003l\x1b[?1006l\x1b[?1000l\x1b[?25h\x1b[?1049l' + reset)
+        out.flush()
+        termios.tcsetattr(fd, termios.TCSADRAIN, saved)
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:])

@@ -1,0 +1,42 @@
+#!/bin/bash
+# Omarchy's screensaver with tetra-tank in place of TTE text effects.
+#
+# omarchy-launch-screensaver opens one terminal per monitor running
+# `omarchy-screensaver` from PATH, and ~/bin comes before Omarchy's bin, so
+# this file shadows the stock script. Delete it to get the stock one back.
+# Like the stock script, it hides the cursor and closes every screensaver
+# window on a key press or when another window takes focus.
+
+stock=/usr/share/omarchy/bin/omarchy-screensaver
+command -v tetra-tank >/dev/null || exec "$stock"
+
+screensaver_in_focus() {
+  hyprctl activewindow -j | jq -e '.class == "org.omarchy.screensaver"' >/dev/null 2>&1
+}
+
+exit_screensaver() {
+  [[ -n $tank ]] && kill "$tank" 2>/dev/null
+  hyprctl eval 'hl.config({ cursor = { invisible = false } })' &>/dev/null || hyprctl keyword cursor:invisible false &>/dev/null || true
+  pkill -f '[o]rg.omarchy.screensaver' 2>/dev/null
+  exit 0
+}
+
+trap exit_screensaver SIGINT SIGTERM SIGHUP SIGQUIT
+
+hyprctl eval 'hl.config({ cursor = { invisible = true } })' &>/dev/null || hyprctl keyword cursor:invisible true &>/dev/null
+
+# The screensaver terminals start from Omarchy's own config, not the theme, so
+# hand tetra-tank the current theme's colours to load.
+args=(--screensaver)
+colors=~/.local/state/omarchy/current/theme/colors.toml
+[[ -f $colors ]] && args+=(--palette "$colors")
+
+# Background jobs get /dev/null for stdin unless told otherwise.
+tetra-tank "${args[@]}" </dev/tty &
+tank=$!
+
+sleep 1
+while kill -0 "$tank" 2>/dev/null && screensaver_in_focus; do
+  sleep 1
+done
+exit_screensaver
