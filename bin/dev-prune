@@ -1,0 +1,218 @@
+#!/usr/bin/env bash
+# Reclaim disk from rebuildable developer files:
+#   - Rust target/, node_modules/ and .next/ folders under the source roots
+#     that nothing has written to in KEEP_DAYS days
+#   - Docker images no container uses, in the colima VM, then fstrim so the
+#     VM's disk file actually shrinks on the host
+#   - versioned Rust toolchains that no main checkout pins
+#   - artifacts older than KEEP_DAYS in the shared cargo-warehouse cache
+#
+# Usage: dev-prune [-n|--dry-run] [--self-test]
+#
+# Everything removed here is rebuilt on demand (cargo build, npm install,
+# docker pull, rustup's auto-install), so the cost of pruning is time, not data.
+set -uo pipefail
+
+KEEP_DAYS=7
+ROOTS=("$HOME/src" "$HOME/.paseo/worktrees")
+COLIMA_PROFILE=default
+CARGO_CACHE="$HOME/.cargo-cache"
+# Checkouts under these path fragments are worktrees; their toolchain pins
+# don't keep a toolchain installed (building one reinstalls it on demand).
+WORKTREE_PATTERNS=('*__worktrees/*' '*/.paseo/worktrees/*' '*/.claude/worktrees/*')
+
+DRY_RUN=0
+failed=0
+
+stamp() { date '+%Y-%m-%d %H:%M:%S'; }
+log() { echo "$(stamp) $*"; }
+fail() { log "ERROR: $*"; failed=1; }
+
+# A folder is deletable only on positive evidence that it is build output:
+# the manifest that regenerates it sits beside it, and git (when the parent is
+# a repo) ignores it rather than tracking it.
+is_build_dir() {
+  local d=$1 parent base
+  parent=$(dirname "$d")
+  base=$(basename "$d")
+  case $base in
+    target) [[ -f $parent/Cargo.toml && -f $d/CACHEDIR.TAG ]] || return 1 ;;
+    node_modules | .next) [[ -f $parent/package.json ]] || return 1 ;;
+    *) return 1 ;;
+  esac
+  if git -C "$parent" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    # Exit 0 means ignored; 1 (not ignored) and 128 (error) both keep it.
+    git -C "$parent" check-ignore -q -- "$base" || return 1
+  fi
+}
+
+# mtime alone isn't enough: npm preserves package mtimes from the tarball,
+# while ctime records when the file was written here.
+is_stale() {
+  [[ -z $(find "$1" \( -mtime "-$KEEP_DAYS" -o -ctime "-$KEEP_DAYS" \) -print -quit 2>/dev/null) ]]
+}
+
+prune_build_dirs() {
+  local root d kb total=0
+  for root in "$@"; do
+    [[ -d $root ]] || continue
+    # Prune at each match so nested node_modules aren't visited. Skip .app
+    # bundles (their node_modules belong to a built application) and copies
+    # like node_modules.bak, whose nested node_modules aren't build output.
+    while IFS= read -r -d '' d; do
+      if ! is_build_dir "$d" || ! is_stale "$d"; then continue; fi
+      kb=$(du -sk "$d" | cut -f1)
+      total=$((total + kb))
+      if ((DRY_RUN)); then
+        log "would delete $((kb / 1024))M $d"
+      elif rm -rf -- "$d"; then
+        log "deleted $((kb / 1024))M $d"
+      else
+        fail "could not delete $d"
+      fi
+    done < <(find "$root" \( -name '*.app' -o -name .git -o \( -name '*node_modules*' ! -name node_modules \) \) -prune -o \
+      -type d \( -name target -o -name node_modules -o -name .next \) -prune -print0)
+  done
+  log "build folders: $((total / 1024))M $( ((DRY_RUN)) && echo reclaimable || echo reclaimed)"
+}
+
+prune_docker() {
+  if ! colima status -p "$COLIMA_PROFILE" >/dev/null 2>&1; then
+    log "docker: colima '$COLIMA_PROFILE' not running, skipped"
+    return
+  fi
+  if ((DRY_RUN)); then
+    log "docker: would prune unused images and fstrim colima '$COLIMA_PROFILE'"
+    docker --context colima system df | sed -n '1,2p'
+    return
+  fi
+  docker --context colima image prune -a -f | tail -1 || fail "docker image prune failed"
+  colima ssh -p "$COLIMA_PROFILE" -- sudo fstrim -a >/dev/null || fail "colima fstrim failed"
+  log "docker: pruned unused images and trimmed the VM disk"
+}
+
+# Prints each version pinned by a rust-toolchain file in a main checkout.
+pinned_toolchains() {
+  local f pat skip
+  find "${ROOTS[@]}" -maxdepth 5 \( -name node_modules -o -name target -o -name .git \) -prune -o \
+    \( -name rust-toolchain -o -name rust-toolchain.toml \) -print 2>/dev/null |
+    while IFS= read -r f; do
+      skip=0
+      for pat in "${WORKTREE_PATTERNS[@]}"; do
+        # shellcheck disable=SC2053  # pattern match is intended
+        [[ $f == $pat ]] && skip=1
+      done
+      ((skip)) && continue
+      if [[ $f == *.toml ]]; then
+        sed -nE 's/^[[:space:]]*channel[[:space:]]*=[[:space:]]*"([^"]+)".*/\1/p' "$f"
+      else
+        head -1 "$f" | tr -d '[:space:]'
+        echo
+      fi
+    done
+}
+
+prune_toolchains() {
+  local host installed pins t version
+  host=$(rustup show | sed -n 's/^Default host: //p')
+  installed=$(rustup toolchain list | awk '{print $1}')
+  if [[ -z $host || -z $installed ]]; then
+    fail "rust: could not read rustup host or toolchain list, skipped"
+    return
+  fi
+  pins=$(pinned_toolchains | sort -u)
+  for t in $installed; do
+    # Only numbered releases for this host; channels and linked toolchains stay.
+    [[ $t =~ ^([0-9]+\.[0-9]+(\.[0-9]+)?)-$host$ ]] || continue
+    version=${BASH_REMATCH[1]}
+    grep -qxF "$version" <<<"$pins" && continue
+    if ((DRY_RUN)); then
+      log "rust: would uninstall $t"
+    elif rustup toolchain uninstall "$t" >/dev/null 2>&1; then
+      log "rust: uninstalled $t"
+    else
+      fail "rust: could not uninstall $t"
+    fi
+  done
+}
+
+# cargo-warehouse links projects to one shared cache, and cargo never removes
+# superseded artifacts from it, so every build stacks another generation of
+# objects and binaries. This prunes individual files and keeps the profile
+# directories (debug, release) and their deps/build/.fingerprint children,
+# which mindepth 3 protects.
+prune_cargo_cache() {
+  [[ -d $CARGO_CACHE ]] || return
+  # Deleting an object file out from under a running build fails its link step.
+  if pgrep -x rustc >/dev/null || pgrep -x cargo >/dev/null; then
+    log "cargo cache: build in progress, skipped"
+    return
+  fi
+  local before
+  before=$(du -sh "$CARGO_CACHE" | cut -f1)
+  if ((DRY_RUN)); then
+    log "cargo cache: would delete $(find "$CARGO_CACHE" -mindepth 3 -type f -mtime "+$KEEP_DAYS" | wc -l | tr -d ' ') files from $before"
+    return
+  fi
+  if find "$CARGO_CACHE" -mindepth 3 -type f -mtime "+$KEEP_DAYS" -delete &&
+    find "$CARGO_CACHE" -mindepth 3 -type d -empty -delete; then
+    log "cargo cache: $before -> $(du -sh "$CARGO_CACHE" | cut -f1)"
+  else
+    fail "cargo cache: prune failed"
+  fi
+}
+
+self_test() {
+  # Global, not local: the EXIT trap runs after this function returns.
+  tmp=$(mktemp -d) || exit 1
+  trap 'rm -rf "$tmp"' EXIT
+  local repo=$tmp/repo plain=$tmp/plain
+  mkdir -p "$repo"/{rust,untagged,shown,nomanifest,Built.app/Contents} "$plain"
+  git -C "$repo" init -q
+  printf 'target/\nnode_modules/\n!shown/node_modules/\n' >"$repo/.gitignore"
+  touch "$repo"/rust/Cargo.toml "$repo"/untagged/Cargo.toml "$repo"/shown/package.json \
+    "$repo"/Built.app/Contents/package.json "$plain"/package.json
+  mkdir -p "$plain"/node_modules.bak/pkg/node_modules
+  touch "$plain"/node_modules.bak/pkg/package.json
+  mkdir -p "$repo"/rust/target "$repo"/untagged/target "$repo"/shown/node_modules \
+    "$repo"/nomanifest/node_modules "$repo"/Built.app/Contents/node_modules "$plain"/node_modules
+  touch "$repo"/rust/target/CACHEDIR.TAG
+
+  # Fresh files are inside the window, so nothing goes.
+  KEEP_DAYS=1 prune_build_dirs "$tmp" >/dev/null
+  [[ -d $repo/rust/target && -d $plain/node_modules ]] || { echo "FAIL: deleted a recent folder"; exit 1; }
+
+  # -mtime -0 matches nothing, so every folder counts as stale.
+  KEEP_DAYS=0 prune_build_dirs "$tmp" >/dev/null
+  [[ ! -e $repo/rust/target ]] || { echo "FAIL: kept ignored cargo target"; exit 1; }
+  [[ ! -e $plain/node_modules ]] || { echo "FAIL: kept node_modules outside a repo"; exit 1; }
+  [[ -d $repo/untagged/target ]] || { echo "FAIL: deleted target without CACHEDIR.TAG"; exit 1; }
+  [[ -d $repo/shown/node_modules ]] || { echo "FAIL: deleted a folder git doesn't ignore"; exit 1; }
+  [[ -d $repo/nomanifest/node_modules ]] || { echo "FAIL: deleted node_modules with no package.json"; exit 1; }
+  [[ -d $repo/Built.app/Contents/node_modules ]] || { echo "FAIL: deleted inside an .app bundle"; exit 1; }
+  [[ -d $plain/node_modules.bak/pkg/node_modules ]] || { echo "FAIL: deleted inside a node_modules copy"; exit 1; }
+  echo "self-test passed"
+}
+
+main() {
+  local arg
+  for arg in "$@"; do
+    case $arg in
+      -n | --dry-run) DRY_RUN=1 ;;
+      --self-test) self_test; exit ;;
+      *) echo "usage: dev-prune [-n|--dry-run] [--self-test]" >&2; exit 2 ;;
+    esac
+  done
+
+  local before after
+  before=$(df -g /System/Volumes/Data | awk 'NR==2 {print $4}')
+  prune_build_dirs "${ROOTS[@]}"
+  prune_docker
+  prune_toolchains
+  prune_cargo_cache
+  after=$(df -g /System/Volumes/Data | awk 'NR==2 {print $4}')
+  log "free space: ${before}G -> ${after}G"
+  exit "$failed"
+}
+
+main "$@"
