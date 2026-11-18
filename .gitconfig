@@ -1,5 +1,6 @@
 [user]
 	name = Joshua Elliott
+	useConfigOnly = true
 
 [core]
 	editor = vim
