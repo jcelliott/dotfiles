@@ -49,3 +49,5 @@ end)
 -- Big Picture is Steam's TV/controller UI, so give it the whole screen instead
 -- of Omarchy's default floating Steam window.
 o.window({ class = "^steam$", title = "^Steam Big Picture Mode$" }, { fullscreen = true })
+
+require("hypr.omacast")
