@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Google Meet (Personal)
+Comment=Google Meet (Personal)
+Exec=omarchy-launch-webapp https://meet.google.com/ "--profile-directory=Profile 1"
+Terminal=false
+Type=Application
+Icon=google-meet-personal
+StartupNotify=true
+StartupWMClass=chrome-meet.google.com__-Profile_1

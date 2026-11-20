@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=Firefox (Work)
+Comment=Firefox in the Work profile
+Exec=/usr/lib/firefox/firefox --name firefox-work --profile "/home/josh/.config/mozilla/firefox/hcAIOKiz.Profile 1" %u
+Terminal=false
+Type=Application
+Icon=firefox-work
+Categories=Network;WebBrowser;
+StartupNotify=true
+StartupWMClass=firefox-work

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Google Meet (Work)
+Comment=Google Meet (Work)
+Exec=omarchy-launch-webapp https://meet.google.com/ --profile-directory=Default
+Terminal=false
+Type=Application
+Icon=google-meet-work
+StartupNotify=true
+StartupWMClass=chrome-meet.google.com__-Default
