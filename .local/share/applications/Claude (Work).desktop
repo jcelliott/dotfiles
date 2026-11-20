@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Claude (Work)
+Comment=Claude desktop app with its own work sign-in and data
+Exec=env CLAUDE_CONFIG_DIR=/home/josh/.claude-work claude-desktop --user-data-dir=/home/josh/.config/Claude-Work %U
+Terminal=false
+Type=Application
+Icon=claude-work
+Categories=Utility;Development;
+StartupNotify=true

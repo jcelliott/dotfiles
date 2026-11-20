@@ -50,11 +50,41 @@ end)
 -- of Omarchy's default floating Steam window.
 o.window({ class = "^steam$", title = "^Steam Big Picture Mode$" }, { fullscreen = true })
 
--- Work windows get the current theme's red border, focused or not, so they
--- stand apart without a title bar: web apps in the Work Chromium profile
--- (--profile-directory=Default) and Firefox started with --name firefox-work.
--- Regular Chromium and Firefox windows have class "chromium" or "firefox" and
--- keep the theme border.
+-- Windows tagged "work" get the current theme's red border, focused or not, so
+-- they stand apart without a title bar. Tagged: web apps in the Work Chromium
+-- profile (--profile-directory=Default), Firefox started with --name
+-- firefox-work, and the Claude desktop app started with the Claude-Work data
+-- dir. Regular Chromium, Firefox and Claude windows keep the theme border.
+o.window({ class = "^(chrome-.*-Default|firefox-work)$" }, { tag = "+work" })
+
+-- The Claude desktop app hard-codes its window class, so its work instance is
+-- told apart by the --user-data-dir on the window's process command line.
+local claude_work_dir = os.getenv("HOME") .. "/.config/Claude-Work"
+local function tag_claude_work(window)
+  if not window or window.class ~= "com.anthropic.Claude" or not window.pid then
+    return
+  end
+  local f = io.open("/proc/" .. window.pid .. "/cmdline")
+  if not f then
+    return
+  end
+  local cmdline = f:read("a")
+  f:close()
+  -- Chromium rewrites its process title, so arguments may be separated by
+  -- spaces rather than NULs.
+  for arg in cmdline:gmatch("[^ \0]+") do
+    if arg == "--user-data-dir=" .. claude_work_dir then
+      hl.dispatch(hl.dsp.window.tag({ tag = "+work", window = window }))
+      return
+    end
+  end
+end
+hl.on("window.open", tag_claude_work)
+-- Also catch windows already open when the config loads or reloads.
+for _, window in ipairs(hl.get_windows()) do
+  tag_claude_work(window)
+end
+
 local function theme_color(name)
   local f = io.open(os.getenv("HOME") .. "/.local/state/omarchy/current/theme/colors.toml")
   if not f then
@@ -67,7 +97,7 @@ end
 
 local work_red = theme_color("red")
 if work_red then
-  o.window({ class = "^(chrome-.*-Default|firefox-work)$" }, {
+  o.window({ tag = "work" }, {
     border_color = "rgba(" .. work_red .. "ff) rgba(" .. work_red .. "aa)",
   })
 end
