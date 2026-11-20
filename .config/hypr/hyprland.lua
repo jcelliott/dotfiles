@@ -50,4 +50,26 @@ end)
 -- of Omarchy's default floating Steam window.
 o.window({ class = "^steam$", title = "^Steam Big Picture Mode$" }, { fullscreen = true })
 
+-- Work windows get the current theme's red border, focused or not, so they
+-- stand apart without a title bar: web apps in the Work Chromium profile
+-- (--profile-directory=Default) and Firefox started with --name firefox-work.
+-- Regular Chromium and Firefox windows have class "chromium" or "firefox" and
+-- keep the theme border.
+local function theme_color(name)
+  local f = io.open(os.getenv("HOME") .. "/.local/state/omarchy/current/theme/colors.toml")
+  if not f then
+    return nil
+  end
+  local hex = f:read("a"):match("\n" .. name .. ' = "#(%x+)"')
+  f:close()
+  return hex
+end
+
+local work_red = theme_color("red")
+if work_red then
+  o.window({ class = "^(chrome-.*-Default|firefox-work)$" }, {
+    border_color = "rgba(" .. work_red .. "ff) rgba(" .. work_red .. "aa)",
+  })
+end
+
 require("hypr.omacast")
